@@ -1,0 +1,91 @@
+{
+    "umum": {
+        "demam tinggi lebih dari 3 hari": "Jika demam tinggi berlangsung lebih dari 3 hari, segera periksakan diri ke dokter untuk evaluasi lebih lanjut. Demam berkepanjangan bisa menjadi tanda infeksi serius seperti tipes, demam berdarah, atau infeksi lainnya. Sambil menunggu pemeriksaan dokter, Anda dapat mengompres dengan air hangat dan minum obat penurun panas sesuai dosis.",
+        "sakit kepala terus menerus": "Sakit kepala terus-menerus yang tidak kunjung mereda bisa disebabkan oleh berbagai hal, seperti migrain, ketegangan otot, sinusitis, atau masalah yang lebih serius. Penting untuk periksakan diri ke dokter jika sakit kepala berlangsung lebih dari 2-3 hari, sangat parah, atau disertai dengan gejala seperti demam, kaku leher, atau muntah.",
+        "batuk tidak sembuh sembuh": "Batuk yang tidak kunjung sembuh selama lebih dari 2-3 minggu memerlukan perhatian medis. Hal ini bisa menjadi tanda infeksi paru-paru, asma, refluks asam, alergi, atau kondisi lain yang memerlukan penanganan khusus. Jika batuk disertai dengan dahak berdarah, sesak napas, atau demam, segera periksakan diri ke dokter.",
+        "mual dan muntah berhari hari": "Mual dan muntah yang berlangsung berhari-hari dapat menyebabkan dehidrasi dan gangguan elektrolit. Kondisi ini bisa disebabkan oleh infeksi virus, keracunan makanan, migren, gangguan pencernaan, atau masalah kesehatan lainnya. Jika muntah berlangsung lebih dari 2 hari atau disertai nyeri perut hebat, segera periksakan diri ke dokter. Pastikan tetap terhidrasi dengan minum cairan secara perlahan.",
+        "diare lebih dari 3 hari": "Diare yang berlangsung lebih dari 3 hari berisiko menyebabkan dehidrasi dan memerlukan penanganan medis. Kondisi ini bisa disebabkan oleh infeksi bakteri/virus, parasit, intoleransi makanan, atau gangguan pencernaan lainnya. Penting untuk minum banyak cairan (oralit), menghindari makanan yang sulit dicerna, dan periksakan diri ke dokter, terutama jika disertai dengan demam tinggi, darah dalam tinja, atau nyeri perut hebat."
+    },
+    "gejala_tambahan": {
+        "Flu": [
+            "batuk pilek",
+            "hidung tersumbat",
+            "bersin-bersin",
+            "sakit tenggorokan",
+            "demam",
+            "nyeri otot"
+        ],
+        "Demam Berdarah": [
+            "demam tinggi mendadak",
+            "nyeri di belakang mata",
+            "nyeri sendi dan otot",
+            "ruam merah",
+            "mimisan",
+            "nyeri kepala berat"
+        ],
+        "Tipes": [
+            "demam tinggi bertahap",
+            "nafsu makan menurun",
+            "sakit perut",
+            "sembelit atau diare",
+            "lidah berselaput putih",
+            "lemas"
+        ],
+        "TBC": [
+            "batuk lebih dari 2 minggu",
+            "batuk darah",
+            "nyeri dada",
+            "keringat malam",
+            "berat badan turun",
+            "sesak napas"
+        ],
+        "Maag": [
+            "nyeri ulu hati",
+            "perut kembung",
+            "sendawa berlebihan",
+            "mual",
+            "cepat kenyang",
+            "muntah"
+        ],
+        "Asma": [
+            "sesak napas",
+            "napas berbunyi",
+            "batuk-batuk",
+            "dada terasa berat",
+            "kesulitan bernapas",
+            "batuk malam hari"
+        ],
+        "Migrain": [
+            "sakit kepala berdenyut",
+            "mual",
+            "muntah",
+            "sensitif terhadap cahaya",
+            "sensitif terhadap suara",
+            "pusing"
+        ],
+        "Diare": [
+            "BAB cair lebih dari 3 kali sehari",
+            "kram perut",
+            "mual",
+            "muntah",
+            "demam ringan",
+            "dehidrasi"
+        ],
+        "Hipertensi": [
+            "sakit kepala",
+            "jantung berdebar",
+            "pusing",
+            "telinga berdenging",
+            "sesak napas",
+            "wajah kemerahan"
+        ],
+        "Diabetes": [
+            "sering buang air kecil",
+            "selalu haus",
+            "selalu lapar",
+            "berat badan turun",
+            "luka lambat sembuh",
+            "pandangan kabur"
+        ]
+    }
+}

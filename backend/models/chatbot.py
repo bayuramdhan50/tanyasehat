@@ -4,7 +4,10 @@ Chatbot sederhana untuk menjawab pertanyaan tentang penyakit
 import os
 import json
 import re
-from utils.preprocessor import preprocess_text
+import numpy as np
+from utils.preprocessor import preprocess_text, extract_gejala_patterns
+from difflib import get_close_matches
+from difflib import SequenceMatcher
 
 class Chatbot:
     """
@@ -24,50 +27,166 @@ class Chatbot:
         self.diseases_data = self._load_diseases_data()
         # Muat data FAQ
         self.faq_data = self._load_faq_data()
+
+        # Siapkan kamus sinonim penyakit untuk meningkatkan pengenalan
+        self.disease_synonyms = self._create_disease_synonyms()
         
-        # Pattern untuk mengenali pertanyaan
+        # Tambahkan sinonim gejala untuk meningkatkan pengenalan
+        self.symptom_synonyms = self._create_symptom_synonyms()
+        
+        # Tambahkan informasi penting tentang penyakit
+        self.disease_facts = self._create_disease_facts()
+        
+        # Pattern untuk mengenali pertanyaan dengan matching yang lebih fleksibel
         self.patterns = {
             'apa_itu': [
-                r'apa itu (.*)', 
-                r'apa yang dimaksud dengan (.*)', 
-                r'apa sih (.*)', 
-                r'tolong jelaskan (.*)',
-                r'(.*) itu apa'
+                r'apa(?:\s+(?:itu|yang\s+dimaksud\s+dengan|sih|yang\s+dimaksud|arti\s+dari))?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+itu)?\s+(?:apa|adalah|merupakan)',
+                r'(?:jelaskan|ceritakan|bisa\s+jelaskan|tolong\s+jelaskan)(?:\s+(?:tentang|mengenai|apa))?\s+([a-zA-Z\s]+)',
+                r'(?:pengertian|definisi)(?:\s+(?:dari|tentang))?\s+([a-zA-Z\s]+)',
+                r'apa\s+(?:yang|sih\s+yang)\s+(?:dimaksud|disebut)(?:\s+dengan)?\s+([a-zA-Z\s]+)'
             ],
             'gejala': [
-                r'apa gejala (.*)', 
-                r'gejala (.*) apa saja', 
-                r'ciri-ciri (.*)', 
-                r'tanda-tanda (.*)',
-                r'gimana (sih |)tau kalo kena (.*)'
+                r'(?:apa(?:\s+saja)?|bagaimana|gimana)(?:\s+(?:gejala|ciri-ciri|tanda-tanda))(?:\s+(?:dari|penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:gejala|ciri-ciri|tanda-tanda)(?:\s+(?:dari|penyakit))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|apa\s+saja))?',
+                r'(?:gimana|bagaimana)(?:\s+(?:cara|bisa|dapat|untuk))?\s+(?:tau|tahu|mengetahui|mendeteksi)(?:\s+kalau|kalo|jika)?\s+(?:terkena|kena|menderita)?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+(?:gejalanya|ciri-cirinya|tanda-tandanya))(?:\s+(?:apa|apa\s+saja|bagaimana|seperti\s+apa))?',
+                r'(?:seseorang|saya|orang)(?:\s+yang)?\s+(?:terkena|kena|menderita)\s+([a-zA-Z\s]+)(?:\s+(?:seperti|kayak)\s+(?:apa|gimana))?'
             ],
             'penanganan': [
-                r'bagaimana (cara |)menangani (.*)', 
-                r'gimana (cara |)mengobati (.*)', 
-                r'apa pengobatan (.*)', 
-                r'bagaimana jika terkena (.*)',
-                r'kalau kena (.*) gimana'
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|caranya))?(?:\s+(?:untuk|bisa))?\s+(?:menangani|mengobati|mengatasi|menyembuhkan|menghadapi|merawat)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:pengobatan|penanganan|perawatan|terapi|cara\s+mengobati)(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?',
+                r'(?:kalau|jika|bila)(?:\s+(?:terkena|kena|menderita))?\s+([a-zA-Z\s]+)(?:\s+(?:bagaimana|gimana|harus|perlu))?(?:\s+(?:penanganannya|pengobatannya|cara\s+mengobatinya))?',
+                r'(?:obat|pengobatan)(?:\s+(?:untuk|bagi|buat))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|apa\s+saja))?',
+                r'([a-zA-Z\s]+)(?:\s+(?:diobati|ditangani|disembuhkan|diatasi))(?:\s+(?:dengan|bagaimana|gimana|seperti\s+apa))?'
             ],
             'pencegahan': [
-                r'bagaimana (cara |)mencegah (.*)', 
-                r'cara mencegah (.*)', 
-                r'gimana supaya tidak kena (.*)', 
-                r'pencegahan (.*)'
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|caranya))?(?:\s+(?:untuk|bisa))?\s+(?:mencegah|menghindari|menjauhkan)(?:\s+(?:penyakit|terkena|terinfeksi))?\s+([a-zA-Z\s]+)',
+                r'(?:pencegahan|cara\s+mencegah|langkah\s+pencegahan|upaya\s+mencegah)(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?',
+                r'(?:agar|supaya|biar)(?:\s+(?:tidak|nggak|gak|enggak|terhindar\s+dari))?\s+(?:terkena|kena|menderita|terinfeksi)\s+([a-zA-Z\s]+)(?:\s+(?:bagaimana|gimana|harus|perlu|sebaiknya|seharusnya))?',
+                r'(?:cara|tips|langkah)(?:\s+(?:menghindari|mencegah|menghindarkan\s+diri))(?:\s+(?:dari))?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+(?:bisa|dapat))?\s+(?:dicegah|dihindari|dicegahnya)(?:\s+(?:dengan|bagaimana|gimana|seperti\s+apa))?'
             ],
             'durasi': [
-                r'berapa lama (.*) sembuh', 
-                r'(.*) sembuh dalam berapa lama', 
-                r'waktu sembuh (.*)', 
-                r'durasi penyembuhan (.*)',
-                r'kalau (.*) berapa lama sembuh'
+                r'(?:berapa\s+lama|seberapa\s+lama)(?:\s+(?:waktu|durasi|masa))?\s+(?:penyembuhan|pemulihan|pengobatan|perawatan)(?:\s+(?:penyakit|pasien|orang|penderita))?\s+([a-zA-Z\s]+)',
+                r'(?:berapa\s+lama|seberapa\s+lama)(?:\s+(?:penyakit|pasien|orang|penderita))?\s+([a-zA-Z\s]+)(?:\s+(?:sembuh|pulih|diobati|dirawat))?',
+                r'([a-zA-Z\s]+)(?:\s+(?:sembuh|pulih|diobati|dirawat))(?:\s+(?:dalam|butuh|memerlukan))?\s+(?:berapa\s+lama|berapa\s+waktu|waktu\s+berapa\s+lama)?',
+                r'(?:waktu|durasi|masa)(?:\s+(?:penyembuhan|pemulihan|pengobatan|perawatan))(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|berapa\s+lama|berapa\s+waktu))?',
+                r'(?:sembuhnya|pulihnya|pengobatannya|penyembuhannya)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)(?:\s+(?:berapa\s+lama|berapa\s+waktu|butuh\s+waktu\s+berapa))?'
             ],
             'umum': [
-                r'kalau ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)',
-                r'jika ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)',
-                r'bila ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)'
+                r'(?:apa(?:kah)?|bagaimana|apabila)(?:\s+(?:berbahaya|bahaya|risiko|dampak|efek))(?:\s+(?:dari|terkena|menderita))?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?|bagaimana|apabila)(?:\s+(?:perlu|harus|wajib|sebaiknya|seharusnya))(?:\s+(?:ke|pergi\s+ke|konsultasi\s+ke|memeriksakan\s+diri\s+ke))?\s+(?:dokter|rumah\s+sakit|puskesmas)(?:\s+(?:jika|kalau|bila))?\s+(?:terkena|menderita)?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?)(?:\s+([a-zA-Z\s]+))(?:\s+(?:bisa|dapat|mungkin))(?:\s+(?:menular|ditularkan|menyebar))?',
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|proses|mekanisme))?\s+(?:penularan|penyebaran)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?)(?:\s+(?:penyebab|faktor\s+risiko|faktor\s+penyebab))(?:\s+(?:dari|utama|terjadinya|munculnya))?\s+([a-zA-Z\s]+)'
+            ],
+            'diagnosis': [
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|proses|langkah))?\s+(?:diagnosis|pemeriksaan|mendiagnosis|mendiagnosa)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:tes|pemeriksaan|uji|test|pengujian)(?:\s+(?:apa|apa\s+saja))(?:\s+(?:untuk|yang\s+diperlukan\s+untuk|dalam))?\s+(?:diagnosis|mendiagnosis|mendiagnosa)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:dokter|tenaga\s+medis)(?:\s+(?:bisa|dapat))?\s+(?:mendiagnosis|mendiagnosa|mengetahui)(?:\s+seseorang\s+terkena)?\s+([a-zA-Z\s]+)(?:\s+(?:dengan|melalui|bagaimana|seperti\s+apa))?',
+                r'(?:diagnosis|pemeriksaan)(?:\s+(?:untuk|bagi))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?' 
             ]
         }
-    
+    def _create_symptom_synonyms(self):
+        """
+        Membuat kamus sinonim gejala untuk meningkatkan pengenalan
+        
+        Returns
+        -------
+        dict
+            Dictionary berisi sinonim untuk gejala umum
+        """
+        synonyms = {
+            "demam": ["panas", "demam tinggi", "suhu tinggi", "badan panas", "meriang", "temperatut tinggi", "hangat"],
+            "batuk": ["batuk-batuk", "batuk kering", "batuk berdahak", "batuk berdarah", "batuk terus-menerus"],
+            "pilek": ["ingus", "hidung berair", "hidung meler", "hidung tersumbat", "hidung berlendir"],
+            "sakit kepala": ["pusing", "kepala sakit", "pening", "kepala berat", "migrain", "nyeri kepala"],
+            "sakit perut": ["perut sakit", "perut nyeri", "kram perut", "mulas", "nyeri perut", "perih perut"],
+            "diare": ["mencret", "BAB cair", "berak encer", "buang air besar cair", "perut mencret", "perut encer"],
+            "mual": ["ingin muntah", "eneg", "mau muntah", "rasa mual", "perut mual"],
+            "muntah": ["memuntahkan", "muntah-muntah", "keluarkan isi perut", "memuntahkan makanan"],
+            "pusing": ["kepala berputar", "berkunang-kunang", "vertigo", "kepala pening", "pening"],
+            "ruam": ["bintik merah", "bercak merah", "kemerahan pada kulit", "ruam kulit", "bintik-bintik"],
+            "lemas": ["lemah", "tidak bertenaga", "lesu", "kurang tenaga", "badan lemas", "loyo"],
+            "nyeri sendi": ["sakit sendi", "ngilu sendi", "sendi sakit", "sendi kaku", "sendi nyeri"],
+            "sesak napas": ["sulit bernapas", "napas pendek", "napas berat", "kesulitan bernapas", "napas sesak", "napas terasa berat"]
+        }
+        return synonyms
+        
+    def _create_disease_facts(self):
+        """
+        Membuat kamus fakta penting tentang penyakit
+        
+        Returns
+        -------
+        dict
+            Dictionary berisi fakta-fakta penting tentang penyakit
+        """
+        facts = {
+            "Flu": [
+                "Flu disebabkan oleh virus influenza dan bukan bakteri, sehingga antibiotik tidak efektif untuk pengobatan flu.",
+                "Vaksin flu tahunan dapat membantu mencegah atau mengurangi keparahan infeksi.",
+                "Virus flu dapat menular sehari sebelum gejala muncul dan hingga 5-7 hari setelah sakit.",
+                "Cuci tangan secara teratur adalah salah satu cara terbaik untuk mencegah penyebaran flu."
+            ],
+            "Demam Berdarah": [
+                "Demam berdarah ditularkan oleh nyamuk Aedes aegypti yang aktif di siang hari.",
+                "Tidak ada obat khusus untuk demam berdarah, pengobatan berfokus pada penanganan gejala.",
+                "Penurunan trombosit (keping darah) adalah ciri khas demam berdarah.",
+                "Waspada fase kritis demam berdarah yang biasanya terjadi setelah demam mereda (hari ke-3 hingga 7)."
+            ],
+            "Tipes": [
+                "Tipes disebabkan oleh bakteri Salmonella typhi yang menyebar melalui makanan dan minuman yang terkontaminasi.",
+                "Pengobatan tipes memerlukan antibiotik dan harus tuntas sesuai anjuran dokter.",
+                "Pasien tipes harus istirahat total dan mengonsumsi makanan lunak selama masa pemulihan.",
+                "Vaksin tipes tersedia dan direkomendasikan terutama untuk orang yang akan bepergian ke daerah endemis."
+            ],
+            "TBC": [
+                "TBC membutuhkan pengobatan jangka panjang, biasanya 6-9 bulan, dan harus diminum secara teratur.",
+                "Menghentikan pengobatan TBC sebelum waktunya dapat menyebabkan bakteri TBC menjadi resisten terhadap obat.",
+                "TBC dapat menular melalui udara saat penderita batuk, bersin, atau berbicara.",
+                "Ventilasi yang baik dan paparan sinar matahari membantu mengurangi risiko penularan TBC."
+            ],
+            "Maag": [
+                "Maag dapat disebabkan oleh infeksi bakteri Helicobacter pylori, penggunaan obat anti inflamasi, atau stres.",
+                "Makan teratur dengan porsi kecil namun sering dapat membantu mengurangi gejala maag.",
+                "Hindari makanan pedas, asam, kafein, dan alkohol yang dapat memicu kekambuhan maag.",
+                "Stres dapat memperburuk gejala maag, sehingga manajemen stres penting dalam penanganan."
+            ],
+            "Asma": [
+                "Asma tidak dapat disembuhkan tetapi dapat dikendalikan dengan pengobatan yang tepat.",
+                "Serangan asma dapat dipicu oleh alergen, polusi udara, olahraga, stres, atau perubahan cuaca.",
+                "Inhaler adalah pengobatan utama untuk mengatasi serangan asma akut.",
+                "Penggunaan inhaler yang benar sangat penting untuk efektivitas pengobatan asma."
+            ],
+            "Migrain": [
+                "Migrain sering bersifat genetik dan lebih umum terjadi pada wanita.",
+                "Beberapa makanan seperti cokelat, keju, dan makanan yang mengandung MSG dapat memicu migrain.",
+                "Migrain dapat disertai dengan aura (sensasi visual atau sensorik) sebelum serangan.",
+                "Tidur teratur, manajemen stres, dan hindari pemicu dapat membantu mengurangi frekuensi migrain."
+            ],
+            "Diare": [
+                "Diare dapat disebabkan oleh virus, bakteri, parasit, intoleransi makanan, atau efek samping obat.",
+                "Dehidrasi adalah komplikasi utama diare, terutama pada anak-anak dan lansia.",
+                "Oralit sangat efektif untuk mengganti cairan dan elektrolit yang hilang akibat diare.",
+                "Jika diare disertai demam tinggi, darah dalam tinja, atau berlangsung lebih dari 2 hari, segera konsultasikan ke dokter."
+            ],
+            "Hipertensi": [
+                "Hipertensi sering disebut 'silent killer' karena biasanya tidak menimbulkan gejala yang jelas.",
+                "Konsumsi garam berlebih, kurang aktivitas fisik, dan stres dapat meningkatkan risiko hipertensi.",
+                "Pemantauan tekanan darah secara teratur penting untuk mengelola hipertensi.",
+                "Obat hipertensi harus diminum secara teratur sesuai anjuran dokter, bahkan ketika tekanan darah sudah normal."
+            ],
+            "Diabetes": [
+                "Diabetes tipe 1 disebabkan oleh faktor genetik dan autoimun, sementara tipe 2 lebih terkait dengan gaya hidup.",
+                "Pemeriksaan gula darah secara teratur sangat penting untuk mengelola diabetes.",
+                "Komplikasi diabetes dapat mempengaruhi mata, ginjal, saraf, dan jantung jika tidak dikontrol dengan baik.",
+                "Olahraga teratur dan pola makan seimbang membantu mengontrol kadar gula darah."
+            ]
+        }
+        return facts
+        
     def _load_diseases_data(self):
         """
         Memuat data penyakit dari JSON
@@ -221,9 +340,45 @@ class Chatbot:
         
         return sample_data
     
+    def _create_disease_synonyms(self):
+        """
+        Membuat kamus sinonim penyakit untuk meningkatkan pengenalan
+        
+        Returns
+        -------
+        dict
+            Dictionary berisi sinonim untuk setiap penyakit
+        """
+        synonyms = {
+            "Flu": ["influenza", "pilek", "flu biasa", "flu ringan", "flu musiman", 
+                   "batuk pilek", "hidung meler", "masuk angin"],
+            "Demam Berdarah": ["dbd", "db", "demam dengue", "dengue", "demam berdarah dengue", 
+                              "penyakit nyamuk", "demam dengue", "panas berdarah"],
+            "Tipes": ["tifus", "tipus", "typhoid", "tipes abdominalis", "demam tifoid",
+                     "penyakit tipes", "sakit tipes", "demam tipus"],
+            "TBC": ["tuberkulosis", "tb", "tuberculosis", "tbc paru", "flek paru",
+                   "batuk tbc", "batuk darah", "batuk kering", "batuk lama"],
+            "Maag": ["dispepsia", "sakit lambung", "sakit maag", "asam lambung", 
+                    "radang lambung", "perih lambung", "nyeri lambung", "gerd"],
+            "Asma": ["bengek", "sesak nafas", "asma bronkial", "penyakit asma",
+                    "sesak napas", "mengi", "wheezing", "asma akut"],
+            "Migrain": ["sakit kepala", "migrain kronis", "nyeri kepala", "sakit kepala sebelah",
+                       "migrain tanpa aura", "migrain dengan aura", "sakit kepala berdenyut"],
+            "Diare": ["mencret", "berak cair", "sakit perut", "disentri", "gastroenteritis",
+                     "buang air besar cair", "muntaber", "sakit mencret"],
+            "Hipertensi": ["darah tinggi", "tekanan darah tinggi", "hipertensi primer", 
+                          "hipertensi sekunder", "penyakit darah tinggi", "tensi tinggi"],
+            "Diabetes": ["kencing manis", "diabetes mellitus", "gula darah tinggi", 
+                        "diabetes tipe 1", "diabetes tipe 2", "sakit gula", "penyakit gula"],
+            "Alergi Makanan": ["alergi", "reaksi alergi", "hipersensitivitas", "alergi makanan laut", 
+                              "alergi kacang", "alergi susu", "alergi telur", "intoleransi makanan"],
+            "Sinusitis": ["radang sinus", "infeksi sinus", "hidung tersumbat", "nyeri wajah",
+                         "sinus kronis", "sinus akut", "hidung mampet"]
+        }
+        return synonyms
     def _extract_disease_from_question(self, question_type, question):
         """
-        Ekstrak nama penyakit dari pertanyaan
+        Ekstrak nama penyakit dari pertanyaan dengan dukungan fuzzy matching
         
         Parameters
         ----------
@@ -247,19 +402,39 @@ class Chatbot:
                     # Bersihkan hasil ekstraksi
                     disease_name = disease_name.strip().lower()
                     
-                    # Cari match dengan nama penyakit yang ada di database
+                    # Coba temukan kecocokan langsung dengan nama penyakit
                     for disease in self.diseases_data.keys():
                         if disease.lower() in disease_name or disease_name in disease.lower():
                             return disease
-                
+                    
+                    # Coba temukan kecocokan dengan sinonim
+                    for disease, synonyms in self.disease_synonyms.items():
+                        for synonym in synonyms:
+                            if synonym.lower() in disease_name or disease_name in synonym.lower():
+                                return disease
+                    
+                    # Gunakan fuzzy matching jika tidak ditemukan kecocokan langsung
+                    disease_candidates = list(self.diseases_data.keys()) + [syn for syns in self.disease_synonyms.values() for syn in syns]
+                    matches = get_close_matches(disease_name, disease_candidates, n=1, cutoff=0.7)
+                    
+                    if matches:
+                        matched_term = matches[0]
+                        # Jika yang cocok adalah sinonim, kembalikan nama penyakit aslinya
+                        for disease, synonyms in self.disease_synonyms.items():
+                            if matched_term in synonyms:
+                                return disease                        # Jika yang cocok adalah nama penyakit, kembalikan apa adanya
+                        if matched_term in self.diseases_data:
+                            return matched_term
+                    
                 if question_type == 'umum':
                     # Untuk pertanyaan umum, kita mengembalikan seluruh match sebagai string
-                    return " ".join([match.group(i) for i in range(1, 5) if match.group(i)])
+                    # Pastikan hanya mengambil grup yang ada, cek jumlah total grup dulu
+                    num_groups = len(match.groups())
+                    return " ".join([match.group(i) for i in range(1, min(num_groups + 1, 5)) if match.group(i)])
                 
                 return disease_name
         
         return None
-    
     def get_response(self, processed_question, original_text):
         """
         Mendapatkan jawaban chatbot berdasarkan pertanyaan user
@@ -276,85 +451,181 @@ class Chatbot:
         str
             Jawaban dari chatbot
         """
-        # Cek jika pertanyaan cocok dengan salah satu pattern FAQ umum
+        # Coba identifikasi pertanyaan dengan berbagai pattern
+        possible_matches = []
+        disease_match = None
+        
+        # Cek jika pertanyaan cocok dengan salah satu pattern FAQ
         for question_type, patterns in self.patterns.items():
             disease_or_condition = self._extract_disease_from_question(question_type, original_text)
             
             if disease_or_condition:
-                if question_type == 'apa_itu':
-                    if disease_or_condition in self.diseases_data:
-                        return f"{disease_or_condition} adalah {self.diseases_data[disease_or_condition]['description']}"
+                possible_matches.append((question_type, disease_or_condition))
+                
+                if not disease_match and disease_or_condition in self.diseases_data:
+                    disease_match = disease_or_condition
+        
+        # Jika ada kecocokan yang valid, gunakan yang pertama
+        if possible_matches:
+            question_type, disease_or_condition = possible_matches[0]
+            
+            if question_type == 'apa_itu':
+                if disease_or_condition in self.diseases_data:
+                    return f"{disease_or_condition} adalah {self.diseases_data[disease_or_condition]['description']}"
+                else:
+                    # Coba fuzzy matching untuk menemukan penyakit yang mirip
+                    disease_candidates = list(self.diseases_data.keys())
+                    matches = get_close_matches(disease_or_condition, disease_candidates, n=1, cutoff=0.6)
+                    
+                    if matches:
+                        suggested_disease = matches[0]
+                        return f"Saya tidak memiliki informasi spesifik tentang '{disease_or_condition}'. Mungkin maksud Anda '{suggested_disease}'? {suggested_disease} adalah {self.diseases_data[suggested_disease]['description']}"
                     else:
                         return f"Maaf, saya tidak memiliki informasi tentang {disease_or_condition}."
-                
-                elif question_type == 'gejala':
-                    if disease_or_condition in self.diseases_data and disease_or_condition in self.faq_data['gejala_tambahan']:
+            
+            elif question_type == 'gejala':
+                if disease_or_condition in self.diseases_data:
+                    if disease_or_condition in self.faq_data['gejala_tambahan']:
                         gejala = ", ".join(self.faq_data['gejala_tambahan'][disease_or_condition])
                         return f"Gejala {disease_or_condition} antara lain: {gejala}."
                     else:
-                        return f"Maaf, saya tidak memiliki informasi tentang gejala {disease_or_condition}."
-                
-                elif question_type == 'penanganan':
-                    if disease_or_condition in self.diseases_data:
-                        penanganan = "\n- " + "\n- ".join(self.diseases_data[disease_or_condition]['recommendations'])
-                        return f"Penanganan untuk {disease_or_condition}:{penanganan}"
-                    else:
-                        return f"Maaf, saya tidak memiliki informasi tentang penanganan {disease_or_condition}."
-                
-                elif question_type == 'pencegahan':
-                    # Berikan info pencegahan berdasarkan jenis penyakit
-                    pencegahan = {
-                        "Flu": "Mencuci tangan secara rutin, menghindari kontak dekat dengan orang yang sedang sakit, menjaga daya tahan tubuh dengan istirahat cukup dan makan makanan bergizi.",
-                        "Demam Berdarah": "Memberantas sarang nyamuk dengan menguras tempat penampungan air, menutup rapat tempat penampungan air, mendaur ulang barang bekas, dan memantau jentik nyamuk.",
-                        "Tipes": "Menjaga kebersihan makanan dan minuman, mencuci tangan sebelum makan, memasak makanan dengan matang, dan menggunakan air bersih.",
-                        "TBC": "Mendapatkan vaksinasi BCG, menjaga ventilasi rumah, menghindari kontak dekat dengan penderita TBC aktif, dan menjaga daya tahan tubuh.",
-                        "Maag": "Makan secara teratur, menghindari makanan pedas dan asam, mengelola stres, dan menghindari merokok dan minuman beralkohol.",
-                        "Asma": "Menghindari faktor pemicu seperti debu, polen, asap rokok, dan udara dingin, serta menjaga kebersihan rumah.",
-                        "Migrain": "Menghindari faktor pemicu seperti stres, kurang tidur, dan makanan tertentu, serta menjaga pola hidup teratur.",
-                        "Diare": "Mencuci tangan dengan sabun, menggunakan air bersih, memasak makanan hingga matang, dan menjaga kebersihan makanan.",
-                        "Hipertensi": "Mengurangi konsumsi garam, menjaga berat badan ideal, olahraga teratur, dan menghindari stres.",
-                        "Diabetes": "Menjaga pola makan sehat, olahraga teratur, menghindari makanan tinggi gula, dan menjaga berat badan ideal."
-                    }
+                        return f"Maaf, saya belum memiliki data lengkap tentang gejala {disease_or_condition}."
+                else:
+                    # Coba fuzzy matching
+                    disease_candidates = list(self.diseases_data.keys())
+                    matches = get_close_matches(disease_or_condition, disease_candidates, n=1, cutoff=0.6)
                     
-                    if disease_or_condition in pencegahan:
-                        return f"Cara mencegah {disease_or_condition}: {pencegahan[disease_or_condition]}"
-                    else:
-                        return f"Maaf, saya tidak memiliki informasi tentang pencegahan {disease_or_condition}."
-                
-                elif question_type == 'durasi':
-                    # Berikan info durasi penyembuhan berdasarkan jenis penyakit
-                    durasi = {
-                        "Flu": "Flu biasanya sembuh dalam waktu 7-10 hari tanpa pengobatan khusus, namun gejala seperti batuk mungkin bertahan lebih lama.",
-                        "Demam Berdarah": "Proses penyembuhan demam berdarah biasanya memerlukan waktu 2-7 hari untuk fase kritis, dan total 2-4 minggu untuk pemulihan penuh.",
-                        "Tipes": "Tipes membutuhkan waktu penyembuhan sekitar 2-4 minggu dengan pengobatan antibiotik yang tepat. Tanpa pengobatan bisa lebih lama dan berisiko komplikasi.",
-                        "TBC": "Pengobatan TBC memerlukan waktu minimal 6 bulan hingga 12 bulan dengan konsumsi obat secara teratur dan lengkap.",
-                        "Maag": "Maag akut dapat membaik dalam 1-2 minggu dengan pengobatan, sedangkan maag kronis memerlukan pengobatan jangka panjang dan pengelolaan gaya hidup.",
-                        "Asma": "Asma adalah kondisi kronis yang dapat dikontrol dengan pengobatan yang tepat. Serangan asma bisa mereda dalam beberapa menit hingga jam dengan penanganan yang sesuai.",
-                        "Migrain": "Serangan migrain biasanya berlangsung 4-72 jam. Dengan pengobatan yang tepat bisa lebih cepat mereda.",
-                        "Diare": "Diare akut biasanya sembuh dalam 2-3 hari. Jika berlangsung lebih dari seminggu, perlu evaluasi medis lebih lanjut.",
-                        "Hipertensi": "Hipertensi adalah kondisi kronis yang memerlukan pengelolaan seumur hidup melalui pengobatan dan perubahan gaya hidup.",
-                        "Diabetes": "Diabetes adalah kondisi kronis yang memerlukan pengelolaan seumur hidup. Dengan penanganan yang tepat, kadar gula darah bisa terkontrol dengan baik."
-                    }
+                    if matches:
+                        suggested_disease = matches[0]
+                        if suggested_disease in self.faq_data['gejala_tambahan']:
+                            gejala = ", ".join(self.faq_data['gejala_tambahan'][suggested_disease])
+                            return f"Saya tidak memiliki informasi tentang '{disease_or_condition}'. Mungkin maksud Anda '{suggested_disease}'? Gejala {suggested_disease} antara lain: {gejala}."
                     
-                    if disease_or_condition in durasi:
-                        return durasi[disease_or_condition]
-                    else:
-                        return f"Maaf, saya tidak memiliki informasi tentang durasi penyembuhan {disease_or_condition}."
-                
-                elif question_type == 'umum':
-                    # Cek di data FAQ umum
-                    for condition, answer in self.faq_data['umum'].items():
-                        if condition.lower() in disease_or_condition.lower() or disease_or_condition.lower() in condition.lower():
-                            return answer
+                    return f"Maaf, saya tidak memiliki informasi tentang gejala {disease_or_condition}."
+            
+            elif question_type == 'penanganan':
+                if disease_or_condition in self.diseases_data:
+                    penanganan = "\n- " + "\n- ".join(self.diseases_data[disease_or_condition]['recommendations'])
+                    return f"Penanganan untuk {disease_or_condition}:{penanganan}"
+                else:
+                    # Coba fuzzy matching
+                    disease_candidates = list(self.diseases_data.keys())
+                    matches = get_close_matches(disease_or_condition, disease_candidates, n=1, cutoff=0.6)
                     
-                    return "Maaf, saya tidak memiliki informasi khusus tentang kondisi tersebut. Sebaiknya konsultasikan dengan dokter untuk penanganan yang tepat."
+                    if matches:
+                        suggested_disease = matches[0]
+                        penanganan = "\n- " + "\n- ".join(self.diseases_data[suggested_disease]['recommendations'])
+                        return f"Saya tidak memiliki informasi tentang '{disease_or_condition}'. Mungkin maksud Anda '{suggested_disease}'? Penanganan untuk {suggested_disease}:{penanganan}"
+                        
+                    return f"Maaf, saya tidak memiliki informasi tentang penanganan {disease_or_condition}."
+            
+            elif question_type == 'pencegahan':
+                # Berikan info pencegahan berdasarkan jenis penyakit
+                pencegahan = {
+                    "Flu": "Mencuci tangan secara rutin, menghindari kontak dekat dengan orang yang sedang sakit, menjaga daya tahan tubuh dengan istirahat cukup dan makan makanan bergizi.",
+                    "Demam Berdarah": "Memberantas sarang nyamuk dengan menguras tempat penampungan air, menutup rapat tempat penampungan air, mendaur ulang barang bekas, dan memantau jentik nyamuk.",
+                    "Tipes": "Menjaga kebersihan makanan dan minuman, mencuci tangan sebelum makan, memasak makanan dengan matang, dan menggunakan air bersih.",
+                    "TBC": "Mendapatkan vaksinasi BCG, menjaga ventilasi rumah, menghindari kontak dekat dengan penderita TBC aktif, dan menjaga daya tahan tubuh.",
+                    "Maag": "Makan secara teratur, menghindari makanan pedas dan asam, mengelola stres, dan menghindari merokok dan minuman beralkohol.",
+                    "Asma": "Menghindari faktor pemicu seperti debu, polen, asap rokok, dan udara dingin, serta menjaga kebersihan rumah.",
+                    "Migrain": "Menghindari faktor pemicu seperti stres, kurang tidur, dan makanan tertentu, serta menjaga pola hidup teratur.",
+                    "Diare": "Mencuci tangan dengan sabun, menggunakan air bersih, memasak makanan hingga matang, dan menjaga kebersihan makanan.",
+                    "Hipertensi": "Mengurangi konsumsi garam, menjaga berat badan ideal, olahraga teratur, dan menghindari stres.",
+                    "Diabetes": "Menjaga pola makan sehat, olahraga teratur, menghindari makanan tinggi gula, dan menjaga berat badan ideal.",
+                    "Alergi Makanan": "Menghindari makanan pemicu alergi, membaca label makanan dengan seksama, dan membawa obat alergi jika memiliki riwayat alergi berat.",
+                    "Sinusitis": "Menjaga kebersihan, menghindari alergen, banyak minum air putih, dan hindari perubahan suhu ekstrem."
+                }
+                
+                if disease_or_condition in pencegahan:
+                    return f"Cara mencegah {disease_or_condition}: {pencegahan[disease_or_condition]}"
+                else:
+                    # Coba fuzzy matching
+                    disease_candidates = list(pencegahan.keys())
+                    matches = get_close_matches(disease_or_condition, disease_candidates, n=1, cutoff=0.6)
+                    
+                    if matches:
+                        suggested_disease = matches[0]
+                        return f"Saya tidak memiliki informasi tentang '{disease_or_condition}'. Mungkin maksud Anda '{suggested_disease}'? Cara mencegah {suggested_disease}: {pencegahan[suggested_disease]}"
+                    
+                    return f"Maaf, saya tidak memiliki informasi tentang pencegahan {disease_or_condition}."
+            
+            elif question_type == 'durasi':
+                # Berikan info durasi penyembuhan berdasarkan jenis penyakit
+                durasi = {
+                    "Flu": "Flu biasanya sembuh dalam waktu 7-10 hari tanpa pengobatan khusus, namun gejala seperti batuk mungkin bertahan lebih lama.",
+                    "Demam Berdarah": "Proses penyembuhan demam berdarah biasanya memerlukan waktu 2-7 hari untuk fase kritis, dan total 2-4 minggu untuk pemulihan penuh.",
+                    "Tipes": "Tipes membutuhkan waktu penyembuhan sekitar 2-4 minggu dengan pengobatan antibiotik yang tepat. Tanpa pengobatan bisa lebih lama dan berisiko komplikasi.",
+                    "TBC": "Pengobatan TBC memerlukan waktu minimal 6 bulan hingga 12 bulan dengan konsumsi obat secara teratur dan lengkap.",
+                    "Maag": "Maag akut dapat membaik dalam 1-2 minggu dengan pengobatan, sedangkan maag kronis memerlukan pengobatan jangka panjang dan pengelolaan gaya hidup.",
+                    "Asma": "Asma adalah kondisi kronis yang dapat dikontrol dengan pengobatan yang tepat. Serangan asma bisa mereda dalam beberapa menit hingga jam dengan penanganan yang sesuai.",
+                    "Migrain": "Serangan migrain biasanya berlangsung 4-72 jam. Dengan pengobatan yang tepat bisa lebih cepat mereda.",
+                    "Diare": "Diare akut biasanya sembuh dalam 2-3 hari. Jika berlangsung lebih dari seminggu, perlu evaluasi medis lebih lanjut.",
+                    "Hipertensi": "Hipertensi adalah kondisi kronis yang memerlukan pengelolaan seumur hidup melalui pengobatan dan perubahan gaya hidup.",
+                    "Diabetes": "Diabetes adalah kondisi kronis yang memerlukan pengelolaan seumur hidup. Dengan penanganan yang tepat, kadar gula darah bisa terkontrol dengan baik.",
+                    "Alergi Makanan": "Reaksi alergi makanan bisa berlangsung dari beberapa menit hingga beberapa jam, dan umumnya mereda dalam 1-2 hari setelah berhenti mengonsumsi pemicu.",
+                    "Sinusitis": "Sinusitis akut biasanya sembuh dalam 2-4 minggu, sementara sinusitis kronis dapat berlangsung lebih dari 12 minggu dan membutuhkan perawatan jangka panjang."
+                }
+                
+                if disease_or_condition in durasi:
+                    return durasi[disease_or_condition]
+                else:
+                    # Coba fuzzy matching
+                    disease_candidates = list(durasi.keys())
+                    matches = get_close_matches(disease_or_condition, disease_candidates, n=1, cutoff=0.6)
+                    
+                    if matches:
+                        suggested_disease = matches[0]
+                        return f"Saya tidak memiliki informasi tentang '{disease_or_condition}'. Mungkin maksud Anda '{suggested_disease}'? {durasi[suggested_disease]}"
+                    
+                    return f"Maaf, saya tidak memiliki informasi tentang durasi penyembuhan {disease_or_condition}."
+            
+            elif question_type == 'umum':
+                # Cek di data FAQ umum
+                for condition, answer in self.faq_data['umum'].items():
+                    if condition.lower() in disease_or_condition.lower() or disease_or_condition.lower() in condition.lower():
+                        return answer
+                
+                # Analisis berdasarkan kata-kata dalam pertanyaan
+                if "demam" in original_text.lower() and any(durasi in original_text.lower() for durasi in ["3 hari", "tiga hari", "beberapa hari"]):
+                    return self.faq_data['umum']["demam tinggi lebih dari 3 hari"]
+                elif "sakit kepala" in original_text.lower() and any(kondisi in original_text.lower() for kondisi in ["terus", "berkelanjutan", "tidak sembuh"]):
+                    return self.faq_data['umum']["sakit kepala terus menerus"]
+                
+                return "Maaf, saya tidak memiliki informasi khusus tentang kondisi tersebut. Sebaiknya konsultasikan dengan dokter untuk penanganan yang tepat."
         
-        # Jika tidak cocok dengan pattern apapun, berikan jawaban default
+        # Jika ada pertanyaan tentang penyakit tapi tidak cocok dengan pola spesifik
+        # Coba deteksi nama penyakit dari pertanyaan umum
+        for disease in self.diseases_data.keys():
+            if disease.lower() in original_text.lower():
+                return f"{disease} adalah {self.diseases_data[disease]['description']}"
+        
+        # Coba deteksi kata kunci lain dalam pertanyaan
+        for synonym_list in self.disease_synonyms.values():
+            for synonym in synonym_list:
+                if synonym.lower() in original_text.lower():
+                    for disease, synonyms in self.disease_synonyms.items():
+                        if synonym in synonyms:
+                            return f"{disease} adalah {self.diseases_data[disease]['description']}"
+        
+        # Cek untuk pertanyaan umum tentang kesehatan
+        health_keywords = {
+            "vaksin": "Vaksinasi adalah cara efektif untuk mencegah berbagai penyakit menular. Konsultasikan dengan dokter untuk jadwal vaksinasi yang sesuai untuk Anda.",
+            "vitamin": "Vitamin penting untuk menjaga kesehatan tubuh. Usahakan mendapatkan vitamin dari makanan seimbang. Konsumsi suplemen vitamin sebaiknya atas anjuran dokter.",
+            "olahraga": "Olahraga teratur sangat baik untuk kesehatan. Disarankan melakukan aktivitas fisik minimal 150 menit per minggu dengan intensitas sedang.",
+            "makan sehat": "Pola makan sehat meliputi konsumsi buah, sayur, protein, dan karbohidrat dalam jumlah seimbang, serta mengurangi gula, garam, dan lemak jenuh.",
+            "tidur": "Tidur yang cukup (7-9 jam per hari untuk orang dewasa) penting untuk kesehatan fisik dan mental."
+        }
+        
+        for keyword, response in health_keywords.items():
+            if keyword in original_text.lower():
+                return response
+                
+        # Jika tidak cocok dengan pattern apapun, berikan jawaban default dengan contoh pertanyaan
         default_responses = [
-            "Maaf, saya tidak memahami pertanyaan Anda. Coba tanyakan tentang gejala, pengobatan, atau informasi tentang penyakit tertentu.",
-            "Saya tidak yakin apa yang Anda tanyakan. Anda bisa bertanya seperti 'Apa itu flu?' atau 'Bagaimana cara mengobati maag?'",
-            "Pertanyaan Anda di luar pengetahuan saya. Silakan tanyakan tentang penyakit, gejalanya, atau cara penanganannya.",
-            "Saya masih belajar dan belum bisa menjawab pertanyaan tersebut. Coba pertanyaan yang lebih spesifik tentang penyakit tertentu."
+            "Maaf, saya tidak memahami pertanyaan Anda. Anda dapat bertanya tentang:\n\n• Informasi penyakit: 'Apa itu tipes?'\n• Gejala: 'Apa gejala demam berdarah?'\n• Pengobatan: 'Bagaimana mengobati flu?'\n• Pencegahan: 'Cara mencegah diabetes?'\n• Durasi: 'Berapa lama maag sembuh?'",
+            "Saya tidak yakin apa yang Anda tanyakan. Contoh pertanyaan yang bisa saya jawab:\n\n• Apa itu hipertensi?\n• Gejala asma apa saja?\n• Bagaimana cara mengobati migren?\n• Cara mencegah TBC?\n• Berapa lama diare sembuh?",
+            "Pertanyaan Anda di luar pemahaman saya. Cobalah bertanya dengan format:\n\n• Apa itu [nama penyakit]?\n• Apa gejala [nama penyakit]?\n• Bagaimana mengobati [nama penyakit]?\n• Bagaimana mencegah [nama penyakit]?\n• Berapa lama [nama penyakit] sembuh?",
+            "Saya belum bisa menjawab pertanyaan tersebut. Berikut contoh pertanyaan yang dapat saya jawab:\n\n• Jelaskan tentang diabetes\n• Ciri-ciri terkena maag\n• Cara mengobati flu\n• Bagaimana mencegah demam berdarah\n• Berapa lama tipes sembuh"
         ]
         
         import random

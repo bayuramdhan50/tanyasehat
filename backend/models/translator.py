@@ -149,40 +149,95 @@ class OutputTranslator:
                 ]
             },
             "Diabetes": {
-                "description": "Penyakit kronis yang ditandai dengan kadar gula darah tinggi karena tubuh tidak dapat memproduksi atau menggunakan insulin dengan baik. Diabetes dapat menyebabkan kerusakan pada berbagai organ tubuh jika tidak ditangani dengan baik.",
+                "description": "Kondisi yang ditandai dengan kadar gula darah tinggi karena tubuh tidak dapat memproduksi atau menggunakan insulin dengan baik. Diabetes dapat menyebabkan berbagai komplikasi jika tidak ditangani dengan baik.",
                 "recommendations": [
                     "Pantau kadar gula darah secara teratur",
-                    "Ikuti pola makan seimbang dengan membatasi karbohidrat sederhana dan gula",
-                    "Lakukan aktivitas fisik secara teratur",
-                    "Konsumsi obat diabetes atau insulin sesuai resep dokter",
-                    "Jaga berat badan ideal",
-                    "Rawat kaki dengan baik dan perhatikan luka yang lambat sembuh",
+                    "Ikuti diet seimbang dengan batasan gula dan karbohidrat sesuai anjuran",
+                    "Lakukan aktivitas fisik secara rutin",
+                    "Konsumsi obat atau insulin sesuai resep dokter",
+                    "Periksa kaki setiap hari untuk mencegah luka yang sulit sembuh",
+                    "Kontrol berat badan dalam rentang sehat",
                     "Periksakan diri ke dokter secara rutin untuk mencegah komplikasi"
                 ]
             },
-            "Tidak diketahui": {
-                "description": "Sulit menentukan diagnosis yang tepat berdasarkan gejala yang disampaikan.",
+            "Eksim": {
+                "description": "Kondisi peradangan pada kulit yang ditandai dengan kulit kering, gatal, kemerahan, dan kadang-kadang lepuh. Eksim dapat dipicu oleh faktor genetik, alergi, atau lingkungan.",
                 "recommendations": [
-                    "Periksakan diri ke dokter untuk evaluasi lebih lanjut",
-                    "Berikan informasi gejala secara lebih detail kepada tenaga medis",
-                    "Lakukan pemeriksaan fisik dan tes laboratorium jika diperlukan",
-                    "Istirahat yang cukup dan minum banyak air putih",
-                    "Pantau perkembangan gejala dan catat jika ada perubahan"
+                    "Hindari bahan-bahan yang dapat memicu alergi seperti sabun keras dan deterjen",
+                    "Gunakan pelembab secara teratur untuk mengatasi kulit kering",
+                    "Hindari menggaruk area yang gatal untuk mencegah infeksi",
+                    "Gunakan pakaian berbahan lembut seperti katun",
+                    "Mandi dengan air hangat (tidak panas) dan segera gunakan pelembab setelah mandi",
+                    "Konsultasikan dengan dokter kulit untuk pengobatan yang tepat jika kondisi memburuk"
+                ]
+            },
+            "Infeksi Saluran Kemih": {
+                "description": "Infeksi yang terjadi di saluran kemih termasuk kandung kemih, uretra, ureter, dan ginjal. ISK lebih sering terjadi pada wanita dan ditandai dengan rasa terbakar saat buang air kecil dan keinginan buang air kecil yang sering.",
+                "recommendations": [
+                    "Minum banyak air putih untuk membantu membilas bakteri dari saluran kemih",
+                    "Buang air kecil segera saat terasa ingin, jangan ditahan",
+                    "Jaga kebersihan area genital",
+                    "Konsumsi obat antibiotik sesuai resep dokter hingga habis meskipun gejala sudah hilang",
+                    "Hindari minuman yang dapat mengiritasi kandung kemih seperti alkohol, kafein, dan minuman bersoda",
+                    "Konsultasikan dengan dokter jika gejala tidak membaik setelah beberapa hari pengobatan"
+                ]
+            },
+            "Radang Sendi": {
+                "description": "Peradangan pada satu atau lebih sendi yang menyebabkan nyeri dan kekakuan. Terdapat berbagai jenis radang sendi, dengan osteoartritis dan rheumatoid arthritis sebagai jenis yang paling umum.",
+                "recommendations": [
+                    "Lakukan latihan ringan dan peregangan untuk menjaga fleksibilitas sendi",
+                    "Jaga berat badan ideal untuk mengurangi tekanan pada sendi",
+                    "Gunakan kompres panas atau dingin untuk meredakan nyeri",
+                    "Konsumsi obat anti-inflamasi sesuai anjuran dokter",
+                    "Istirahatkan sendi yang sakit, tetapi hindari imobilisasi yang terlalu lama",
+                    "Gunakan alat bantu seperti tongkat atau penyangga jika diperlukan",
+                    "Konsultasikan dengan dokter untuk program terapi yang sesuai"
+                ]
+            },
+            "Alergi Makanan": {
+                "description": "Respons imun abnormal terhadap protein dalam makanan tertentu. Alergi makanan dapat menyebabkan gejala ringan seperti gatal-gatal hingga yang lebih serius seperti anafilaksis.",
+                "recommendations": [
+                    "Hindari makanan yang menyebabkan alergi",
+                    "Baca label makanan dengan cermat untuk mengidentifikasi alergen tersembunyi",
+                    "Informasikan kondisi alergi Anda kepada restoran saat makan di luar",
+                    "Bawalah selalu obat alergi atau EpiPen jika Anda memiliki riwayat reaksi parah",
+                    "Kenakan gelang informasi medis jika alergi Anda parah",
+                    "Konsultasikan dengan ahli alergi untuk tes dan manajemen alergi yang tepat"
+                ]
+            },
+            "Sinusitis": {
+                "description": "Peradangan pada rongga sinus yang biasanya disebabkan oleh infeksi virus, bakteri, atau jamur. Sinusitis ditandai dengan hidung tersumbat, sakit kepala, nyeri wajah, dan lendir kental.",
+                "recommendations": [
+                    "Gunakan semprotan hidung saline untuk membantu mengencerkan dan mengalirkan lendir",
+                    "Hirup uap hangat untuk membantu mengurangi sumbatan",
+                    "Hindari iritan seperti asap rokok dan polusi",
+                    "Kompres hangat pada wajah untuk meredakan nyeri",
+                    "Minum banyak cairan untuk mengencerkan lendir",
+                    "Jika gejala berlangsung lebih dari 10 hari atau sangat parah, konsultasikan dengan dokter"
+                ]
+            },
+            "Tidak diketahui": {
+                "description": "Berdasarkan gejala yang diberikan, tidak dapat dipastikan diagnosis yang tepat. Ini bisa disebabkan oleh berbagai faktor seperti gejala yang tidak spesifik, atau kondisi yang jarang terjadi.",
+                "recommendations": [
+                    "Konsultasikan dengan dokter untuk pemeriksaan lebih lanjut dan diagnosis yang tepat",
+                    "Catat semua gejala yang dialami secara detail, termasuk kapan mulai terjadi dan apa yang memperburuk atau meringankan gejala",
+                    "Hindari mendiagnosis sendiri dan mengobati diri tanpa petunjuk medis",
+                    "Prioritaskan istirahat dan jaga kesehatan secara umum sambil menunggu konsultasi medis",
+                    "Jika gejala semakin parah, segera cari bantuan medis darurat"
                 ]
             }
         }
         
-        # Buat direktori data jika belum ada
+        # Buat direktori jika belum ada
         os.makedirs(os.path.dirname(self.diseases_data_path), exist_ok=True)
         
         # Simpan ke JSON
         with open(self.diseases_data_path, 'w', encoding='utf-8') as f:
             json.dump(sample_data, f, indent=4, ensure_ascii=False)
         
-        print(f"Data contoh penyakit berhasil dibuat dan disimpan ke {self.diseases_data_path}")
+        print(f"Data contoh berhasil dibuat dan disimpan ke {self.diseases_data_path}")
         
         return sample_data
-    
     def translate(self, disease, confidence):
         """
         Menghasilkan rekomendasi berdasarkan hasil prediksi penyakit
@@ -196,8 +251,8 @@ class OutputTranslator:
         
         Returns
         -------
-        dict
-            Respons yang berisi deskripsi penyakit dan rekomendasi
+        list
+            Daftar rekomendasi berdasarkan penyakit dan tingkat kepercayaan
         """
         # Jika penyakit tidak ditemukan di data
         if disease not in self.diseases_data:
@@ -205,25 +260,16 @@ class OutputTranslator:
         
         # Ambil informasi penyakit
         disease_info = self.diseases_data[disease]
+        recommendations = disease_info["recommendations"]
         
-        # Format respons berdasarkan confidence level
-        if confidence < 0.5:
-            confidence_level = "Anda mungkin"
-        elif confidence < 0.7:
-            confidence_level = "Kemungkinan Anda"
-        else:
-            confidence_level = "Anda sangat mungkin"
+        # Tambahkan peringatan jika confidence rendah
+        if disease != "Tidak diketahui" and confidence < 0.6:
+            low_confidence_warning = f"Tingkat kepercayaan prediksi cukup rendah ({confidence:.2f}). Sebaiknya konsultasikan dengan dokter untuk diagnosis yang lebih akurat."
+            recommendations = [low_confidence_warning] + recommendations
         
-        # Buat respons
+        # Untuk kasus "Tidak diketahui", tambahkan pesan khusus
         if disease == "Tidak diketahui":
-            response = {
-                "description": "Maaf, gejala yang Anda sampaikan kurang spesifik untuk menentukan diagnosis.",
-                "recommendations": disease_info["recommendations"]
-            }
-        else:
-            response = {
-                "description": f"{confidence_level} mengalami {disease}. {disease_info['description']}",
-                "recommendations": disease_info["recommendations"]
-            }
-        
-        return response
+            uncertain_message = "Berdasarkan gejala yang Anda berikan, sistem tidak dapat menentukan diagnosis yang pasti. Ini bisa disebabkan oleh kurangnya informasi atau gejala yang terlalu umum."
+            recommendations = [uncertain_message] + recommendations
+            
+        return recommendations
