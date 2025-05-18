@@ -42,7 +42,7 @@ TanyaSehat adalah aplikasi web untuk mendeteksi kemungkinan penyakit berdasarkan
 #### Backend
 1. Clone repositori ini
    ```bash
-   git clone https://github.com/username/tanyasehat.git
+   git clone https://github.com/bayuramdhan50/tanyasehat.git
    cd tanyasehat
    ```
 
