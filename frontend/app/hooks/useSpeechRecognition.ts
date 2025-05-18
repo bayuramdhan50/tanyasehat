@@ -29,7 +29,6 @@ const useSpeechRecognition = ({
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
   const [hasSupport, setHasSupport] = useState(false);
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -73,7 +72,9 @@ const useSpeechRecognition = ({
         recognitionInstance.stop();
       }
     };
-  }, [language, onError, onResult]);
+    // Only depend on the language - we handle callbacks internally to avoid dependency cycles
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
 
   const startListening = useCallback(() => {
     if (!recognition) return;

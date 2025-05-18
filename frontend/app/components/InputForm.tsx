@@ -50,21 +50,24 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
       setConnectionStatus('failed');
     }
   }, []);
-
   // Gunakan custom hook untuk speech recognition
+  const onSpeechResult = useCallback((text: string) => {
+    setSymptoms(text);
+  }, []);
+
+  const onSpeechError = useCallback((error: string) => {
+    console.error('Speech recognition error:', error);
+    setError('Terjadi kesalahan pada pengenalan suara. Silakan coba lagi.');
+  }, []);
+
   const { 
     isListening, 
     startListening, 
     stopListening, 
     hasSupport 
   } = useSpeechRecognition({
-    onResult: (text) => {
-      setSymptoms(text);
-    },
-    onError: (error) => {
-      console.error('Speech recognition error:', error);
-      setError('Terjadi kesalahan pada pengenalan suara. Silakan coba lagi.');
-    },
+    onResult: onSpeechResult,
+    onError: onSpeechError,
     language: 'id-ID'
   });
 
