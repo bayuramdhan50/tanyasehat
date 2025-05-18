@@ -1,0 +1,32 @@
+# Backend specific .gitignore
+
+# Python-related
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+
+# Model files
+*.model
+*.pickle
+*.pkl
+*.joblib
+*.h5
+
+# Data files that should not be committed
+data/raw_data/
+data/processed_data/
+data/temp/
+
+# Generated logs
+*.log
+logs/
+
+# Flask specific
+instance/
+.webassets-cache

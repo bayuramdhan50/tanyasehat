@@ -1,0 +1,51 @@
+symptoms,disease
+"Demam tinggi, pilek, hidung tersumbat, bersin-bersin, batuk kering, sakit tenggorokan, nyeri otot",Flu
+"Badan panas dingin, kepala pusing, batuk pilek, hidung meler",Flu
+"Demam, nyeri otot, sakit kepala, bersin, hidung tersumbat, batuk",Flu
+"Badan menggigil, demam, batuk kering, sakit kepala, hidung meler",Flu
+"Suhu tubuh tinggi, lemas, bersin-bersin, nyeri tenggorokan, batuk",Flu
+"Demam tinggi mendadak, nyeri di belakang mata, sakit kepala parah, ruam merah, nyeri sendi dan otot",Demam Berdarah
+"Demam 40 derajat, nyeri otot dan sendi, mual, muntah, bintik merah di kulit",Demam Berdarah
+"Panas tinggi selama 2-7 hari, nyeri sendi luar biasa, sakit kepala berat, bintik merah di anggota tubuh",Demam Berdarah
+"Demam tinggi, perdarahan gusi, mimisan, bintik merah di tubuh, mual dan muntah",Demam Berdarah
+"Panas tinggi, nyeri otot dan sendi parah, mata merah dan nyeri, lemas, bintik kemerahan",Demam Berdarah
+"Demam tinggi berkelanjutan, sakit kepala, nafsu makan menurun, nyeri perut, sembelit atau diare",Tipes
+"Demam naik secara bertahap, lemas, sakit perut, tidak nafsu makan, lidah kotor",Tipes
+"Panas tinggi terus menerus, nyeri perut bagian kanan bawah, sembelit, lidah berselaput",Tipes
+"Demam lebih dari seminggu, sakit kepala, tidak nafsu makan, perut tidak nyaman",Tipes
+"Panas terus-menerus, lemas, mual, sakit perut, lidah kotor, konstipasi",Tipes
+"Batuk berdahak lebih dari 2 minggu, batuk darah, nyeri dada, demam, berkeringat di malam hari, berat badan turun",TBC
+"Batuk lama tidak sembuh, dahak kental, batuk darah, berat badan menurun drastis, keringat malam",TBC
+"Batuk terus-menerus lebih dari 3 minggu, sesak napas, nyeri dada, demam rendah, keringat malam, nafsu makan berkurang",TBC
+"Batuk darah, demam bertahap, berkeringat di malam hari, badan kurus, lemas",TBC
+"Batuk berdahak lebih dari sebulan, demam, nafsu makan hilang, berat badan turun, keringat malam",TBC
+"Nyeri ulu hati, perut kembung, mual, muntah, nafsu makan berkurang",Maag
+"Sakit perut bagian atas, kembung, sendawa terus-menerus, mual",Maag
+"Perih di ulu hati, perut terasa penuh, sering bersendawa, mual setelah makan",Maag
+"Nyeri perut seperti terbakar, kembung, mual, muntah, cepat kenyang",Maag
+"Perih di lambung, kembung, nafsu makan berkurang, mual muntah",Maag
+"Sesak napas, napas berbunyi, batuk-batuk, dada terasa berat",Asma
+"Sulit bernapas, napas berbunyi seperti mengi, batuk terutama malam hari",Asma
+"Sesak napas mendadak, dada terasa sempit, batuk kering, suara napas berbunyi",Asma
+"Kesulitan bernapas, batuk terus-menerus, dada sesak, napas bunyi seperti peluit",Asma
+"Serangan sesak napas, batuk, napas berbunyi, kesulitan tidur karena batuk",Asma
+"Sakit kepala berdenyut di satu sisi, mual, muntah, sensitif terhadap cahaya dan suara",Migrain
+"Nyeri kepala parah, pandangan kabur, sensitif terhadap cahaya, mual",Migrain
+"Sakit kepala berdenyut, mual, sensitif terhadap suara, penglihatan berbayang",Migrain
+"Nyeri kepala sebelah, sensitif terhadap cahaya dan suara, mual, muntah",Migrain
+"Sakit kepala hebat, mual, mata berkunang-kunang, sensitif terhadap suara",Migrain
+"BAB cair lebih dari 3 kali sehari, sakit perut, kram perut, mual, muntah",Diare
+"BAB encer berkali-kali, perut kram, mual, lemas, dehidrasi",Diare
+"Buang air besar cair berkali-kali, sakit perut, mual, muntah, kurang nafsu makan",Diare
+"BAB encer terus menerus, perut sakit, kembung, mual, badan lemas",Diare
+"Mencret berkali-kali, kram perut, mual, muntah, haus terus",Diare
+"Sakit kepala, pusing, jantung berdebar, sesak napas, telinga berdenging",Hipertensi
+"Sakit kepala parah, pusing, sesak napas, jantung berdebar kencang",Hipertensi
+"Pusing, sakit kepala terutama di tengkuk, wajah kemerahan, mudah lelah",Hipertensi
+"Pusing, leher kaku, pandangan kabur, sesak napas, jantung berdebar",Hipertensi
+"Sakit kepala, penglihatan kabur, jantung berdebar, sulit tidur",Hipertensi
+"Sering buang air kecil, selalu haus, selalu lapar, berat badan turun, pandangan kabur, luka lambat sembuh",Diabetes
+"Kencing terus-menerus, haus terus, lapar berlebihan, berat badan menurun",Diabetes
+"Sering kencing terutama malam hari, haus berlebihan, lemas, luka sulit sembuh",Diabetes
+"Kencing terus, selalu haus, nafsu makan bertambah, lemas, penglihatan kabur",Diabetes
+"Haus terus, sering pipis, cepat lelah, berat badan turun tanpa sebab",Diabetes
