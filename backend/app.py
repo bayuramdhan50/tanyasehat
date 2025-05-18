@@ -109,6 +109,11 @@ def chat():
     # Dapatkan jawaban dari chatbot
     response = chatbot.get_response(processed_question, original_text=question)
     
+    # Log untuk debugging
+    print(f"Pertanyaan: {question}")
+    print(f"Preprocessing: {processed_question}")
+    print(f"Jawaban: {response}")
+    
     return jsonify({'response': response})
 
 @app.route('/api/train', methods=['POST'])

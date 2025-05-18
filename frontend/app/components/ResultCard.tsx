@@ -4,6 +4,8 @@
  */
 'use client'
 
+import { useState } from 'react';
+
 interface Disease {
   name: string;
   probability: number;
@@ -21,6 +23,8 @@ interface ResultCardProps {
 }
 
 export default function ResultCard({ result }: ResultCardProps) {
+  const [showAllRecommendations, setShowAllRecommendations] = useState(false);
+  
   // Format persentase probabilitas
   const formatProbability = (prob: number) => {
     return (prob * 100).toFixed(2) + '%';
@@ -42,6 +46,15 @@ export default function ResultCard({ result }: ResultCardProps) {
 
   // Menentukan apakah prediksi tidak diketahui
   const isUnknown = result.prediction === "Tidak diketahui";
+  
+  // Teks dengan penjelasan tingkat kepercayaan
+  const confidenceExplanation = isUnknown
+    ? "Sistem tidak dapat menentukan diagnosis dengan pasti berdasarkan gejala yang diinputkan."
+    : result.confidence >= 0.7
+      ? "Tingkat kepercayaan tinggi menunjukkan bahwa gejala yang diinputkan memiliki korelasi kuat dengan penyakit yang terdeteksi."
+      : result.confidence >= 0.5
+        ? "Tingkat kepercayaan sedang menunjukkan bahwa ada kemungkinan penyakit lain dengan gejala serupa."
+        : "Tingkat kepercayaan rendah menunjukkan bahwa gejala yang diinputkan tidak cukup spesifik. Sebaiknya konsultasikan dengan dokter.";
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-2xl mx-auto mt-8">
@@ -81,6 +94,13 @@ export default function ResultCard({ result }: ResultCardProps) {
             {getConfidenceMessage(result.confidence)}
           </p>
         </div>
+        
+        {/* Penjelasan tingkat kepercayaan */}
+        <div className="mt-3 p-2 bg-white dark:bg-gray-700 rounded-sm text-sm">
+          <p className="text-gray-600 dark:text-gray-300">
+            {confidenceExplanation}
+          </p>
+        </div>
       </div>
       
       {result.top_diseases && result.top_diseases.length > 0 && (
@@ -107,6 +127,13 @@ export default function ResultCard({ result }: ResultCardProps) {
               </li>
             ))}
           </ul>
+          
+          {isUnknown && result.top_diseases.length > 1 && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 italic">
+              Gejala yang Anda sampaikan menunjukkan potensi beberapa kondisi dengan tingkat kepercayaan rendah. 
+              Konsultasikan dengan dokter untuk diagnosis yang akurat.
+            </p>
+          )}
         </div>
       )}
       
@@ -114,7 +141,7 @@ export default function ResultCard({ result }: ResultCardProps) {
         <div>
           <h3 className="font-semibold mb-3">Rekomendasi:</h3>
           <ul className="list-disc pl-5 space-y-2">
-            {result.recommendation.map((rec: string, index: number) => (
+            {result.recommendation.slice(0, showAllRecommendations ? result.recommendation.length : 3).map((rec: string, index: number) => (
               <li 
                 key={index} 
                 className={`${index === 0 && result.confidence < 0.6 ? 'text-red-600 dark:text-red-400 font-medium' : 'text-gray-700 dark:text-gray-300'}`}
@@ -123,14 +150,30 @@ export default function ResultCard({ result }: ResultCardProps) {
               </li>
             ))}
           </ul>
+          
+          {result.recommendation.length > 3 && (
+            <button
+              onClick={() => setShowAllRecommendations(!showAllRecommendations)}
+              className="mt-2 text-blue-500 hover:text-blue-600 text-sm font-medium focus:outline-none"
+            >
+              {showAllRecommendations 
+                ? "Tampilkan lebih sedikit" 
+                : `Tampilkan semua rekomendasi (${result.recommendation.length})`}
+            </button>
+          )}
         </div>
       )}
       
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500">
-        <p>
-          Hasil ini hanya bersifat informatif dan tidak menggantikan diagnosis medis profesional.
-          Segera konsultasikan dengan dokter untuk penanganan lebih lanjut.
-        </p>
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center p-3 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            Hasil ini hanya bersifat informatif dan tidak menggantikan diagnosis medis profesional.
+            Segera konsultasikan dengan dokter untuk penanganan lebih lanjut.
+          </p>
+        </div>
       </div>
     </div>
   );

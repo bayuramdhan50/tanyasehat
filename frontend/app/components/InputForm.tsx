@@ -4,8 +4,9 @@
  */
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import useSpeechRecognition from '../hooks/useSpeechRecognition';
 
 interface InputFormProps {
   onResult: (data: any) => void;
@@ -15,64 +16,47 @@ interface InputFormProps {
 export default function InputForm({ onResult, onLoading }: InputFormProps) {
   const [symptoms, setSymptoms] = useState('');
   const [error, setError] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState<any>(null);
-  // Inisialisasi Web Speech API saat komponen dimuat
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognitionAPI = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      
-      if (SpeechRecognitionAPI) {
-        const recognitionInstance = new SpeechRecognitionAPI();
-        
-        recognitionInstance.lang = 'id-ID'; // Set bahasa ke Bahasa Indonesia
-        recognitionInstance.continuous = true;
-        recognitionInstance.interimResults = true;
-        
-        recognitionInstance.onresult = (event: any) => {
-          const transcript = Array.from(event.results)
-            .map((result: any) => result[0])
-            .map((result: any) => result.transcript)
-            .join('');
-          
-          setSymptoms(transcript);
-        };
-        
-        recognitionInstance.onerror = (event: any) => {
-          console.error('Speech recognition error', event.error);
-          setIsListening(false);
-          setError('Terjadi kesalahan pada pengenalan suara. Silakan coba lagi.');
-        };
-        
-        recognitionInstance.onend = () => {
-          setIsListening(false);
-        };
-        
-        setRecognition(recognitionInstance);
-      }
-    }
-    
-    return () => {
-      if (recognition) {
-        recognition.stop();
-      }
-    };
-  }, []);
+  const [examples, setExamples] = useState<string[]>([
+    'Saya mengalami demam tinggi dan sakit kepala selama 3 hari',
+    'Saya batuk kering, sesak napas, dan nyeri dada sejak seminggu yang lalu',
+    'Perut saya sakit dan saya sering muntah sejak kemarin',
+    'Saya mengalami pusing, mual, dan pandangan kabur',
+    'Tenggorokan saya sakit dan sulit menelan sejak 2 hari yang lalu'
+  ]);
+  
+  // Gunakan custom hook untuk speech recognition
+  const { 
+    isListening, 
+    startListening, 
+    stopListening, 
+    hasSupport 
+  } = useSpeechRecognition({
+    onResult: (text) => {
+      setSymptoms(text);
+    },
+    onError: (error) => {
+      console.error('Speech recognition error:', error);
+      setError('Terjadi kesalahan pada pengenalan suara. Silakan coba lagi.');
+    },
+    language: 'id-ID'
+  });
 
   const toggleListening = () => {
-    if (!recognition) {
+    if (!hasSupport) {
       setError('Maaf, browser Anda tidak mendukung pengenalan suara.');
       return;
     }
     
     if (isListening) {
-      recognition.stop();
-      setIsListening(false);
+      stopListening();
     } else {
       setError('');
-      recognition.start();
-      setIsListening(true);
+      startListening();
     }
+  };
+
+  const useExample = (example: string) => {
+    setSymptoms(example);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,7 +86,6 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
       onLoading(false);
     }
   };
-
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="mb-4">
@@ -150,7 +133,30 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
             Mendengarkan... Bicara dengan jelas tentang gejala yang Anda alami.
           </p>
         )}
+        {!hasSupport && (
+          <p className="mt-2 text-sm text-yellow-500">
+            Browser Anda tidak mendukung fitur pengenalan suara.
+          </p>
+        )}
         {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
+        
+        {/* Contoh gejala */}
+        <div className="mt-4">
+          <p className="text-xs text-gray-500 mb-2">Contoh deskripsi gejala:</p>
+          <div className="flex flex-wrap gap-1">
+            {examples.map((example, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => useExample(example)}
+                className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded transition-colors truncate max-w-[48%]"
+                title={example}
+              >
+                {example.length > 30 ? example.substring(0, 30) + '...' : example}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
       <button
         type="submit"

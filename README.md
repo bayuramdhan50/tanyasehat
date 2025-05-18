@@ -1,131 +1,128 @@
 # TanyaSehat - Sistem Deteksi Penyakit Berbasis NLP
 
-Aplikasi web untuk mendeteksi kemungkinan penyakit berdasarkan gejala yang diinputkan pengguna dalam bahasa Indonesia menggunakan NLP (Natural Language Processing). TanyaSehat menggabungkan backend Flask dengan preprocessor teks bahasa Indonesia dan model klasifikasi penyakit, serta frontend Next.js untuk antarmuka pengguna yang modern dan responsif.
+<div align="center">
+  <h3>Deteksi penyakit berdasarkan deskripsi gejala dalam Bahasa Indonesia</h3>
+</div>
 
-## Fitur
+## 📋 Deskripsi
 
-- Deteksi penyakit berdasarkan teks gejala yang diinputkan dalam bahasa Indonesia
-- Preprocessing teks dalam bahasa Indonesia (tokenisasi, stemming, dan stopword removal)
-- Klasifikasi teks menggunakan TF-IDF dan Naive Bayes
-- Chatbot sederhana untuk menjawab pertanyaan tentang penyakit
-- Rekomendasi kustom berdasarkan hasil prediksi penyakit
-- Antarmuka pengguna yang responsif dan mobile-friendly
-- Tampilan mode gelap (dark mode)
+TanyaSehat adalah aplikasi web untuk mendeteksi kemungkinan penyakit berdasarkan gejala yang diinputkan pengguna dalam bahasa Indonesia. Sistem ini menggunakan Natural Language Processing (NLP) untuk memahami input pengguna dan memberikan prediksi berdasarkan model klasifikasi yang telah dilatih.
 
-## Teknologi yang Digunakan
+## ✨ Fitur
+
+- 🔍 **Deteksi Penyakit**: Analisis gejala dalam bahasa natural untuk memprediksi kemungkinan penyakit
+- 🎤 **Input Suara**: Dukungan untuk input suara (speech-to-text) dalam Bahasa Indonesia
+- 🤖 **Chatbot Asisten**: Tanya jawab interaktif tentang informasi penyakit dan rekomendasi kesehatan
+- 📊 **Visualisasi Hasil**: Tampilan hasil dengan indikator tingkat kepercayaan dan rekomendasi
+- 🌙 **Mode Gelap**: Antarmuka yang nyaman untuk penggunaan di berbagai kondisi pencahayaan
+
+## 🚀 Teknologi
 
 ### Backend
-- **Python** dengan **Flask** sebagai framework web
-- **Scikit-learn** untuk pemodelan machine learning
-- **Sastrawi** untuk stemming bahasa Indonesia
-- **NLTK** untuk preprocessing teks
-- **NumPy** dan **Pandas** untuk manipulasi data
+- Python 3.x
+- Flask (Web framework)
+- NLTK & Sastrawi (NLP untuk Bahasa Indonesia)
+- Scikit-learn (Machine Learning)
 
 ### Frontend
-- **Next.js** untuk aplikasi React dengan server-side rendering
-- **TypeScript** untuk type safety
-- **Tailwind CSS** untuk styling
-- **Axios** untuk komunikasi dengan API
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- Web Speech API
 
-## Struktur Proyek
-
-```
-tanyasehat/
-│
-├── backend/
-│   ├── app.py                     # Aplikasi Flask utama
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── classifier.py          # Model klasifikasi (TF-IDF + Naive Bayes)
-│   │   ├── chatbot.py             # Fitur chatbot sederhana
-│   │   └── translator.py          # Output translator (rekomendasi)
-│   │
-│   ├── data/
-│   │   ├── diseases.json          # Data penyakit dan informasinya
-│   │   ├── symptoms.json          # Lexicon gejala penyakit
-│   │   └── training_data.csv      # Data latih (gejala -> penyakit)
-│   │
-│   └── utils/
-│       ├── __init__.py
-│       └── preprocessor.py        # Modul preprocessing teks bahasa Indonesia
-│
-├── frontend/
-│   ├── app/
-│   │   ├── components/            # Komponen UI React 
-│   │   │   ├── Header.tsx
-│   │   │   ├── InputForm.tsx
-│   │   │   ├── ResultCard.tsx
-│   │   │   ├── Chatbot.tsx
-│   │   │   ├── Loading.tsx
-│   │   │   └── Tabs.tsx
-│   │   ├── globals.css            # Style global
-│   │   ├── layout.tsx             # Layout utama
-│   │   └── page.tsx               # Halaman utama
-│   │
-│   ├── public/                    # Asset statis
-│   │   └── logo.svg               # Logo TanyaSehat
-│   │
-│   ├── next.config.ts             # Konfigurasi Next.js
-│   ├── package.json               # Dependensi JavaScript
-│   └── ...
-│
-├── requirements.txt               # Dependensi Python
-└── README.md                      # Dokumentasi proyek
-```
-
-## Instalasi dan Pengaturan
+## 🛠️ Instalasi dan Penggunaan
 
 ### Prasyarat
-- Python 3.7+
+- Python 3.8+
 - Node.js 18+
 - npm atau yarn
 
-### Backend (Flask)
+### Langkah Instalasi
 
-1. Buat virtual environment Python:
+#### Backend
+1. Clone repositori ini
    ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-
-   # macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
+   git clone https://github.com/username/tanyasehat.git
+   cd tanyasehat
    ```
 
-2. Install dependensi:
+2. Siapkan lingkungan virtual Python (opsional tapi disarankan)
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
+   ```
+
+3. Install dependensi backend
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Jalankan aplikasi Flask:
+4. Jalankan server backend
    ```bash
    cd backend
    python app.py
    ```
-   
    Server akan berjalan di http://localhost:5000
 
-### Frontend (Next.js)
-
-1. Install dependensi:
+#### Frontend
+1. Masuk ke direktori frontend
    ```bash
    cd frontend
+   ```
+
+2. Install dependensi frontend
+   ```bash
    npm install
    # atau
    yarn install
    ```
 
-2. Jalankan aplikasi Next.js dalam mode development:
+3. Jalankan server development frontend
    ```bash
    npm run dev
    # atau
    yarn dev
    ```
-   
-   Aplikasi akan berjalan di http://localhost:3000
+   Frontend akan tersedia di http://localhost:3000
 
-## API Endpoints
+## 📚 Cara Menggunakan
+
+1. Buka aplikasi di browser
+2. Pilih tab "Deteksi Penyakit"
+3. Deskripsikan gejala yang dialami dalam bahasa Indonesia (bisa melalui ketikan atau input suara)
+4. Klik "Analisis Gejala" untuk mendapatkan hasil
+5. Lihat hasil diagnosis beserta rekomendasi
+6. Untuk pertanyaan lebih lanjut, gunakan tab "Asisten TanyaSehat"
+
+## 📊 Struktur Proyek
+
+```
+tanyasehat/
+├── backend/                   # Kode backend Flask
+│   ├── app.py                 # Aplikasi utama Flask
+│   ├── data/                  # Data untuk model
+│   ├── docs/                  # Dokumentasi backend
+│   ├── models/                # Model-model
+│   │   ├── classifier.py      # Model klasifikasi penyakit
+│   │   ├── chatbot.py         # Model chatbot sederhana
+│   │   └── translator.py      # Translator hasil prediksi
+│   └── utils/                 # Utilitas
+│       └── preprocessor.py    # Preprocessing teks
+├── frontend/                  # Kode frontend Next.js
+│   ├── app/                   # Aplikasi Next.js
+│   │   ├── components/        # Komponen React
+│   │   ├── hooks/             # Custom React hooks
+│   │   ├── types/             # TypeScript type definitions
+│   │   ├── page.tsx           # Halaman utama
+│   │   └── layout.tsx         # Layout aplikasi
+│   ├── public/                # Aset statis
+│   └── package.json           # Dependensi frontend
+├── DOKUMENTASI.md             # Dokumentasi pengembangan
+└── requirements.txt           # Dependensi backend
+```
+
+## 🔌 API Endpoints
 
 ### 1. Prediksi Penyakit
 - **URL**: `/api/predict`
@@ -139,12 +136,16 @@ tanyasehat/
 - **Response**:
   ```json
   {
-    "predicted_disease": "Pneumonia",
-    "probability": 0.85,
-    "recommendations": [
+    "prediction": "Pneumonia",
+    "confidence": 0.85,
+    "recommendation": [
       "Segera konsultasikan dengan dokter",
       "Istirahat yang cukup",
       "Minum banyak cairan"
+    ],
+    "top_diseases": [
+      {"name": "Bronkitis", "probability": 0.12},
+      {"name": "Asma", "probability": 0.03}
     ]
   }
   ```
@@ -155,7 +156,7 @@ tanyasehat/
 - **Request Body**:
   ```json
   {
-    "message": "Apa itu diabetes?"
+    "text": "Apa itu diabetes?"
   }
   ```
 - **Response**:
@@ -165,7 +166,18 @@ tanyasehat/
   }
   ```
 
-## Pengembangan
+### 3. Melatih Ulang Model
+- **URL**: `/api/train`
+- **Method**: POST
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Model berhasil dilatih ulang"
+  }
+  ```
+
+## 🛠️ Pengembangan
 
 ### Menambahkan Data Penyakit Baru
 Untuk menambahkan data penyakit baru, tambahkan entri ke file `backend/data/diseases.json` dengan format:
@@ -179,17 +191,16 @@ Untuk menambahkan data penyakit baru, tambahkan entri ke file `backend/data/dise
 }
 ```
 
-### Melatih Ulang Model
-Setelah menambahkan data baru ke `training_data.csv`, jalankan script:
-```bash
-cd backend
-python -c "from models.classifier import train_model; train_model()"
-```
+Setelah itu, tambahkan contoh gejala di `backend/models/classifier.py` dan latih ulang model melalui endpoint `/api/train`.
 
-## Lisensi
+## ⚠️ Disclaimer
 
-Proyek ini dilisensikan di bawah lisensi MIT.
+Aplikasi ini hanya bersifat informatif dan **tidak** menggantikan konsultasi medis profesional. Hasil deteksi yang diberikan tidak dapat dianggap sebagai diagnosis medis. Selalu konsultasikan dengan dokter untuk diagnosis dan penanganan medis yang tepat.
 
-## Kontributor
+## 👥 Kontributor
 
 - Dibuat untuk Mata Kuliah Sistem Pakar - Semester 6
+
+## 📄 Lisensi
+
+Proyek ini tersedia di bawah lisensi MIT. Lihat file `LICENSE` untuk informasi selengkapnya.
