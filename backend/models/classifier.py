@@ -5,10 +5,12 @@ import os
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import MultinomialNB, ComplementNB
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.ensemble import VotingClassifier
+from sklearn.preprocessing import LabelEncoder
 import joblib
 
 from utils.preprocessor import preprocess_text
@@ -16,15 +18,22 @@ from utils.preprocessor import preprocess_text
 class DiseaseClassifier:
     """
     Kelas untuk mengklasifikasikan penyakit berdasarkan teks gejala.
-    Menggunakan TF-IDF dan Naive Bayes.
+    Menggunakan TF-IDF dan Naive Bayes dengan optimasi parameter.
     """
     
     def __init__(self):
         """Inisialisasi model klasifikasi penyakit"""
-        # Pipeline untuk preprocessing dan klasifikasi
+        # Pipeline untuk preprocessing dan klasifikasi dengan parameter yang dioptimalkan
         self.pipeline = Pipeline([
-            ('tfidf', TfidfVectorizer(max_features=5000, ngram_range=(1, 2))),
-            ('clf', MultinomialNB(alpha=1.0))
+            ('tfidf', TfidfVectorizer(
+                max_features=10000,  # Meningkatkan jumlah fitur untuk menangkap lebih banyak pola
+                ngram_range=(1, 3),  # Menggunakan n-gram dari 1 hingga 3 untuk menangkap frasa
+                min_df=2,            # Minimal muncul di 2 dokumen
+                sublinear_tf=True,   # Logarithmic scaling pada term frequency
+                use_idf=True,        # Menggunakan inverse document frequency
+                smooth_idf=True      # Smoothing IDF weights
+            )),
+            ('clf', ComplementNB(alpha=0.3))  # ComplementNB lebih baik untuk kelas tidak seimbang
         ])
         
         # Path ke file data training
@@ -35,6 +44,9 @@ class DiseaseClassifier:
         
         # Dictionary untuk menyimpan skor kepercayaan (confidence) model
         self.model_confidence = {}
+        
+        # Label encoder untuk menyimpan pemetaan kelas
+        self.label_encoder = LabelEncoder()
     
     def load_data(self):
         """
@@ -272,7 +284,6 @@ class DiseaseClassifier:
         print(f"Data contoh berhasil dibuat dan disimpan ke {self.data_path}")
         
         return df
-    
     def preprocess_training_data(self, data):
         """
         Melakukan preprocessing pada data training.
@@ -290,16 +301,63 @@ class DiseaseClassifier:
         # Buat kolom baru untuk teks yang sudah dipreproses
         data['processed_symptoms'] = data['symptoms'].apply(preprocess_text)
         
-        # Kumpulkan informasi tentang penyakit dan gejalanya
+        # Augmentasi data: kombinasikan gejala dari penyakit yang sama untuk meningkatkan jumlah data
+        augmented_data = []
+        
         for disease in data['disease'].unique():
-            disease_symptoms = data[data['disease'] == disease]['symptoms'].tolist()
+            disease_data = data[data['disease'] == disease]
+            symptoms_list = disease_data['symptoms'].tolist()
+            disease_symptoms = disease_data['symptoms'].tolist()
+            
+            # Simpan informasi untuk penggunaan chatbot
             self.diseases_info[disease] = disease_symptoms
+            
+            # Augmentasi: buat kombinasi gejala untuk penyakit yang sama
+            if len(symptoms_list) >= 2:
+                for i in range(len(symptoms_list)):
+                    for j in range(i+1, len(symptoms_list)):
+                        # Kombinasikan gejala dan hilangkan duplikasi kata
+                        combined = f"{symptoms_list[i]} dan {symptoms_list[j]}"
+                        augmented_data.append({
+                            'symptoms': combined,
+                            'disease': disease,
+                            'processed_symptoms': preprocess_text(combined)
+                        })
+        
+        # Gabungkan data asli dengan data yang diaugmentasi
+        if augmented_data:
+            augmented_df = pd.DataFrame(augmented_data)
+            data = pd.concat([data, augmented_df], ignore_index=True)
+        
+        # Balance dataset dengan duplikasi kelas minoritas
+        class_counts = data['disease'].value_counts()
+        max_count = class_counts.max()
+        
+        balanced_data = []
+        for disease, count in class_counts.items():
+            if count < max_count:
+                # Duplikasi data untuk kelas minoritas
+                disease_samples = data[data['disease'] == disease]
+                multiplier = int(max_count / count)
+                remainder = max_count % count
+                
+                # Duplikasi data berdasarkan multiplier
+                for _ in range(multiplier - 1):  # -1 karena yang asli sudah ada
+                    balanced_data.append(disease_samples)
+                
+                # Tambahkan sisa data jika ada
+                if remainder > 0:
+                    balanced_data.append(disease_samples.sample(remainder, replace=True))
+        
+        # Gabungkan data yang sudah diseimbangkan
+        if balanced_data:
+            balanced_df = pd.concat(balanced_data, ignore_index=True)
+            data = pd.concat([data, balanced_df], ignore_index=True)
         
         return data
-    
     def train(self):
         """
-        Melatih model klasifikasi penyakit
+        Melatih model klasifikasi penyakit dengan optimasi parameter
         """
         # Muat data
         data = self.load_data()
@@ -307,40 +365,102 @@ class DiseaseClassifier:
         # Preprocess data
         data = self.preprocess_training_data(data)
         
-        # Split data menjadi data training dan testing (80:20)
+        # Encode label untuk kompatibilitas dengan cross-validation
+        y = self.label_encoder.fit_transform(data['disease'])
+        X = data['processed_symptoms']
+        
+        # Split data menjadi data training dan testing (80:20) dengan stratifikasi
         X_train, X_test, y_train, y_test = train_test_split(
-            data['processed_symptoms'], 
-            data['disease'], 
+            X, y, 
             test_size=0.2, 
-            random_state=42
+            random_state=42,
+            stratify=y  # Pastikan distribusi kelas seimbang
         )
         
-        # Latih model
-        self.pipeline.fit(X_train, y_train)
+        # Hyperparameter tuning dengan GridSearchCV
+        param_grid = {
+            'tfidf__max_features': [5000, 10000],
+            'tfidf__ngram_range': [(1, 2), (1, 3)],
+            'clf__alpha': [0.1, 0.3, 0.5, 0.7, 1.0]
+        }
+        
+        grid_search = GridSearchCV(
+            self.pipeline,
+            param_grid,
+            cv=5,  # 5-fold cross-validation
+            scoring='accuracy',
+            n_jobs=-1,  # Gunakan semua core CPU
+            verbose=1
+        )
+        
+        print("Melakukan optimasi parameter model...")
+        grid_search.fit(X_train, y_train)
+        
+        # Gunakan parameter terbaik dari grid search
+        best_params = grid_search.best_params_
+        print(f"Parameter terbaik: {best_params}")
+        
+        # Update pipeline dengan parameter terbaik
+        self.pipeline = grid_search.best_estimator_
         
         # Evaluasi model
         y_pred = self.pipeline.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
-        report = classification_report(y_test, y_pred)
+        
+        # Konversi label kembali ke nama penyakit untuk laporan
+        y_test_names = self.label_encoder.inverse_transform(y_test)
+        y_pred_names = self.label_encoder.inverse_transform(y_pred)
+        
+        accuracy = accuracy_score(y_test_names, y_pred_names)
+        report = classification_report(y_test_names, y_pred_names, zero_division=1)
         
         print(f"Akurasi model: {accuracy:.2f}")
         print("Classification Report:")
         print(report)
         
-        # Hitung confidence untuk setiap kelas
-        class_probas = self.pipeline.predict_proba(X_test)
-        for i, disease in enumerate(self.pipeline.classes_):
-            # Rata-rata confidence untuk setiap penyakit
-            avg_confidence = np.mean([proba[i] for proba in class_probas])
-            self.model_confidence[disease] = avg_confidence
+        # Evaluasi dengan cross-validation
+        cv_scores = cross_val_score(self.pipeline, X, y, cv=5, scoring='accuracy')
+        print(f"Skor Cross-Validation (5-fold): {cv_scores}")
+        print(f"Rata-rata akurasi CV: {cv_scores.mean():.2f}, Std: {cv_scores.std():.2f}")
+        
+        # Latih kembali pada seluruh dataset
+        self.pipeline.fit(X, y)
+        
+        # Hitung confidence untuk setiap kelas dengan k-fold cross-validation
+        from sklearn.model_selection import KFold
+        kf = KFold(n_splits=5, shuffle=True, random_state=42)
+        
+        # Dictionary untuk menyimpan probabilitas per kelas
+        class_probas = {disease: [] for disease in self.label_encoder.classes_}
+        
+        for train_idx, val_idx in kf.split(X):
+            X_cv_train, X_cv_val = X.iloc[train_idx], X.iloc[val_idx]
+            y_cv_train, y_cv_val = y[train_idx], y[val_idx]
+            
+            # Latih model pada fold ini
+            self.pipeline.fit(X_cv_train, y_cv_train)
+            
+            # Prediksi probabilitas untuk validation set
+            fold_probas = self.pipeline.predict_proba(X_cv_val)
+            
+            # Kelompokkan probabilitas berdasarkan kelas yang sebenarnya
+            for i, idx in enumerate(val_idx):
+                true_class = y[idx]
+                true_class_name = self.label_encoder.inverse_transform([true_class])[0]
+                class_probas[true_class_name].append(fold_probas[i][true_class])
+        
+        # Hitung rata-rata confidence untuk setiap kelas
+        for disease, probas in class_probas.items():
+            if probas:  # Jika ada data untuk kelas ini
+                self.model_confidence[disease] = np.mean(probas)
+            else:
+                self.model_confidence[disease] = 0.7  # Default jika tidak ada data
         
         print("Model berhasil dilatih!")
         
         return accuracy
-    
     def predict(self, text):
         """
-        Memprediksi penyakit berdasarkan teks gejala
+        Memprediksi penyakit berdasarkan teks gejala dengan pendekatan ensemble
         
         Parameters
         ----------
@@ -350,65 +470,139 @@ class DiseaseClassifier:
         Returns
         -------
         tuple
-            (nama_penyakit, confidence)
+            (nama_penyakit, confidence, top_diseases)
         """
         # Pastikan model sudah dilatih
         if not hasattr(self.pipeline, 'classes_'):
             self.train()
-          # Prediksi
-        predicted_disease = self.pipeline.predict([text])[0]
-        # Prediksi probabilitas
-        probas = self.pipeline.predict_proba([text])[0]
-        # Ambil probabilitas tertinggi
-        max_proba = max(probas)
+        
+        # Preprocessed text
+        processed_text = preprocess_text(text)
+        
+        # Lakukan augmentasi data input dengan sinonim/variasi kata
+        augmented_inputs = [processed_text]
+        
+        # Buat beberapa variasi input dengan mengganti kata-kata tertentu
+        gejala_variations = {
+            'sakit': ['nyeri', 'ngilu', 'perih', 'tidak nyaman'],
+            'kepala': ['tengkorak', 'pala', 'kepala bagian'],
+            'perut': ['lambung', 'abdomen', 'bagian perut', 'perut bagian'],
+            'demam': ['panas', 'temperatur tinggi', 'badan panas', 'suhu tubuh'],
+            'batuk': ['batuk-batuk', 'batuk kering', 'batuk tidak berhenti'],
+            'pusing': ['berkunang', 'vertigo', 'kepala berputar', 'pandangan berputar']
+        }
+        
+        # Cari dan ganti kata-kata pada teks dengan sinonimnya
+        for kata, variasi in gejala_variations.items():
+            if kata in processed_text:
+                for var in variasi:
+                    new_text = processed_text.replace(kata, var)
+                    augmented_inputs.append(new_text)
+        
+        # Prediksi untuk semua variasi input
+        probas_list = []
+        for aug_text in augmented_inputs:
+            # Transform label enkoder yang sudah ditraing
+            predicted_encoded = self.pipeline.predict([aug_text])[0]
+            probas = self.pipeline.predict_proba([aug_text])[0]
+            probas_list.append(probas)
+        
+        # Gabungkan hasil prediksi dari semua variasi input (ensemble)
+        avg_probas = np.mean(probas_list, axis=0)
+        
+        # Dapatkan kelas dengan probabilitas tertinggi
+        max_prob_idx = np.argmax(avg_probas)
+        
+        # Decode kembali ke nama penyakit
+        predicted_disease = self.label_encoder.inverse_transform([max_prob_idx])[0]
+        max_proba = avg_probas[max_prob_idx]
         
         # Dapatkan top 3 penyakit dengan probabilitas tertinggi
-        indices = probas.argsort()[-3:][::-1]  # Indeks 3 probabilitas tertinggi
-        top_diseases = [(self.pipeline.classes_[i], probas[i]) for i in indices]
+        top_indices = avg_probas.argsort()[-3:][::-1]
+        top_diseases = [(self.label_encoder.inverse_transform([i])[0], avg_probas[i]) for i in top_indices]
         
+        # Penanganan kasus khusus:
         # Jika confidence terlalu rendah, kita ragu dengan prediksi
-        if max_proba < 0.5:
+        if max_proba < 0.6:
             # Jika ada beberapa penyakit dengan probabilitas yang dekat (selisih < 0.15)
             # maka kita menganggap ini sebagai kasus yang tidak pasti
             if len(top_diseases) > 1 and (top_diseases[0][1] - top_diseases[1][1]) < 0.15:
-                # Tetap kembalikan penyakit dengan probabilitas tertinggi, tapi dengan flag ketidakpastian
+                # Kembalikan penyakit dengan probabilitas tertinggi, tapi dengan indikasi ketidakpastian
                 return predicted_disease, max_proba, top_diseases
             
-            # Jika probabilitas terlalu rendah (< 0.35), kita anggap sebagai "Tidak diketahui"
-            if max_proba < 0.35:
+            # Jika probabilitas terlalu rendah (< 0.45), kita anggap sebagai "Tidak diketahui"
+            if max_proba < 0.45:
                 return "Tidak diketahui", max_proba, top_diseases
-        
-        # Jika confidence cukup tinggi, kembalikan prediksi utama
+          # Jika confidence cukup tinggi, kembalikan prediksi utama
         return predicted_disease, max_proba, top_diseases
-    
-    def save_model(self, model_path):
+    def save_model(self, model_filename='disease_classifier.joblib'):
         """
-        Menyimpan model ke file
+        Menyimpan model ke file dalam folder models
         
         Parameters
         ----------
-        model_path : str
-            Path untuk menyimpan model
+        model_filename : str
+            Nama file model (akan disimpan dalam folder models)
         """
-        # Buat direktori jika belum ada
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        # Buat path model di folder models
+        models_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
+        model_path = os.path.join(models_dir, model_filename)
+        
+        # Buat direktori models jika belum ada
+        os.makedirs(models_dir, exist_ok=True)
+        
+        # Simpan model dan label encoder
+        model_data = {
+            'pipeline': self.pipeline,
+            'label_encoder': self.label_encoder,
+            'diseases_info': self.diseases_info,
+            'model_confidence': self.model_confidence
+        }
         
         # Simpan model
-        joblib.dump(self.pipeline, model_path)
+        joblib.dump(model_data, model_path)
         print(f"Model berhasil disimpan ke {model_path}")
+        
+        return model_path  # Return path agar bisa digunakan untuk load model
     
-    def load_model(self, model_path):
+    def load_model(self, model_filename='disease_classifier.joblib'):
         """
-        Memuat model dari file
+        Memuat model dari file dalam folder models
         
         Parameters
         ----------
-        model_path : str
-            Path untuk memuat model
+        model_filename : str
+            Nama file model (akan dicari dalam folder models)
         """
-        self.pipeline = joblib.load(model_path)
+        # Cek apakah model_filename adalah path lengkap atau hanya nama file
+        if os.path.dirname(model_filename):
+            model_path = model_filename  # Gunakan path yang diberikan
+        else:
+            # Konstruksi path ke file model di folder models
+            models_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
+            model_path = os.path.join(models_dir, model_filename)
+        
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"File model tidak ditemukan di {model_path}")
+            
+        # Load model data yang sudah disimpan
+        model_data = joblib.load(model_path)
+        
+        # Extract komponen model
+        self.pipeline = model_data['pipeline']
+        self.label_encoder = model_data['label_encoder']
+        
+        # Load juga informasi tambahan jika ada
+        if 'diseases_info' in model_data:
+            self.diseases_info = model_data['diseases_info']
+        
+        if 'model_confidence' in model_data:
+            self.model_confidence = model_data['model_confidence']
+            
         print(f"Model berhasil dimuat dari {model_path}")
         
-        # Muat informasi penyakit dan gejala
-        data = self.load_data()
-        self.preprocess_training_data(data)
+        # Untuk kompatibilitas dengan model lama, muat data jika diseases_info kosong
+        if not self.diseases_info:
+            # Muat informasi penyakit dan gejala
+            data = self.load_data()
+            self.preprocess_training_data(data)

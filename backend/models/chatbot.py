@@ -4,8 +4,10 @@ Chatbot sederhana untuk menjawab pertanyaan tentang penyakit
 import os
 import json
 import re
-from utils.preprocessor import preprocess_text
+import numpy as np
+from utils.preprocessor import preprocess_text, extract_gejala_patterns
 from difflib import get_close_matches
+from difflib import SequenceMatcher
 
 class Chatbot:
     """
@@ -29,69 +31,162 @@ class Chatbot:
         # Siapkan kamus sinonim penyakit untuk meningkatkan pengenalan
         self.disease_synonyms = self._create_disease_synonyms()
         
-        # Pattern untuk mengenali pertanyaan
+        # Tambahkan sinonim gejala untuk meningkatkan pengenalan
+        self.symptom_synonyms = self._create_symptom_synonyms()
+        
+        # Tambahkan informasi penting tentang penyakit
+        self.disease_facts = self._create_disease_facts()
+        
+        # Pattern untuk mengenali pertanyaan dengan matching yang lebih fleksibel
         self.patterns = {
             'apa_itu': [
-                r'apa itu (.*)', 
-                r'apa yang dimaksud dengan (.*)', 
-                r'apa sih (.*)', 
-                r'tolong jelaskan (.*)',
-                r'(.*) itu apa',
-                r'jelaskan tentang (.*)',
-                r'bisa jelaskan (.*)',
-                r'apa (.*) itu'
+                r'apa(?:\s+(?:itu|yang\s+dimaksud\s+dengan|sih|yang\s+dimaksud|arti\s+dari))?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+itu)?\s+(?:apa|adalah|merupakan)',
+                r'(?:jelaskan|ceritakan|bisa\s+jelaskan|tolong\s+jelaskan)(?:\s+(?:tentang|mengenai|apa))?\s+([a-zA-Z\s]+)',
+                r'(?:pengertian|definisi)(?:\s+(?:dari|tentang))?\s+([a-zA-Z\s]+)',
+                r'apa\s+(?:yang|sih\s+yang)\s+(?:dimaksud|disebut)(?:\s+dengan)?\s+([a-zA-Z\s]+)'
             ],
             'gejala': [
-                r'apa gejala (.*)', 
-                r'gejala (.*) apa saja', 
-                r'ciri-ciri (.*)', 
-                r'tanda-tanda (.*)',
-                r'gimana (sih |)tau kalo kena (.*)',
-                r'apa saja ciri-ciri (.*)',
-                r'bagaimana mengetahui (.*)',
-                r'terkena (.*) itu seperti apa',
-                r'gejala dari (.*)'
+                r'(?:apa(?:\s+saja)?|bagaimana|gimana)(?:\s+(?:gejala|ciri-ciri|tanda-tanda))(?:\s+(?:dari|penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:gejala|ciri-ciri|tanda-tanda)(?:\s+(?:dari|penyakit))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|apa\s+saja))?',
+                r'(?:gimana|bagaimana)(?:\s+(?:cara|bisa|dapat|untuk))?\s+(?:tau|tahu|mengetahui|mendeteksi)(?:\s+kalau|kalo|jika)?\s+(?:terkena|kena|menderita)?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+(?:gejalanya|ciri-cirinya|tanda-tandanya))(?:\s+(?:apa|apa\s+saja|bagaimana|seperti\s+apa))?',
+                r'(?:seseorang|saya|orang)(?:\s+yang)?\s+(?:terkena|kena|menderita)\s+([a-zA-Z\s]+)(?:\s+(?:seperti|kayak)\s+(?:apa|gimana))?'
             ],
             'penanganan': [
-                r'bagaimana (cara |)menangani (.*)', 
-                r'gimana (cara |)mengobati (.*)', 
-                r'apa pengobatan (.*)', 
-                r'bagaimana jika terkena (.*)',
-                r'kalau kena (.*) gimana',
-                r'cara mengobati (.*)',
-                r'obat (.*)',
-                r'pengobatan untuk (.*)',
-                r'terapi (.*)'
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|caranya))?(?:\s+(?:untuk|bisa))?\s+(?:menangani|mengobati|mengatasi|menyembuhkan|menghadapi|merawat)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:pengobatan|penanganan|perawatan|terapi|cara\s+mengobati)(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?',
+                r'(?:kalau|jika|bila)(?:\s+(?:terkena|kena|menderita))?\s+([a-zA-Z\s]+)(?:\s+(?:bagaimana|gimana|harus|perlu))?(?:\s+(?:penanganannya|pengobatannya|cara\s+mengobatinya))?',
+                r'(?:obat|pengobatan)(?:\s+(?:untuk|bagi|buat))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|apa\s+saja))?',
+                r'([a-zA-Z\s]+)(?:\s+(?:diobati|ditangani|disembuhkan|diatasi))(?:\s+(?:dengan|bagaimana|gimana|seperti\s+apa))?'
             ],
             'pencegahan': [
-                r'bagaimana (cara |)mencegah (.*)', 
-                r'cara mencegah (.*)', 
-                r'gimana supaya tidak kena (.*)', 
-                r'pencegahan (.*)',
-                r'cara agar tidak terkena (.*)',
-                r'mencegah (.*) bagaimana',
-                r'bagaimana menghindari (.*)',
-                r'agar tidak (.*)'
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|caranya))?(?:\s+(?:untuk|bisa))?\s+(?:mencegah|menghindari|menjauhkan)(?:\s+(?:penyakit|terkena|terinfeksi))?\s+([a-zA-Z\s]+)',
+                r'(?:pencegahan|cara\s+mencegah|langkah\s+pencegahan|upaya\s+mencegah)(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?',
+                r'(?:agar|supaya|biar)(?:\s+(?:tidak|nggak|gak|enggak|terhindar\s+dari))?\s+(?:terkena|kena|menderita|terinfeksi)\s+([a-zA-Z\s]+)(?:\s+(?:bagaimana|gimana|harus|perlu|sebaiknya|seharusnya))?',
+                r'(?:cara|tips|langkah)(?:\s+(?:menghindari|mencegah|menghindarkan\s+diri))(?:\s+(?:dari))?\s+([a-zA-Z\s]+)',
+                r'([a-zA-Z\s]+)(?:\s+(?:bisa|dapat))?\s+(?:dicegah|dihindari|dicegahnya)(?:\s+(?:dengan|bagaimana|gimana|seperti\s+apa))?'
             ],
             'durasi': [
-                r'berapa lama (.*) sembuh', 
-                r'(.*) sembuh dalam berapa lama', 
-                r'waktu sembuh (.*)', 
-                r'durasi penyembuhan (.*)',
-                r'kalau (.*) berapa lama sembuh',
-                r'berapa lama pengobatan (.*)',
-                r'sembuhnya (.*) berapa lama',
-                r'waktu yang diperlukan untuk (.*) sembuh'
+                r'(?:berapa\s+lama|seberapa\s+lama)(?:\s+(?:waktu|durasi|masa))?\s+(?:penyembuhan|pemulihan|pengobatan|perawatan)(?:\s+(?:penyakit|pasien|orang|penderita))?\s+([a-zA-Z\s]+)',
+                r'(?:berapa\s+lama|seberapa\s+lama)(?:\s+(?:penyakit|pasien|orang|penderita))?\s+([a-zA-Z\s]+)(?:\s+(?:sembuh|pulih|diobati|dirawat))?',
+                r'([a-zA-Z\s]+)(?:\s+(?:sembuh|pulih|diobati|dirawat))(?:\s+(?:dalam|butuh|memerlukan))?\s+(?:berapa\s+lama|berapa\s+waktu|waktu\s+berapa\s+lama)?',
+                r'(?:waktu|durasi|masa)(?:\s+(?:penyembuhan|pemulihan|pengobatan|perawatan))(?:\s+(?:untuk|bagi|pada))?\s+(?:penyakit)?\s+([a-zA-Z\s]+)(?:\s+(?:apa|berapa\s+lama|berapa\s+waktu))?',
+                r'(?:sembuhnya|pulihnya|pengobatannya|penyembuhannya)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)(?:\s+(?:berapa\s+lama|berapa\s+waktu|butuh\s+waktu\s+berapa))?'
             ],
             'umum': [
-                r'kalau ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)',
-                r'jika ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)',
-                r'bila ([^,]*) ([^,]*) (hari|minggu|bulan) (.*)',
-                r'apakah berbahaya ([^,]*)',
-                r'apakah perlu ke dokter ([^,]*)'
+                r'(?:apa(?:kah)?|bagaimana|apabila)(?:\s+(?:berbahaya|bahaya|risiko|dampak|efek))(?:\s+(?:dari|terkena|menderita))?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?|bagaimana|apabila)(?:\s+(?:perlu|harus|wajib|sebaiknya|seharusnya))(?:\s+(?:ke|pergi\s+ke|konsultasi\s+ke|memeriksakan\s+diri\s+ke))?\s+(?:dokter|rumah\s+sakit|puskesmas)(?:\s+(?:jika|kalau|bila))?\s+(?:terkena|menderita)?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?)(?:\s+([a-zA-Z\s]+))(?:\s+(?:bisa|dapat|mungkin))(?:\s+(?:menular|ditularkan|menyebar))?',
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|proses|mekanisme))?\s+(?:penularan|penyebaran)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:apa(?:kah)?)(?:\s+(?:penyebab|faktor\s+risiko|faktor\s+penyebab))(?:\s+(?:dari|utama|terjadinya|munculnya))?\s+([a-zA-Z\s]+)'
+            ],
+            'diagnosis': [
+                r'(?:bagaimana|gimana)(?:\s+(?:cara|proses|langkah))?\s+(?:diagnosis|pemeriksaan|mendiagnosis|mendiagnosa)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:tes|pemeriksaan|uji|test|pengujian)(?:\s+(?:apa|apa\s+saja))(?:\s+(?:untuk|yang\s+diperlukan\s+untuk|dalam))?\s+(?:diagnosis|mendiagnosis|mendiagnosa)(?:\s+(?:penyakit))?\s+([a-zA-Z\s]+)',
+                r'(?:dokter|tenaga\s+medis)(?:\s+(?:bisa|dapat))?\s+(?:mendiagnosis|mendiagnosa|mengetahui)(?:\s+seseorang\s+terkena)?\s+([a-zA-Z\s]+)(?:\s+(?:dengan|melalui|bagaimana|seperti\s+apa))?',
+                r'(?:diagnosis|pemeriksaan)(?:\s+(?:untuk|bagi))?\s+([a-zA-Z\s]+)(?:\s+(?:apa|bagaimana|seperti\s+apa))?' 
             ]
         }
-    
+    def _create_symptom_synonyms(self):
+        """
+        Membuat kamus sinonim gejala untuk meningkatkan pengenalan
+        
+        Returns
+        -------
+        dict
+            Dictionary berisi sinonim untuk gejala umum
+        """
+        synonyms = {
+            "demam": ["panas", "demam tinggi", "suhu tinggi", "badan panas", "meriang", "temperatut tinggi", "hangat"],
+            "batuk": ["batuk-batuk", "batuk kering", "batuk berdahak", "batuk berdarah", "batuk terus-menerus"],
+            "pilek": ["ingus", "hidung berair", "hidung meler", "hidung tersumbat", "hidung berlendir"],
+            "sakit kepala": ["pusing", "kepala sakit", "pening", "kepala berat", "migrain", "nyeri kepala"],
+            "sakit perut": ["perut sakit", "perut nyeri", "kram perut", "mulas", "nyeri perut", "perih perut"],
+            "diare": ["mencret", "BAB cair", "berak encer", "buang air besar cair", "perut mencret", "perut encer"],
+            "mual": ["ingin muntah", "eneg", "mau muntah", "rasa mual", "perut mual"],
+            "muntah": ["memuntahkan", "muntah-muntah", "keluarkan isi perut", "memuntahkan makanan"],
+            "pusing": ["kepala berputar", "berkunang-kunang", "vertigo", "kepala pening", "pening"],
+            "ruam": ["bintik merah", "bercak merah", "kemerahan pada kulit", "ruam kulit", "bintik-bintik"],
+            "lemas": ["lemah", "tidak bertenaga", "lesu", "kurang tenaga", "badan lemas", "loyo"],
+            "nyeri sendi": ["sakit sendi", "ngilu sendi", "sendi sakit", "sendi kaku", "sendi nyeri"],
+            "sesak napas": ["sulit bernapas", "napas pendek", "napas berat", "kesulitan bernapas", "napas sesak", "napas terasa berat"]
+        }
+        return synonyms
+        
+    def _create_disease_facts(self):
+        """
+        Membuat kamus fakta penting tentang penyakit
+        
+        Returns
+        -------
+        dict
+            Dictionary berisi fakta-fakta penting tentang penyakit
+        """
+        facts = {
+            "Flu": [
+                "Flu disebabkan oleh virus influenza dan bukan bakteri, sehingga antibiotik tidak efektif untuk pengobatan flu.",
+                "Vaksin flu tahunan dapat membantu mencegah atau mengurangi keparahan infeksi.",
+                "Virus flu dapat menular sehari sebelum gejala muncul dan hingga 5-7 hari setelah sakit.",
+                "Cuci tangan secara teratur adalah salah satu cara terbaik untuk mencegah penyebaran flu."
+            ],
+            "Demam Berdarah": [
+                "Demam berdarah ditularkan oleh nyamuk Aedes aegypti yang aktif di siang hari.",
+                "Tidak ada obat khusus untuk demam berdarah, pengobatan berfokus pada penanganan gejala.",
+                "Penurunan trombosit (keping darah) adalah ciri khas demam berdarah.",
+                "Waspada fase kritis demam berdarah yang biasanya terjadi setelah demam mereda (hari ke-3 hingga 7)."
+            ],
+            "Tipes": [
+                "Tipes disebabkan oleh bakteri Salmonella typhi yang menyebar melalui makanan dan minuman yang terkontaminasi.",
+                "Pengobatan tipes memerlukan antibiotik dan harus tuntas sesuai anjuran dokter.",
+                "Pasien tipes harus istirahat total dan mengonsumsi makanan lunak selama masa pemulihan.",
+                "Vaksin tipes tersedia dan direkomendasikan terutama untuk orang yang akan bepergian ke daerah endemis."
+            ],
+            "TBC": [
+                "TBC membutuhkan pengobatan jangka panjang, biasanya 6-9 bulan, dan harus diminum secara teratur.",
+                "Menghentikan pengobatan TBC sebelum waktunya dapat menyebabkan bakteri TBC menjadi resisten terhadap obat.",
+                "TBC dapat menular melalui udara saat penderita batuk, bersin, atau berbicara.",
+                "Ventilasi yang baik dan paparan sinar matahari membantu mengurangi risiko penularan TBC."
+            ],
+            "Maag": [
+                "Maag dapat disebabkan oleh infeksi bakteri Helicobacter pylori, penggunaan obat anti inflamasi, atau stres.",
+                "Makan teratur dengan porsi kecil namun sering dapat membantu mengurangi gejala maag.",
+                "Hindari makanan pedas, asam, kafein, dan alkohol yang dapat memicu kekambuhan maag.",
+                "Stres dapat memperburuk gejala maag, sehingga manajemen stres penting dalam penanganan."
+            ],
+            "Asma": [
+                "Asma tidak dapat disembuhkan tetapi dapat dikendalikan dengan pengobatan yang tepat.",
+                "Serangan asma dapat dipicu oleh alergen, polusi udara, olahraga, stres, atau perubahan cuaca.",
+                "Inhaler adalah pengobatan utama untuk mengatasi serangan asma akut.",
+                "Penggunaan inhaler yang benar sangat penting untuk efektivitas pengobatan asma."
+            ],
+            "Migrain": [
+                "Migrain sering bersifat genetik dan lebih umum terjadi pada wanita.",
+                "Beberapa makanan seperti cokelat, keju, dan makanan yang mengandung MSG dapat memicu migrain.",
+                "Migrain dapat disertai dengan aura (sensasi visual atau sensorik) sebelum serangan.",
+                "Tidur teratur, manajemen stres, dan hindari pemicu dapat membantu mengurangi frekuensi migrain."
+            ],
+            "Diare": [
+                "Diare dapat disebabkan oleh virus, bakteri, parasit, intoleransi makanan, atau efek samping obat.",
+                "Dehidrasi adalah komplikasi utama diare, terutama pada anak-anak dan lansia.",
+                "Oralit sangat efektif untuk mengganti cairan dan elektrolit yang hilang akibat diare.",
+                "Jika diare disertai demam tinggi, darah dalam tinja, atau berlangsung lebih dari 2 hari, segera konsultasikan ke dokter."
+            ],
+            "Hipertensi": [
+                "Hipertensi sering disebut 'silent killer' karena biasanya tidak menimbulkan gejala yang jelas.",
+                "Konsumsi garam berlebih, kurang aktivitas fisik, dan stres dapat meningkatkan risiko hipertensi.",
+                "Pemantauan tekanan darah secara teratur penting untuk mengelola hipertensi.",
+                "Obat hipertensi harus diminum secara teratur sesuai anjuran dokter, bahkan ketika tekanan darah sudah normal."
+            ],
+            "Diabetes": [
+                "Diabetes tipe 1 disebabkan oleh faktor genetik dan autoimun, sementara tipe 2 lebih terkait dengan gaya hidup.",
+                "Pemeriksaan gula darah secara teratur sangat penting untuk mengelola diabetes.",
+                "Komplikasi diabetes dapat mempengaruhi mata, ginjal, saraf, dan jantung jika tidak dikontrol dengan baik.",
+                "Olahraga teratur dan pola makan seimbang membantu mengontrol kadar gula darah."
+            ]
+        }
+        return facts
+        
     def _load_diseases_data(self):
         """
         Memuat data penyakit dari JSON
@@ -327,14 +422,15 @@ class Chatbot:
                         # Jika yang cocok adalah sinonim, kembalikan nama penyakit aslinya
                         for disease, synonyms in self.disease_synonyms.items():
                             if matched_term in synonyms:
-                                return disease
-                        # Jika yang cocok adalah nama penyakit, kembalikan apa adanya
+                                return disease                        # Jika yang cocok adalah nama penyakit, kembalikan apa adanya
                         if matched_term in self.diseases_data:
                             return matched_term
                     
                 if question_type == 'umum':
                     # Untuk pertanyaan umum, kita mengembalikan seluruh match sebagai string
-                    return " ".join([match.group(i) for i in range(1, 5) if match.group(i)])
+                    # Pastikan hanya mengambil grup yang ada, cek jumlah total grup dulu
+                    num_groups = len(match.groups())
+                    return " ".join([match.group(i) for i in range(1, min(num_groups + 1, 5)) if match.group(i)])
                 
                 return disease_name
         

@@ -7,6 +7,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+import unicodedata
 
 # Download NLTK data yang diperlukan
 try:
@@ -19,18 +20,39 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
-# Khusus untuk pesan yang diberikan dalam error, kita pastikan punkt_tab tersedia
-# Ini diperlukan khususnya untuk bahasa Inggris atau Indonesia
-try:
-    # Coba mencari punkt untuk bahasa Inggris dan Indonesia
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    # Download punkt (mencakup beberapa bahasa termasuk English)
-    nltk.download('punkt')
-
 # Setup stemmer bahasa Indonesia dari Sastrawi
 stemmer_factory = StemmerFactory()
 stemmer = stemmer_factory.create_stemmer()
+
+# Normalisasi singkatan dan slang words bahasa Indonesia
+word_normalization = {
+    'gak': 'tidak', 'ga': 'tidak', 'ngga': 'tidak', 'nggak': 'tidak', 'g': 'tidak',
+    'tdk': 'tidak', 'enggak': 'tidak', 'gk': 'tidak', 'engga': 'tidak',
+    'gpp': 'tidak apa-apa', 'gapapa': 'tidak apa-apa', 'gppa': 'tidak apa-apa',
+    'pny': 'punya', 'udh': 'sudah', 'dah': 'sudah', 'sdh': 'sudah', 'udah': 'sudah',
+    'blm': 'belum', 'belom': 'belum', 'blum': 'belum',
+    'kyk': 'seperti', 'kyak': 'seperti', 'ky': 'seperti', 'kek': 'seperti',
+    'bgt': 'banget', 'bangetss': 'banget', 'bgtt': 'banget',
+    'jg': 'juga', 'dg': 'dengan', 'dgn': 'dengan', 'dlm': 'dalam',
+    'ank': 'anak', 'org': 'orang', 'krn': 'karena', 'karna': 'karena',
+    'hrs': 'harus', 'smua': 'semua', 'smuanya': 'semuanya',
+    'spy': 'supaya', 'stlh': 'setelah', 'skrg': 'sekarang', 'skrang': 'sekarang',
+    'kalo': 'kalau', 'klo': 'kalau', 'kl': 'kalau',
+    'ato': 'atau', 'atw': 'atau', 'tp': 'tapi', 'tpi': 'tapi',
+    'sm': 'sama', 'yg': 'yang', 'dr': 'dari', 'utk': 'untuk',
+    'pd': 'pada', 'trs': 'terus', 'truss': 'terus', 'trus': 'terus',
+    'byk': 'banyak', 'dll': 'dan lain-lain', 'dsb': 'dan sebagainya',
+    'sbg': 'sebagai', 'sblm': 'sebelum', 'stlh': 'setelah',
+    'sy': 'saya', 'sya': 'saya', 'aq': 'saya', 'aku': 'saya', 'gw': 'saya', 'gua': 'saya', 'gue': 'saya',
+    'km': 'kamu', 'kmu': 'kamu', 'lu': 'kamu', 'loe': 'kamu', 'elo': 'kamu',
+    'emg': 'memang', 'emang': 'memang', 'btw': 'ngomong-ngomong',
+    'lbh': 'lebih', 'jd': 'jadi', 'jdnya': 'jadinya',
+    'bln': 'bulan', 'hr': 'hari', 'mgg': 'minggu', 'thun': 'tahun', 'th': 'tahun',
+    'biar': 'supaya', 'bngt': 'banget',
+    'bru': 'baru', 'msh': 'masih', 'dpat': 'dapat',
+    'kmrn': 'kemarin', 'sbnrnya': 'sebenarnya', 'sbntar': 'sebentar',
+    'brp': 'berapa', 'bs': 'bisa', 'bsa': 'bisa',
+}
 
 # Load stopwords bahasa Indonesia
 try:
@@ -41,7 +63,7 @@ except:
         'ada', 'adalah', 'adanya', 'adapun', 'agak', 'agaknya', 'agar', 'akan', 'akankah', 
         'akhir', 'akhiri', 'akhirnya', 'aku', 'akulah', 'amat', 'amatlah', 'anda', 'andalah', 
         'antar', 'antara', 'antaranya', 'apa', 'apaan', 'apabila', 'apakah', 'apalagi', 'apatah', 
-        'artinya', 'asal', 'asalkan', 'atas', 'atau', 'ataukah', 'ataupun', 'awal', 'awalnya', 
+        'artinya', 'asal', 'asalkan', 'atas', 'atau', 'ataukah', 'ataupun', 'awal', 'awalnya',
         'bagai', 'bagaikan', 'bagaimana', 'bagaimanakah', 'bagaimanapun', 'bagi', 'bagian', 
         'bahkan', 'bahwa', 'bahwasanya', 'baik', 'bakal', 'bakalan', 'balik', 'banyak', 'bapak', 
         'baru', 'bawah', 'beberapa', 'begini', 'beginian', 'beginikah', 'beginilah', 'begitu', 
@@ -147,11 +169,98 @@ medical_stopwords = set([
     'bagaimana', 'kenapa', 'mengapa', 'gimana', 'apa', 'apakah', 'tolong', 'bantu', 'minta',
     'bantuan', 'saran', 'kira', 'kira-kira', 'mohon', 'ya', 'pak', 'bu', 'bapak', 'ibu',
     'mas', 'mbak', 'telah', 'sudah', 'sedang', 'masih', 'akan', 'sekarang', 'tadi', 'kemarin',
-    'lusa', 'lama', 'terus', 'terus-menerus'
+    'lusa', 'lama', 'terus', 'terus-menerus', 'kira-kira', 'sangat'
 ])
 
-# Gabungkan semua stopwords
-stop_words = stop_words.union(medical_stopwords)
+# Kata-kata penting terkait gejala yang TIDAK boleh dihapus (negasi)
+important_medical_terms = set([
+    'nyeri', 'sakit', 'bengkak', 'panas', 'dingin', 'lemas', 'lelah', 'lemah', 'batuk', 
+    'pilek', 'bersin', 'demam', 'pusing', 'mual', 'muntah', 'diare', 'sembelit', 
+    'sesak', 'napas', 'berdarah', 'darah', 'berdenyut', 'kembung', 'gatal', 'ruam', 
+    'kemerahan', 'merah', 'menggigil', 'kaku', 'kering', 'berkeringat', 'keringat', 
+    'bintik', 'bercak', 'perih', 'terbakar', 'tidak'
+])
+
+# Gabungkan stopwords kecuali kata-kata penting
+stop_words = stop_words.union(medical_stopwords) - important_medical_terms
+
+def normalize_words(text):
+    """
+    Melakukan normalisasi kata-kata informal dan singkatan
+    
+    Parameters
+    ----------
+    text : str
+        Teks input yang akan dinormalisasi
+    
+    Returns
+    -------
+    str
+        Teks yang sudah dinormalisasi
+    """
+    words = text.split()
+    normalized = []
+    
+    for word in words:
+        if word.lower() in word_normalization:
+            normalized.append(word_normalization[word.lower()])
+        else:
+            normalized.append(word)
+    
+    return ' '.join(normalized)
+
+def clean_text(text):
+    """
+    Membersihkan teks dari karakter khusus, angka, dan menormalkan unicode
+    
+    Parameters
+    ----------
+    text : str
+        Teks input yang akan dibersihkan
+    
+    Returns
+    -------
+    str
+        Teks yang sudah dibersihkan
+    """
+    # Normalisasi unicode (mengubah karakter khusus menjadi ascii)
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8', 'ignore')
+    
+    # Pola untuk mencocokkan tanggal dan angka (kita perlu mempertahankan ini)
+    date_pattern = r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b'
+    number_pattern = r'\b\d+\b'
+    
+    # Simpan tanggal dan angka
+    dates = re.findall(date_pattern, text)
+    numbers = re.findall(number_pattern, text)
+    
+    # Hapus tanggal dan angka dari teks
+    text = re.sub(date_pattern, ' DATE ', text)
+    text = re.sub(number_pattern, ' NUM ', text)
+    
+    # Ubah ke huruf kecil
+    text = text.lower()
+    
+    # Hapus URL
+    text = re.sub(r'https?://\S+|www\.\S+', '', text)
+    
+    # Hapus tag HTML
+    text = re.sub(r'<.*?>', '', text)
+    
+    # Hapus emoji dan simbol khusus
+    text = re.sub(r'[^\w\s]', ' ', text)
+    
+    # Hapus spasi berlebih
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Kembalikan tanggal dan angka
+    for i, date in enumerate(dates):
+        text = text.replace('DATE', date, 1)
+    
+    for i, number in enumerate(numbers):
+        text = text.replace('NUM', number, 1)
+    
+    return text.strip()
 
 def preprocess_text(text):
     """
@@ -169,14 +278,13 @@ def preprocess_text(text):
     """
     if not text or not isinstance(text, str):
         return ""
+      # Pembersihan dan normalisasi teks
+    text = clean_text(text)
     
-    # Normalisasi: ubah ke huruf kecil dan hapus angka
-    text = text.lower()
-    text = re.sub(r'\d+', '', text)
+    # Normalisasi kata-kata informal dan singkatan
+    text = normalize_words(text)
     
-    # Hapus tanda baca
-    text = text.translate(str.maketrans('', '', string.punctuation))
-      # Tokenisasi
+    # Tokenisasi
     try:
         # Coba gunakan tokenizer dengan bahasa Indonesia
         tokens = word_tokenize(text, language='indonesian')
@@ -187,10 +295,61 @@ def preprocess_text(text):
     # Hapus stopwords
     tokens = [word for word in tokens if word not in stop_words]
     
-    # Stemming
-    stemmed_tokens = [stemmer.stem(word) for word in tokens]
+    # Stemming - gunakan hanya untuk kata-kata yang bukan istilah medis penting
+    stemmed_tokens = []
+    for word in tokens:
+        if word in important_medical_terms:
+            stemmed_tokens.append(word)  # Simpan kata medis penting apa adanya
+        else:
+            stemmed_tokens.append(stemmer.stem(word))  # Stem kata-kata lain
     
     # Gabungkan kembali
     preprocessed_text = ' '.join(stemmed_tokens)
     
     return preprocessed_text
+
+def extract_gejala_patterns(text):
+    """
+    Mengekstrak pola-pola gejala dari teks
+    
+    Parameters
+    ----------
+    text : str
+        Teks input yang berisi deskripsi gejala
+    
+    Returns
+    -------
+    list
+        Daftar pola gejala yang diekstrak
+    """
+    if not text or not isinstance(text, str):
+        return []
+    
+    # Normalisasi teks
+    text = clean_text(text)
+    text = normalize_words(text)
+    
+    # Pola-pola regex untuk gejala umum
+    patterns = [
+        r"(?:saya|aku)?\s*(?:merasa|mengalami|menderita|kena|terkena)?\s*([a-z\s-]+)\s*(?:selama|sejak)?\s*(\d+)?\s*(?:hari|minggu|bulan|tahun)?",
+        r"([a-z\s-]+)\s*(?:yang|dan)?\s*(?:tidak kunjung|terus[- ]menerus|tiada henti)",
+        r"(?:sering|kadang|selalu)\s*([a-z\s-]+)",
+        r"(?:keluar|ada)\s*([a-z\s-]+)\s*(?:dari|di|pada)\s*([a-z\s-]+)"
+    ]
+    
+    extracted = []
+    for pattern in patterns:
+        matches = re.findall(pattern, text)
+        if matches:
+            for match in matches:
+                if isinstance(match, tuple):
+                    for item in match:
+                        if item and len(item) > 3:  # Minimal 3 karakter
+                            extracted.append(item.strip())
+                elif match and len(match) > 3:
+                    extracted.append(match.strip())
+    
+    # Hilangkan duplikat
+    extracted = list(set(extracted))
+    
+    return extracted
