@@ -39,10 +39,9 @@ export default function Chatbot() {
     // Tambahkan pesan pengguna ke daftar pesan
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
-    
-    try {
+      try {
       const response = await axios.post('http://localhost:5000/api/chat', {
-        message: userMessage
+        text: userMessage
       });
       
       // Tambahkan respon dari bot ke daftar pesan

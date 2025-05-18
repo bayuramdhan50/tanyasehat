@@ -13,10 +13,10 @@ interface Disease {
 
 interface ResultCardProps {
   result: {
-    predicted_disease: string;
-    probability: number;
+    prediction: string;
+    confidence: number;
+    recommendation: string[];
     top_diseases?: Disease[];
-    recommendations?: string[];
   };
 }
 
@@ -34,10 +34,10 @@ export default function ResultCard({ result }: ResultCardProps) {
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-semibold text-lg">Kemungkinan Penyakit:</h3>
           <span className="font-bold text-blue-600 dark:text-blue-400">
-            {formatProbability(result.probability)}
+            {formatProbability(result.confidence)}
           </span>
         </div>
-        <p className="text-lg font-medium">{result.predicted_disease}</p>
+        <p className="text-lg font-medium">{result.prediction}</p>
       </div>
       
       {result.top_diseases && result.top_diseases.length > 0 && (
@@ -56,16 +56,15 @@ export default function ResultCard({ result }: ResultCardProps) {
               </li>
             ))}
           </ul>
-        </div>
-      )}
+        </div>      )}
       
-      {result.recommendations && result.recommendations.length > 0 && (
+      {result.recommendation && result.recommendation.length > 0 && (
         <div>
           <h3 className="font-semibold mb-3">Rekomendasi:</h3>
           <ul className="list-disc pl-5 space-y-1">
-            {result.recommendations.map((recommendation, index) => (
+            {result.recommendation.map((rec: string, index: number) => (
               <li key={index} className="text-gray-700 dark:text-gray-300">
-                {recommendation}
+                {rec}
               </li>
             ))}
           </ul>

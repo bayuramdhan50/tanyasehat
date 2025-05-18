@@ -26,11 +26,13 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
     
     setError('');
     onLoading(true);
-    
-    try {
+      try {
       const response = await axios.post('http://localhost:5000/api/predict', {
         text: symptoms
       });
+      
+      // Log data untuk debugging
+      console.log('API Response:', response.data);
       
       onResult(response.data);
     } catch (error) {

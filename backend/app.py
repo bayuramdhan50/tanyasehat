@@ -4,6 +4,19 @@ import os
 import sys
 import joblib
 import json
+import nltk
+
+# Setup NLTK - Download resource yang dibutuhkan
+def setup_nltk():
+    """Download semua resource NLTK yang dibutuhkan aplikasi"""
+    print("Menyiapkan resource NLTK...")
+    # Pastikan resource punkt dan stopwords tersedia
+    nltk.download('punkt_tab')
+    nltk.download('stopwords')
+    print("Resource NLTK berhasil disiapkan")
+
+# Jalankan setup NLTK pertama kali
+setup_nltk()
 
 # Menambahkan path untuk import
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -19,6 +19,15 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
+# Khusus untuk pesan yang diberikan dalam error, kita pastikan punkt_tab tersedia
+# Ini diperlukan khususnya untuk bahasa Inggris atau Indonesia
+try:
+    # Coba mencari punkt untuk bahasa Inggris dan Indonesia
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    # Download punkt (mencakup beberapa bahasa termasuk English)
+    nltk.download('punkt')
+
 # Setup stemmer bahasa Indonesia dari Sastrawi
 stemmer_factory = StemmerFactory()
 stemmer = stemmer_factory.create_stemmer()
@@ -167,9 +176,13 @@ def preprocess_text(text):
     
     # Hapus tanda baca
     text = text.translate(str.maketrans('', '', string.punctuation))
-    
-    # Tokenisasi
-    tokens = word_tokenize(text)
+      # Tokenisasi
+    try:
+        # Coba gunakan tokenizer dengan bahasa Indonesia
+        tokens = word_tokenize(text, language='indonesian')
+    except:
+        # Fallback ke bahasa Inggris jika model bahasa Indonesia tidak tersedia
+        tokens = word_tokenize(text)
     
     # Hapus stopwords
     tokens = [word for word in tokens if word not in stop_words]
