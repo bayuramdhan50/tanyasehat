@@ -227,17 +227,29 @@ class DiseaseClassifier:
         
         # Prediksi
         predicted_disease = self.pipeline.predict([text])[0]
-        
-        # Prediksi probabilitas
+          # Prediksi probabilitas
         probas = self.pipeline.predict_proba([text])[0]
         # Ambil probabilitas tertinggi
         max_proba = max(probas)
         
-        # Jika confidence terlalu rendah, kita ragu dengan prediksi
-        if max_proba < 0.3:
-            return "Tidak diketahui", max_proba
+        # Dapatkan top 3 penyakit dengan probabilitas tertinggi
+        indices = probas.argsort()[-3:][::-1]  # Indeks 3 probabilitas tertinggi
+        top_diseases = [(self.pipeline.classes_[i], probas[i]) for i in indices]
         
-        return predicted_disease, max_proba
+        # Jika confidence terlalu rendah, kita ragu dengan prediksi
+        if max_proba < 0.4:
+            # Jika ada beberapa penyakit dengan probabilitas yang dekat (selisih < 0.1)
+            # maka kita menganggap ini sebagai kasus yang tidak pasti
+            if len(top_diseases) > 1 and (top_diseases[0][1] - top_diseases[1][1]) < 0.1:
+                # Tetap kembalikan penyakit dengan probabilitas tertinggi, tapi dengan flag ketidakpastian
+                return predicted_disease, max_proba, top_diseases
+            
+            # Jika probabilitas terlalu rendah (< 0.3), kita anggap sebagai "Tidak diketahui"
+            if max_proba < 0.3:
+                return "Tidak diketahui", max_proba, top_diseases
+        
+        # Jika confidence cukup tinggi, kembalikan prediksi utama
+        return predicted_disease, max_proba, top_diseases
     
     def save_model(self, model_path):
         """

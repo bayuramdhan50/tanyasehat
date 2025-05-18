@@ -159,15 +159,15 @@ class OutputTranslator:
                     "Rawat kaki dengan baik dan perhatikan luka yang lambat sembuh",
                     "Periksakan diri ke dokter secara rutin untuk mencegah komplikasi"
                 ]
-            },
-            "Tidak diketahui": {
+            },            "Tidak diketahui": {
                 "description": "Sulit menentukan diagnosis yang tepat berdasarkan gejala yang disampaikan.",
                 "recommendations": [
                     "Periksakan diri ke dokter untuk evaluasi lebih lanjut",
                     "Berikan informasi gejala secara lebih detail kepada tenaga medis",
                     "Lakukan pemeriksaan fisik dan tes laboratorium jika diperlukan",
                     "Istirahat yang cukup dan minum banyak air putih",
-                    "Pantau perkembangan gejala dan catat jika ada perubahan"
+                    "Pantau perkembangan gejala dan catat jika ada perubahan",
+                    "Coba jelaskan gejala dengan lebih spesifik, termasuk kapan gejala mulai muncul dan faktor apa yang memperberat atau meringankan gejala"
                 ]
             }
         }
@@ -196,8 +196,8 @@ class OutputTranslator:
         
         Returns
         -------
-        dict
-            Respons yang berisi deskripsi penyakit dan rekomendasi
+        list
+            Daftar rekomendasi berdasarkan penyakit dan tingkat kepercayaan
         """
         # Jika penyakit tidak ditemukan di data
         if disease not in self.diseases_data:
@@ -205,25 +205,11 @@ class OutputTranslator:
         
         # Ambil informasi penyakit
         disease_info = self.diseases_data[disease]
+        recommendations = disease_info["recommendations"]
         
-        # Format respons berdasarkan confidence level
-        if confidence < 0.5:
-            confidence_level = "Anda mungkin"
-        elif confidence < 0.7:
-            confidence_level = "Kemungkinan Anda"
-        else:
-            confidence_level = "Anda sangat mungkin"
-        
-        # Buat respons
-        if disease == "Tidak diketahui":
-            response = {
-                "description": "Maaf, gejala yang Anda sampaikan kurang spesifik untuk menentukan diagnosis.",
-                "recommendations": disease_info["recommendations"]
-            }
-        else:
-            response = {
-                "description": f"{confidence_level} mengalami {disease}. {disease_info['description']}",
-                "recommendations": disease_info["recommendations"]
-            }
-        
-        return response
+        # Tambahkan peringatan jika confidence rendah
+        if disease != "Tidak diketahui" and confidence < 0.6:
+            low_confidence_warning = "Tingkat kepercayaan prediksi cukup rendah. Sebaiknya konsultasikan dengan dokter untuk diagnosis yang lebih akurat."
+            recommendations = [low_confidence_warning] + recommendations
+            
+        return recommendations

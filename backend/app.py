@@ -63,15 +63,21 @@ def predict_disease():
     
     if not data or 'text' not in data:
         return jsonify({'error': 'Data input tidak valid'}), 400
-    
-    # Ambil teks gejala dari request
+      # Ambil teks gejala dari request
     symptoms_text = data['text']
     
     # Preprocessing teks
     processed_text = preprocess_text(symptoms_text)
     
     # Prediksi penyakit
-    prediction, confidence = disease_classifier.predict(processed_text)
+    prediction, confidence, top_diseases = disease_classifier.predict(processed_text)
+    
+    # Format top diseases untuk response
+    formatted_top_diseases = [
+        {"name": disease, "probability": prob}
+        for disease, prob in top_diseases
+        if disease != prediction  # Jangan duplikat penyakit utama
+    ]
     
     # Generate rekomendasi
     recommendation = output_translator.translate(prediction, confidence)
@@ -80,7 +86,8 @@ def predict_disease():
     response = {
         'prediction': prediction,
         'confidence': confidence,
-        'recommendation': recommendation
+        'recommendation': recommendation,
+        'top_diseases': formatted_top_diseases
     }
     
     return jsonify(response)

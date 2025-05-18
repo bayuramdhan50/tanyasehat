@@ -117,5 +117,38 @@
             "Istirahat yang cukup dan minum banyak air putih",
             "Pantau perkembangan gejala dan catat jika ada perubahan"
         ]
+    },
+    "Eksim": {
+        "description": "Kondisi peradangan pada kulit yang menyebabkan kulit menjadi gatal, merah, kering, dan bersisik. Eksim atau dermatitis atopik sering terjadi pada orang dengan riwayat alergi atau asma.",
+        "recommendations": [
+            "Hindari bahan-bahan yang dapat memicu iritasi seperti sabun keras dan deterjen",
+            "Gunakan pelembab secara teratur untuk menjaga kelembaban kulit",
+            "Hindari menggaruk area yang gatal karena dapat memperburuk kondisi",
+            "Konsultasikan dengan dokter untuk mendapatkan krim atau salep yang sesuai",
+            "Mandi dengan air hangat, jangan terlalu panas, dan gunakan sabun lembut",
+            "Jaga suhu ruangan tetap sejuk dan hindari keringat berlebih"
+        ]
+    },
+    "Infeksi Saluran Kemih": {
+        "description": "Infeksi yang terjadi pada saluran kemih, termasuk kandung kemih, uretra, ureter, dan ginjal. Biasanya disebabkan oleh bakteri dan lebih sering terjadi pada wanita.",
+        "recommendations": [
+            "Minum banyak air putih untuk membantu mengeluarkan bakteri dari saluran kemih",
+            "Konsultasikan dengan dokter untuk mendapatkan antibiotik yang sesuai",
+            "Jangan menahan buang air kecil terlalu lama",
+            "Bersihkan area kemaluan dari depan ke belakang (terutama untuk wanita)",
+            "Buang air kecil setelah berhubungan seksual",
+            "Hindari produk-produk yang dapat mengiritasi area kemaluan seperti sabun beraroma"
+        ]
+    },
+    "Radang Sendi": {
+        "description": "Peradangan pada persendian yang menyebabkan nyeri, kekakuan, dan pembengkakan. Bisa disebabkan oleh berbagai faktor termasuk usia, cedera, atau penyakit autoimun seperti artritis reumatoid.",
+        "recommendations": [
+            "Istirahatkan sendi yang terasa nyeri dan hindari aktivitas yang memberatkan",
+            "Kompres dingin atau hangat dapat membantu mengurangi rasa sakit dan pembengkakan",
+            "Gunakan obat pereda nyeri seperti paracetamol sesuai petunjuk",
+            "Konsultasikan dengan dokter untuk diagnosis dan pengobatan yang tepat",
+            "Pertahankan berat badan ideal untuk mengurangi tekanan pada sendi",
+            "Lakukan olahraga ringan seperti berenang atau berjalan untuk menjaga fleksibilitas sendi"
+        ]
     }
 }
