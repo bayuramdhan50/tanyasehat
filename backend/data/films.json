@@ -1,0 +1,172 @@
+{
+    "Dune": {
+        "title": "Dune",
+        "release_year": 2021,
+        "director": "Denis Villeneuve",
+        "genre": ["Sci-Fi", "Action", "Adventure", "Drama"],
+        "description": "Film yang mengadaptasi novel fiksi ilmiah terkenal karya Frank Herbert, menceritakan tentang Paul Atreides yang harus berpindah ke planet Arrakis yang berbahaya, tempat penghasil rempah berharga 'melange'.",
+        "actors": ["Timothée Chalamet", "Rebecca Ferguson", "Oscar Isaac", "Zendaya"],
+        "rating": 8.0,
+        "duration": 155,
+        "recommendations": [
+            "Blade Runner 2049",
+            "Arrival",
+            "Interstellar",
+            "Mad Max: Fury Road",
+            "Foundation (Series)"
+        ]
+    },
+    "Avengers: Endgame": {
+        "title": "Avengers: Endgame",
+        "release_year": 2019,
+        "director": "Anthony & Joe Russo",
+        "genre": ["Action", "Adventure", "Sci-Fi", "Superhero"],
+        "description": "Film penutup dari Saga Infinity dalam Marvel Cinematic Universe, di mana para Avengers yang tersisa berusaha membalikkan efek dari jentikan jari Thanos yang telah melenyapkan setengah populasi semesta.",
+        "actors": ["Robert Downey Jr.", "Chris Evans", "Mark Ruffalo", "Chris Hemsworth", "Scarlett Johansson"],
+        "rating": 8.4,
+        "duration": 181,
+        "recommendations": [
+            "Avengers: Infinity War",
+            "Captain America: Civil War",
+            "Thor: Ragnarok",
+            "Guardians of the Galaxy",
+            "Black Panther"
+        ]
+    },
+    "Parasite": {
+        "title": "Parasite",
+        "release_year": 2019,
+        "director": "Bong Joon-ho",
+        "genre": ["Drama", "Thriller", "Comedy"],
+        "description": "Film Korea yang memenangkan Oscar, mengisahkan keluarga miskin yang secara cerdik menyusup ke dalam kehidupan keluarga kaya dan menjadi parasit di rumah mewah mereka, hingga suatu peristiwa tak terduga terjadi.",
+        "actors": ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik"],
+        "rating": 8.5,
+        "duration": 132,
+        "recommendations": [
+            "Snowpiercer",
+            "The Handmaiden",
+            "Minari",
+            "Shoplifters",
+            "Burning"
+        ]
+    },
+    "Pulp Fiction": {
+        "title": "Pulp Fiction",
+        "release_year": 1994,
+        "director": "Quentin Tarantino",
+        "genre": ["Crime", "Drama", "Thriller", "Comedy"],
+        "description": "Film kultus yang menceritakan beberapa cerita yang saling terkait tentang kejahatan di Los Angeles, termasuk dua pembunuh bayaran, seorang petinju, istri seorang gangster, dan sepasang perampok.",
+        "actors": ["John Travolta", "Samuel L. Jackson", "Uma Thurman", "Bruce Willis"],
+        "rating": 8.9,
+        "duration": 154,
+        "recommendations": [
+            "Reservoir Dogs",
+            "Django Unchained",
+            "The Hateful Eight",
+            "Kill Bill",
+            "Goodfellas"
+        ]
+    },
+    "Inception": {
+        "title": "Inception",
+        "release_year": 2010,
+        "director": "Christopher Nolan",
+        "genre": ["Sci-Fi", "Action", "Thriller", "Mystery"],
+        "description": "Film yang mengeksplorasi konsep pencurian informasi melalui mimpi. Seorang pencuri ahli mencoba melakukan 'inception' - menanamkan ide di pikiran target melalui mimpi bersama yang kompleks.",
+        "actors": ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Ellen Page", "Tom Hardy"],
+        "rating": 8.8,
+        "duration": 148,
+        "recommendations": [
+            "Interstellar",
+            "The Prestige",
+            "Memento",
+            "Tenet",
+            "Shutter Island"
+        ]
+    },
+    "The Shawshank Redemption": {
+        "title": "The Shawshank Redemption",
+        "release_year": 1994,
+        "director": "Frank Darabont",
+        "genre": ["Drama", "Crime"],
+        "description": "Kisah persahabatan antara dua narapidana selama beberapa dekade di penjara Shawshank, dan bagaimana harapan dapat menjadi kekuatan yang luar biasa untuk bertahan dan menemukan penebusan.",
+        "actors": ["Tim Robbins", "Morgan Freeman", "Bob Gunton", "William Sadler"],
+        "rating": 9.3,
+        "duration": 142,
+        "recommendations": [
+            "The Green Mile",
+            "Forrest Gump",
+            "The Godfather",
+            "Schindler's List",
+            "One Flew Over the Cuckoo's Nest"
+        ]
+    },
+    "Spirited Away": {
+        "title": "Spirited Away",
+        "release_year": 2001,
+        "director": "Hayao Miyazaki",
+        "genre": ["Animation", "Adventure", "Fantasy"],
+        "description": "Film animasi Jepang tentang Chihiro, gadis kecil yang terperangkap di dunia roh dan harus bekerja di pemandian roh untuk menyelamatkan orang tuanya yang telah berubah menjadi babi.",
+        "actors": ["Rumi Hiiragi", "Miyu Irino", "Mari Natsuki", "Takashi Naito"],
+        "rating": 8.6,
+        "duration": 125,
+        "recommendations": [
+            "My Neighbor Totoro",
+            "Princess Mononoke",
+            "Howl's Moving Castle",
+            "Your Name",
+            "Grave of the Fireflies"
+        ]
+    },
+    "The Dark Knight": {
+        "title": "The Dark Knight",
+        "release_year": 2008,
+        "director": "Christopher Nolan",
+        "genre": ["Action", "Crime", "Drama", "Thriller", "Superhero"],
+        "description": "Batman berhadapan dengan Joker, penjahat kharismatik yang membawa Gotham City ke dalam kekacauan dan mendorong Batman untuk melewati batas antara pahlawan dan vigilante.",
+        "actors": ["Christian Bale", "Heath Ledger", "Aaron Eckhart", "Gary Oldman", "Maggie Gyllenhaal"],
+        "rating": 9.0,
+        "duration": 152,
+        "recommendations": [
+            "Batman Begins",
+            "The Dark Knight Rises",
+            "Joker",
+            "The Prestige",
+            "Memento"
+        ]
+    },
+    "Titanic": {
+        "title": "Titanic",
+        "release_year": 1997,
+        "director": "James Cameron",
+        "genre": ["Romance", "Drama", "Disaster"],
+        "description": "Kisah cinta tragis antara Jack dan Rose, dua individu dari kelas sosial berbeda yang bertemu dan jatuh cinta di kapal Titanic yang tenggelam pada perjalanan perdananya.",
+        "actors": ["Leonardo DiCaprio", "Kate Winslet", "Billy Zane", "Kathy Bates"],
+        "rating": 7.9,
+        "duration": 194,
+        "recommendations": [
+            "The Notebook",
+            "Romeo + Juliet",
+            "Pearl Harbor",
+            "Avatar",
+            "A Star Is Born"
+        ]
+    },
+    "Jurassic Park": {
+        "title": "Jurassic Park",
+        "release_year": 1993,
+        "director": "Steven Spielberg",
+        "genre": ["Adventure", "Sci-Fi", "Thriller"],
+        "description": "Film tentang taman hiburan yang berisi dinosaurus hasil kloning DNA, yang berubah menjadi neraka saat sistem keamanan gagal dan dinosaurus lepas.",
+        "actors": ["Sam Neill", "Laura Dern", "Jeff Goldblum", "Richard Attenborough"],
+        "rating": 8.2,
+        "duration": 127,
+        "recommendations": [
+            "Jurassic World",
+            "Jaws",
+            "Godzilla",
+            "King Kong",
+            "The Lost World: Jurassic Park"
+        ]
+    }
+}

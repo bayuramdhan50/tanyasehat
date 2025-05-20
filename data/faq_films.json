@@ -1,0 +1,73 @@
+{
+    "umum": {
+        "apa film terbaik tahun 2023": "Beberapa film terbaik tahun 2023 termasuk 'Oppenheimer', 'Barbie', 'The Holdovers', 'Past Lives', dan 'Killers of the Flower Moon'. Penilaian 'terbaik' bisa subjektif, tetapi film-film ini mendapat penilaian tinggi dari kritikus dan penonton.",
+        "rekomendasi film action terbaru": "Beberapa film action terbaru yang direkomendasikan termasuk 'John Wick: Chapter 4', 'Mission: Impossible - Dead Reckoning', 'The Equalizer 3', dan 'Fast X'. Film-film ini menawarkan adegan aksi spektakuler dan cerita yang menarik.",
+        "rekomendasi film untuk anak": "Film yang cocok untuk anak-anak antara lain 'The Super Mario Bros. Movie', 'Elemental', 'Wish', 'Trolls Band Together', dan 'Migration'. Film-film ini memiliki konten yang aman dengan nilai moral positif dan hiburan yang cocok untuk segala usia.",
+        "film klasik yang wajib ditonton": "Beberapa film klasik yang wajib ditonton termasuk 'The Godfather', 'Casablanca', 'Citizen Kane', 'Gone with the Wind', dan '12 Angry Men'. Film-film ini dianggap sebagai karya agung dalam sejarah perfilman dengan pengaruh besar pada industri film.",
+        "rekomendasi film horor": "Beberapa film horor yang direkomendasikan adalah 'The Conjuring', 'Hereditary', 'Get Out', 'It', dan 'The Exorcist'. Film-film ini menawarkan ketegangan, kejutan, dan suasana mencekam yang efektif dalam genre horor."
+    },
+    "genre_info": {
+        "Action": "Genre film dengan penekanan pada adegan kekerasan atau fisik seperti perkelahian, adegan kejar-kejaran, tembak-menembak, ledakan, atau aksi ketangkasan.",
+        "Comedy": "Film yang dirancang untuk menghibur dan mengundang tawa dari penonton, biasanya melalui situasi lucu, dialog jenaka, atau karakter komikal.",
+        "Drama": "Genre yang berfokus pada pengembangan karakter dan cerita realistis tentang konflik emosional atau sosial, mencerminkan kehidupan nyata.",
+        "Horror": "Film yang dirancang untuk menakuti dan menciptakan perasaan teror, kengerian, atau ketakutan pada penonton.",
+        "Sci-Fi": "Film yang mengeksplorasi konsep fiksi ilmiah, seperti teknologi futuristik, perjalanan luar angkasa, kehidupan asing, atau dunia alternatif.",
+        "Romance": "Genre yang berfokus pada hubungan romantis dan cinta antara karakter utama, biasanya dengan rintangan yang harus diatasi.",
+        "Thriller": "Film yang menciptakan ketegangan, suspense, dan kegembiraan melalui plot yang sering melibatkan teka-teki atau bahaya.",
+        "Animation": "Film yang dibuat menggunakan teknik animasi, baik tradisional, komputer, atau stop-motion, sering kali tetapi tidak selalu ditujukan untuk anak-anak.",
+        "Fantasy": "Genre yang menggambarkan dunia atau situasi yang tidak nyata, sering melibatkan sihir, makhluk mistis, atau kekuatan supernatural.",
+        "Documentary": "Film non-fiksi yang berusaha mendokumentasikan realitas untuk tujuan instruksi, pendidikan, atau catatan sejarah."
+    },
+    "film_detail": {
+        "Avengers: Endgame": [
+            "film tentang pahlawan super",
+            "film marvel terbaru",
+            "film iron man terakhir"
+        ],
+        "Parasite": [
+            "film korea terbaik",
+            "film pemenang oscar",
+            "film tentang kesenjangan sosial"
+        ],
+        "Dune": [
+            "film fiksi ilmiah epic",
+            "film adaptasi novel",
+            "film tentang planet gurun"
+        ],
+        "Inception": [
+            "film tentang mimpi",
+            "film christopher nolan terbaik",
+            "film dengan plot twist"
+        ],
+        "Pulp Fiction": [
+            "film tarantino klasik",
+            "film kultus 90an",
+            "film dengan alur non-linear"
+        ],
+        "The Shawshank Redemption": [
+            "film tentang penjara",
+            "film rating tertinggi",
+            "film tentang persahabatan"
+        ],
+        "The Dark Knight": [
+            "film superhero terbaik",
+            "film batman terbaik",
+            "film heath ledger joker"
+        ],
+        "Spirited Away": [
+            "film anime terbaik",
+            "film miyazaki terpopuler",
+            "film animasi jepang"
+        ],
+        "Titanic": [
+            "film romantis klasik",
+            "film tentang kapal tenggelam",
+            "film james cameron terlaris"
+        ],
+        "Jurassic Park": [
+            "film tentang dinosaurus",
+            "film petualangan klasik",
+            "film spielberg terbaik"
+        ]
+    }
+}

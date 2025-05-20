@@ -1,19 +1,19 @@
-# TanyaSehat - Sistem Deteksi Penyakit Berbasis NLP
+# FilmFinder - Sistem Rekomendasi Film Berbasis NLP
 
 <div align="center">
-  <h3>Deteksi penyakit berdasarkan deskripsi gejala dalam Bahasa Indonesia</h3>
+  <h3>Rekomendasi film berdasarkan preferensi pengguna dalam Bahasa Indonesia</h3>
 </div>
 
 ## 📋 Deskripsi
 
-TanyaSehat adalah aplikasi web untuk mendeteksi kemungkinan penyakit berdasarkan gejala yang diinputkan pengguna dalam bahasa Indonesia. Sistem ini menggunakan Natural Language Processing (NLP) untuk memahami input pengguna dan memberikan prediksi berdasarkan model klasifikasi yang telah dilatih.
+FilmFinder adalah aplikasi web untuk mencari rekomendasi dan informasi seputar film berdasarkan preferensi yang diinputkan pengguna dalam bahasa Indonesia. Sistem ini menggunakan Natural Language Processing (NLP) untuk memahami input pengguna dan memberikan rekomendasi film berdasarkan model klasifikasi yang telah dilatih.
 
 ## ✨ Fitur
 
-- 🔍 **Deteksi Penyakit**: Analisis gejala dalam bahasa natural untuk memprediksi kemungkinan penyakit
+- 🔍 **Rekomendasi Film**: Analisis preferensi dalam bahasa natural untuk merekomendasikan film yang sesuai
 - 🎤 **Input Suara**: Dukungan untuk input suara (speech-to-text) dalam Bahasa Indonesia
-- 🤖 **Chatbot Asisten**: Tanya jawab interaktif tentang informasi penyakit dan rekomendasi kesehatan
-- 📊 **Visualisasi Hasil**: Tampilan hasil dengan indikator tingkat kepercayaan dan rekomendasi
+- 🤖 **Chatbot Asisten**: Tanya jawab interaktif tentang informasi film dan rekomendasi tontonan
+- 📊 **Visualisasi Hasil**: Tampilan hasil dengan detail film dan tingkat kesesuaian dengan preferensi
 - 🌙 **Mode Gelap**: Antarmuka yang nyaman untuk penggunaan di berbagai kondisi pencahayaan
 
 ## 🚀 Teknologi

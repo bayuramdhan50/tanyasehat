@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react';
-import Header from './components/Header';
-import InputForm from './components/InputForm';
-import ResultCard from './components/ResultCard';
-import Chatbot from './components/Chatbot';
+import FilmHeader from './components/FilmHeader';
+import FilmInputForm from './components/FilmInputForm';
+import FilmResultCard from './components/FilmResultCard';
+import FilmChatbot from './components/FilmChatbot';
 import Loading from './components/Loading';
-import Tabs from './components/Tabs';
+import FilmTabs from './components/FilmTabs';
 
 export default function Home() {
   const [result, setResult] = useState<any>(null);
@@ -24,11 +24,11 @@ export default function Home() {
 
   const InfoCard = () => (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-2xl mx-auto mt-8">
-      <h2 className="text-xl font-bold mb-4">Selamat Datang di TanyaSehat</h2>
+      <h2 className="text-xl font-bold mb-4">Selamat Datang di FilmFinder</h2>
       
       <div className="prose dark:prose-invert prose-sm max-w-none">
         <p>
-          TanyaSehat adalah sistem deteksi penyakit berbasis Natural Language Processing (NLP) 
+          FilmFinder adalah sistem rekomendasi film berbasis Natural Language Processing (NLP)
           yang dapat membantu Anda mengidentifikasi kemungkinan penyakit berdasarkan gejala yang Anda alami.
         </p>
         
@@ -65,35 +65,34 @@ export default function Home() {
       </button>
     </div>
   );
-
   const tabs = [
     {
-      id: 'detection',
-      label: 'Deteksi Penyakit',
+      id: 'recommender',
+      label: 'Rekomendasi Film',
       content: (
         <div>
-          <InputForm onResult={handleResult} onLoading={handleLoading} />
-          {isLoading ? <Loading /> : result ? <ResultCard result={result} /> : showInfo && <InfoCard />}
+          <FilmInputForm onResult={handleResult} onLoading={handleLoading} />
+          {isLoading ? <Loading /> : result ? <FilmResultCard result={result} /> : showInfo && <InfoCard />}
         </div>
       ),
     },
     {
       id: 'chatbot',
-      label: 'Asisten TanyaSehat',
-      content: <Chatbot />,
+      label: 'Film Assistant',
+      content: <FilmChatbot />,
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 py-10 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
-        <Header />
-        <Tabs tabs={tabs} />
+        <FilmHeader title="FilmFinder" subtitle="Rekomendasi film berdasarkan preferensi Anda" />
+        <FilmTabs tabs={tabs} />
       </div>
       
       <footer className="mt-20 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>TanyaSehat &copy; {new Date().getFullYear()} - Sistem Deteksi Penyakit Berbasis NLP</p>
-        <p className="mt-1">Disclaimer: Hasil deteksi bersifat informatif dan tidak menggantikan konsultasi dengan tenaga medis profesional.</p>
+        <p>FilmFinder &copy; {new Date().getFullYear()} - Sistem Rekomendasi Film Berbasis NLP</p>
+        <p className="mt-1">Dibuat dengan TF-IDF, Naive Bayes, Flask dan Next.js</p>
         
         {/* Tampilkan tombol untuk menampilkan info kembali jika sudah disembunyikan */}
         {!showInfo && !isLoading && result && (
