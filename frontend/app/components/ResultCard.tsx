@@ -38,9 +38,16 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
 
   // Menentukan warna berdasarkan tingkat kepercayaan
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.7) return 'bg-green-500';
-    if (confidence >= 0.5) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (confidence >= 0.7) return 'bg-green-500 dark:bg-green-500';
+    if (confidence >= 0.5) return 'bg-yellow-500 dark:bg-yellow-500';
+    return 'bg-red-500 dark:bg-red-500';
+  };
+
+  // Menentukan warna teks berdasarkan tingkat kepercayaan
+  const getConfidenceTextColor = (confidence: number) => {
+    if (confidence >= 0.7) return 'text-green-600 dark:text-green-400';
+    if (confidence >= 0.5) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-red-600 dark:text-red-400';
   };
 
   // Menentukan pesan berdasarkan tingkat kepercayaan
@@ -48,6 +55,29 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
     if (confidence >= 0.7) return 'Tingkat kepercayaan tinggi';
     if (confidence >= 0.5) return 'Tingkat kepercayaan sedang';
     return 'Tingkat kepercayaan rendah';
+  };
+
+  // Menentukan ikon berdasarkan tingkat kepercayaan
+  const getConfidenceIcon = (confidence: number) => {
+    if (confidence >= 0.7) {
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        </svg>
+      );
+    }
+    if (confidence >= 0.5) {
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+      );
+    }
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+      </svg>
+    );
   };
 
   // Menentukan apakah prediksi tidak diketahui
@@ -71,9 +101,9 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
           <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
             <button
               onClick={() => setActiveTab('result')}
-              className={`py-2 px-4 font-medium text-sm focus:outline-none ${
+              className={`py-3 px-5 font-medium text-sm focus:outline-none transition-colors duration-200 ${
                 activeTab === 'result' 
-                  ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' 
+                  ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
             >
@@ -82,9 +112,9 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
             {result.top_diseases && result.top_diseases.length > 0 && (
               <button
                 onClick={() => setActiveTab('details')}
-                className={`py-2 px-4 font-medium text-sm focus:outline-none ${
+                className={`py-3 px-5 font-medium text-sm focus:outline-none transition-colors duration-200 ${
                   activeTab === 'details' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' 
+                    ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
               >
@@ -94,9 +124,9 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
             {result.recommendation && result.recommendation.length > 0 && (
               <button
                 onClick={() => setActiveTab('recommendations')}
-                className={`py-2 px-4 font-medium text-sm focus:outline-none ${
+                className={`py-3 px-5 font-medium text-sm focus:outline-none transition-colors duration-200 ${
                   activeTab === 'recommendations' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' 
+                    ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
               >
@@ -113,32 +143,31 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className={`mb-6 ${isUnknown ? 'bg-gray-50 dark:bg-gray-900/30' : 'bg-blue-50 dark:bg-blue-900/30'} p-4 rounded-lg`}
+                className={`mb-6 ${isUnknown ? 'bg-gray-50 dark:bg-gray-800/60' : 'bg-blue-50 dark:bg-blue-900/20'} p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700`}
               >
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-semibold text-lg">Kemungkinan Penyakit:</h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">Kemungkinan Penyakit:</h3>
                   <div className="flex items-center">
-                    <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">
+                    <span className="font-bold text-lg text-blue-600 dark:text-blue-400 mr-2">
                       {formatProbability(result.confidence)}
                     </span>
-                    <div className="relative h-5 w-5 rounded-full">
-                      <div 
-                        className={`absolute inset-0 rounded-full ${getConfidenceColor(result.confidence)}`} 
-                        title={getConfidenceMessage(result.confidence)}
-                      ></div>
+                    <div className={`flex items-center justify-center h-6 w-6 rounded-full ${getConfidenceTextColor(result.confidence)}`}
+                         title={getConfidenceMessage(result.confidence)}>
+                      {getConfidenceIcon(result.confidence)}
                     </div>
                   </div>
                 </div>
-                <p className={`text-2xl font-bold ${isUnknown ? 'text-gray-600 dark:text-gray-400' : 'text-blue-700 dark:text-blue-300'}`}>
+                
+                <p className={`text-3xl font-bold mb-5 ${isUnknown ? 'text-gray-600 dark:text-gray-400' : 'text-blue-700 dark:text-blue-300'}`}>
                   {result.prediction}
                 </p>
                 
                 {/* Visualisasi tingkat kepercayaan */}
-                <div className="mt-5">
-                  <div className="text-xs mb-1 flex justify-between">
-                    <span>0%</span>
-                    <span>50%</span>
-                    <span>100%</span>
+                <div className="mt-6">
+                  <div className="text-xs mb-2 flex justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">0%</span>
+                    <span className="text-gray-500 dark:text-gray-400">50%</span>
+                    <span className="text-gray-500 dark:text-gray-400">100%</span>
                   </div>
                   <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <motion.div 
@@ -148,14 +177,17 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
                       className={`h-full ${getConfidenceColor(result.confidence)}`} 
                     ></motion.div>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium text-center">
-                    {getConfidenceMessage(result.confidence)}
-                  </p>
+                  <div className={`flex items-center justify-center mt-3 ${getConfidenceTextColor(result.confidence)}`}>
+                    {getConfidenceIcon(result.confidence)}
+                    <p className="text-sm font-medium ml-2">
+                      {getConfidenceMessage(result.confidence)}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Penjelasan tingkat kepercayaan */}
-                <div className="mt-4 p-3 bg-white dark:bg-gray-700 rounded-sm text-sm">
-                  <p className="text-gray-600 dark:text-gray-300">
+                <div className="mt-6 p-4 bg-white dark:bg-gray-700/50 rounded-lg text-sm border border-gray-100 dark:border-gray-600">
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                     {confidenceExplanation}
                   </p>
                 </div>
@@ -177,18 +209,18 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
                 transition={{ duration: 0.3 }}
                 className="mb-6"
               >
-                <div className="bg-white dark:bg-gray-700 shadow-sm rounded-lg overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                    <thead className="bg-gray-50 dark:bg-gray-800">
+                <div className="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-800/80">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                           Penyakit
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                           Probabilitas
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          Visualisasi
+                        <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden sm:table-cell">
+                          Tingkat Keyakinan
                         </th>
                       </tr>
                     </thead>
@@ -201,7 +233,7 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 dark:text-blue-400">
                           {formatProbability(result.confidence)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                           <div className="w-full h-4 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                             <div 
                               className={`h-full ${getConfidenceColor(result.confidence)}`} 
@@ -220,7 +252,7 @@ const ResultCard = memo(({ result }: ResultCardProps) => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                             {formatProbability(disease.probability)}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                             <div className="w-full h-3 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                               <div 
                                 className={`h-full ${getConfidenceColor(disease.probability)}`}
