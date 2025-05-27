@@ -13,6 +13,12 @@ interface Message {
   content: string;
   timestamp?: Date;
   isTyping?: boolean;
+  id?: number;
+}
+
+interface Suggestion {
+  text: string;
+  category: string;
 }
 
 export default function Chatbot() {
@@ -32,13 +38,25 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'connecting' | 'connected' | 'failed'>('idle');
-  const [suggestions] = useState<string[]>([
-    'Apa itu demam berdarah?',
-    'Apa gejala flu?',
-    'Bagaimana cara mengobati maag?',
-    'Cara mencegah diabetes?',
-    'Berapa lama tipes sembuh?'
+  
+  // State untuk sugesti dinamis berdasarkan konteks percakapan
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([
+    { text: 'Apa itu demam berdarah?', category: 'definisi' },
+    { text: 'Apa gejala flu?', category: 'gejala' },
+    { text: 'Bagaimana cara mengobati maag?', category: 'penanganan' },
+    { text: 'Cara mencegah diabetes?', category: 'pencegahan' },
+    { text: 'Berapa lama tipes sembuh?', category: 'durasi' }
   ]);
+  
+  // State untuk menyimpan penyakit yang disebutkan dalam percakapan
+  const [mentionedDiseases, setMentionedDiseases] = useState<Set<string>>(new Set());
+  
+  // Data penyakit umum untuk membuat saran
+  const commonDiseases = [
+    'Flu', 'Demam Berdarah', 'Tipes', 'Maag', 'Diabetes', 
+    'Hipertensi', 'TBC', 'Asma', 'Migrain', 'Diare'
+  ];
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -84,7 +102,7 @@ export default function Chatbot() {
       isTyping: true,
       timestamp: new Date(),
       id: typingMessageId
-    } as Message & { id: number }]);
+    } as Message]);
     
     // Delay sebelum mulai menampilkan teks
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -99,7 +117,7 @@ export default function Chatbot() {
     for (let i = 0; i < content.length; i++) {
       currentText += content[i];
       setMessages(prev => prev.map(msg => 
-        (msg as Message & { id: number }).id === typingMessageId 
+        (msg as Message).id === typingMessageId 
           ? { ...msg, content: currentText } 
           : msg
       ));
@@ -109,11 +127,105 @@ export default function Chatbot() {
     
     // Setelah selesai, hapus indikator typing
     setMessages(prev => prev.map(msg => 
-      (msg as Message & { id: number }).id === typingMessageId 
+      (msg as Message).id === typingMessageId 
         ? { ...msg, isTyping: false, timestamp: new Date() } 
         : msg
     ));
+    
+    // Ekstrak penyakit dari respons untuk memperbarui saran
+    extractDiseasesFromResponse(content);
   };
+  
+  // Fungsi untuk mengekstrak penyakit yang disebutkan dalam respons
+  const extractDiseasesFromResponse = (content: string) => {
+    // Ekstrak penyakit dari respons bot
+    commonDiseases.forEach(disease => {
+      if (content.includes(disease)) {
+        // Tambahkan ke daftar penyakit yang disebutkan
+        setMentionedDiseases(prev => new Set([...prev, disease]));
+      }
+    });
+    
+    // Update saran setelah mendapatkan respons baru
+    updateSuggestions();
+  };
+
+  // Fungsi untuk mendapatkan penyakit acak yang berbeda dari yang diberikan
+  const getRandomDisease = (excludeDisease?: string) => {
+    let availableDiseases = [...commonDiseases];
+    if (excludeDisease) {
+      availableDiseases = availableDiseases.filter(d => d !== excludeDisease);
+    }
+    return availableDiseases[Math.floor(Math.random() * availableDiseases.length)];
+  };
+  
+  // Fungsi untuk mendapatkan beberapa penyakit acak
+  const getRandomDiseases = (count: number, preferredDiseases: string[] = []) => {
+    const result: string[] = [];
+    
+    // Tambahkan dari preferredDiseases terlebih dahulu
+    for (let i = 0; i < preferredDiseases.length && result.length < count; i++) {
+      if (!result.includes(preferredDiseases[i])) {
+        result.push(preferredDiseases[i]);
+      }
+    }
+    
+    // Tambahkan dari commonDiseases jika masih kurang
+    let availableDiseases = commonDiseases.filter(d => !result.includes(d));
+    while (result.length < count && availableDiseases.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableDiseases.length);
+      result.push(availableDiseases[randomIndex]);
+      availableDiseases.splice(randomIndex, 1);
+    }
+    
+    return result;
+  };
+  
+  // Fungsi untuk menghasilkan saran baru berdasarkan konteks percakapan
+  const updateSuggestions = useCallback(() => {
+    // Dapatkan daftar penyakit yang disebutkan
+    let diseasesInContext = Array.from(mentionedDiseases);
+    
+    // Jika tidak ada penyakit yang terdeteksi, gunakan daftar umum
+    if (diseasesInContext.length === 0) {
+      diseasesInContext = commonDiseases.slice(0, 3);
+    }
+    
+    const disease = diseasesInContext[0] || 'Demam Berdarah';
+    const otherDisease = getRandomDisease(disease);
+    
+    // Buat saran berdasarkan penyakit yang terdeteksi
+    const newSuggestions: Suggestion[] = [
+      { text: `Apa itu ${disease}?`, category: 'definisi' },
+      { text: `Apa gejala ${disease}?`, category: 'gejala' },
+      { text: `Bagaimana cara mengobati ${disease}?`, category: 'penanganan' },
+      { text: `Cara mencegah ${disease}?`, category: 'pencegahan' },
+      { text: `Berapa lama ${disease} sembuh?`, category: 'durasi' }
+    ];
+    
+    // Tambahkan pertanyaan tentang penyakit lain untuk variasi
+    if (otherDisease !== disease) {
+      newSuggestions.push({ text: `Apa itu ${otherDisease}?`, category: 'definisi' });
+      newSuggestions.push({ text: `Apa gejala ${otherDisease}?`, category: 'gejala' });
+    }
+    
+    // Acak urutan dan batasi jumlah
+    const shuffled = [...newSuggestions].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 5);
+    
+    // Update state suggestions
+    setSuggestions(selected);
+  }, [mentionedDiseases, getRandomDisease]);
+  
+  // Update saran ketika percakapan berubah
+  useEffect(() => {
+    // Hanya update saran jika ada pesan baru dari bot
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'bot' && !lastMessage.isTyping) {
+      updateSuggestions();
+      setShowSuggestions(true);
+    }
+  }, [messages, updateSuggestions]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -326,7 +438,7 @@ export default function Chatbot() {
                   transition={{ delay: 0.5, duration: 0.3 }}
                   className="mt-6 mb-2"
                 >
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 ml-1">Pertanyaan yang sering ditanyakan:</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 ml-1">Pertanyaan yang mungkin ingin Anda tanyakan:</p>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((suggestion, index) => (
                       <motion.button
@@ -334,10 +446,20 @@ export default function Chatbot() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.5 + index * 0.1, duration: 0.2 }}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="px-3 py-2 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 text-sm rounded-full border border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors"
+                        onClick={() => handleSuggestionClick(suggestion.text)}
+                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${
+                          suggestion.category === 'gejala' 
+                            ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-800/30'
+                            : suggestion.category === 'penanganan'
+                              ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-800/30'
+                              : suggestion.category === 'pencegahan'
+                                ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-800/30'
+                                : suggestion.category === 'durasi'
+                                  ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-800/30'
+                                  : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                        }`}
                       >
-                        {suggestion}
+                        {suggestion.text}
                       </motion.button>
                     ))}
                   </div>
