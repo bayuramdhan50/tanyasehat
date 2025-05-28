@@ -59,6 +59,8 @@ export default function Chatbot() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Ref untuk melacak pembaruan sugesti terakhir
+  const lastSuggestionUpdateRef = useRef<number | null>(null);
 
   // Check server connection status
   const checkServerConnection = useCallback(async () => {
@@ -138,16 +140,22 @@ export default function Chatbot() {
   
   // Fungsi untuk mengekstrak penyakit yang disebutkan dalam respons
   const extractDiseasesFromResponse = (content: string) => {
+    let diseaseDetected = false;
+    
     // Ekstrak penyakit dari respons bot
     commonDiseases.forEach(disease => {
       if (content.includes(disease)) {
         // Tambahkan ke daftar penyakit yang disebutkan
         setMentionedDiseases(prev => new Set([...prev, disease]));
+        diseaseDetected = true;
       }
     });
     
-    // Update saran setelah mendapatkan respons baru
-    updateSuggestions();
+    // Jika tidak ada penyakit baru yang terdeteksi, tidak perlu update saran
+    // Ini mencegah perubahan saran yang tidak perlu
+    if (!diseaseDetected) {
+      return;
+    }
   };
 
   // Fungsi untuk mendapatkan penyakit acak yang berbeda dari yang diberikan
@@ -183,6 +191,19 @@ export default function Chatbot() {
   
   // Fungsi untuk menghasilkan saran baru berdasarkan konteks percakapan
   const updateSuggestions = useCallback(() => {
+    // Cek apakah ada pesan bot yang baru, jika tidak ada, jangan update sugesti
+    const lastBotMessage = messages.filter(m => m.role === 'bot' && !m.isTyping).pop();
+    if (!lastBotMessage) return;
+    
+    // Cek apakah kita sudah memperbarui sugesti untuk pesan bot ini
+    // Jika ya, jangan perbarui lagi untuk mencegah efek glitch
+    if (lastSuggestionUpdateRef.current === lastBotMessage.id) {
+      return;
+    }
+    
+    // Catat ID pesan terakhir yang sudah digunakan untuk memperbarui sugesti
+    lastSuggestionUpdateRef.current = lastBotMessage.id || Date.now();
+    
     // Dapatkan daftar penyakit yang disebutkan
     let diseasesInContext = Array.from(mentionedDiseases);
     
@@ -209,21 +230,32 @@ export default function Chatbot() {
       newSuggestions.push({ text: `Apa gejala ${otherDisease}?`, category: 'gejala' });
     }
     
-    // Acak urutan dan batasi jumlah
-    const shuffled = [...newSuggestions].sort(() => 0.5 - Math.random());
+    // Gunakan ID pesan sebagai seed untuk pengacakan yang konsisten
+    // Ini akan membuat saran tidak berubah-ubah secara visual
+    const seed = lastBotMessage.id || Date.now();
+    const shuffled = [...newSuggestions].sort((a, b) => {
+      const hashA = (seed + a.text.length) % 100;
+      const hashB = (seed + b.text.length) % 100;
+      return hashA - hashB;
+    });
+    
     const selected = shuffled.slice(0, 5);
     
-    // Update state suggestions
+    // Update state suggestions hanya jika benar-benar perlu
     setSuggestions(selected);
-  }, [mentionedDiseases, getRandomDisease]);
+  }, [mentionedDiseases, messages, getRandomDisease]);
   
   // Update saran ketika percakapan berubah
   useEffect(() => {
-    // Hanya update saran jika ada pesan baru dari bot
+    // Hanya update saran jika ada pesan baru dari bot dan pesan tidak sedang typing
     const lastMessage = messages[messages.length - 1];
     if (lastMessage && lastMessage.role === 'bot' && !lastMessage.isTyping) {
-      updateSuggestions();
-      setShowSuggestions(true);
+      // Gunakan setTimeout untuk memastikan UI tidak melakukan update terlalu sering
+      // yang dapat menyebabkan efek glitch
+      setTimeout(() => {
+        updateSuggestions();
+        setShowSuggestions(true);
+      }, 200);
     }
   }, [messages, updateSuggestions]);
   
@@ -433,6 +465,7 @@ export default function Chatbot() {
               
               {!isLoading && showSuggestions && suggestions.length > 0 && (
                 <motion.div 
+                  key="suggestions-container"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.3 }}
@@ -442,7 +475,7 @@ export default function Chatbot() {
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((suggestion, index) => (
                       <motion.button
-                        key={index}
+                        key={`suggestion-${suggestion.text}`}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.5 + index * 0.1, duration: 0.2 }}
