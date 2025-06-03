@@ -216,6 +216,91 @@ class OutputTranslator:
                     "Jika gejala berlangsung lebih dari 10 hari atau sangat parah, konsultasikan dengan dokter"
                 ]
             },
+            "Campak": {
+                "description": "Penyakit menular akibat infeksi virus yang ditandai dengan demam tinggi, batuk, pilek, mata merah, dan ruam merah di kulit.",
+                "recommendations": [
+                    "Istirahat total dan minum banyak cairan",
+                    "Kompres hangat untuk menurunkan demam",
+                    "Hindari kontak dengan orang lain untuk mencegah penularan",
+                    "Gunakan obat penurun panas jika diperlukan",
+                    "Segera ke dokter jika muncul sesak napas atau kejang"
+                ]
+            },
+            "Cacar Air": {
+                "description": "Infeksi virus varicella-zoster yang menyebabkan ruam berisi cairan dan sangat gatal di seluruh tubuh.",
+                "recommendations": [
+                    "Jaga kebersihan kulit dan hindari menggaruk ruam",
+                    "Gunakan losion calamine untuk mengurangi gatal",
+                    "Istirahat cukup dan minum banyak cairan",
+                    "Gunakan obat penurun demam jika diperlukan",
+                    "Segera ke dokter jika ruam terinfeksi atau demam tinggi"
+                ]
+            },
+            "Hepatitis A": {
+                "description": "Infeksi hati akibat virus hepatitis A yang ditandai dengan mual, muntah, demam, kulit dan mata menguning, serta urine gelap.",
+                "recommendations": [
+                    "Istirahat total dan konsumsi makanan bergizi",
+                    "Minum banyak cairan untuk mencegah dehidrasi",
+                    "Hindari makanan berlemak dan alkohol",
+                    "Cuci tangan sebelum makan dan setelah dari toilet",
+                    "Segera ke dokter jika gejala memburuk"
+                ]
+            },
+            "Anemia": {
+                "description": "Kondisi kekurangan sel darah merah atau hemoglobin yang menyebabkan lemas, pucat, dan mudah lelah.",
+                "recommendations": [
+                    "Konsumsi makanan kaya zat besi seperti daging merah, hati, dan sayuran hijau",
+                    "Minum suplemen zat besi jika diresepkan dokter",
+                    "Istirahat cukup dan hindari aktivitas berat",
+                    "Segera ke dokter jika sering pingsan atau sesak napas berat"
+                ]
+            },
+            "Vertigo": {
+                "description": "Gangguan keseimbangan yang menyebabkan sensasi berputar, mual, muntah, dan sulit berdiri.",
+                "recommendations": [
+                    "Duduk atau berbaring segera saat vertigo menyerang",
+                    "Hindari gerakan kepala mendadak",
+                    "Minum obat anti-mual jika diresepkan dokter",
+                    "Konsultasikan ke dokter jika vertigo sering kambuh"
+                ]
+            },
+            "Bronkitis": {
+                "description": "Peradangan pada saluran bronkus paru-paru yang menyebabkan batuk berdahak, sesak napas, dan demam ringan.",
+                "recommendations": [
+                    "Istirahat cukup dan minum air hangat",
+                    "Hindari asap rokok dan polusi",
+                    "Gunakan obat batuk sesuai anjuran dokter",
+                    "Segera ke dokter jika batuk berdarah atau sesak berat"
+                ]
+            },
+            "Pneumonia": {
+                "description": "Infeksi paru-paru yang menyebabkan demam tinggi, batuk berdahak, sesak napas, dan nyeri dada.",
+                "recommendations": [
+                    "Segera periksakan diri ke dokter untuk pengobatan antibiotik",
+                    "Istirahat total dan minum banyak cairan",
+                    "Gunakan obat penurun demam jika diperlukan",
+                    "Pantau pernapasan dan segera ke IGD jika sesak berat"
+                ]
+            },
+            "Demam Scarlet": {
+                "description": "Infeksi bakteri Streptococcus yang menyebabkan demam, ruam merah, sakit tenggorokan, dan lidah merah.",
+                "recommendations": [
+                    "Segera ke dokter untuk mendapatkan antibiotik",
+                    "Istirahat cukup dan minum banyak cairan",
+                    "Konsumsi makanan lunak jika tenggorokan sakit",
+                    "Pantau ruam dan suhu tubuh"
+                ]
+            },
+            "COVID-19": {
+                "description": "Penyakit infeksi saluran pernapasan akibat virus corona, gejala utama: demam, batuk, sesak napas, hilang penciuman.",
+                "recommendations": [
+                    "Lakukan isolasi mandiri minimal 5 hari",
+                    "Gunakan masker dan jaga jarak dengan orang lain",
+                    "Minum banyak cairan dan istirahat cukup",
+                    "Segera ke dokter jika sesak napas berat atau saturasi oksigen turun",
+                    "Pantau suhu tubuh dan gejala lain secara berkala"
+                ]
+            },
             "Tidak diketahui": {
                 "description": "Berdasarkan gejala yang diberikan, tidak dapat dipastikan diagnosis yang tepat. Ini bisa disebabkan oleh berbagai faktor seperti gejala yang tidak spesifik, atau kondisi yang jarang terjadi.",
                 "recommendations": [

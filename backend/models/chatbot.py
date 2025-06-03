@@ -183,6 +183,90 @@ class Chatbot:
                 "Pemeriksaan gula darah secara teratur sangat penting untuk mengelola diabetes.",
                 "Komplikasi diabetes dapat mempengaruhi mata, ginjal, saraf, dan jantung jika tidak dikontrol dengan baik.",
                 "Olahraga teratur dan pola makan seimbang membantu mengontrol kadar gula darah."
+            ],
+            "Eksim": [
+                "Eksim adalah peradangan kulit yang menyebabkan gatal, kemerahan, dan kulit kering.",
+                "Faktor pencetus eksim antara lain alergi, stres, dan iritasi bahan kimia.",
+                "Menjaga kelembapan kulit dan menghindari pencetus dapat mencegah kekambuhan.",
+                "Eksim tidak menular dan dapat dikontrol dengan pengobatan yang tepat."
+            ],
+            "Infeksi Saluran Kemih": [
+                "ISK lebih sering terjadi pada wanita dan dapat menyebabkan nyeri saat buang air kecil.",
+                "Minum air putih yang cukup membantu mencegah ISK.",
+                "Jangan menahan kencing terlalu lama untuk mencegah infeksi.",
+                "Kebersihan area genital sangat penting untuk pencegahan ISK."
+            ],
+            "Radang Sendi": [
+                "Radang sendi menyebabkan nyeri, bengkak, dan kaku pada sendi.",
+                "Olahraga ringan dan menjaga berat badan dapat membantu mengurangi gejala.",
+                "Radang sendi bisa bersifat kronis dan memerlukan pengelolaan jangka panjang.",
+                "Kompres hangat atau dingin dapat membantu meredakan nyeri sendi."
+            ],
+            "Alergi Makanan": [
+                "Alergi makanan adalah reaksi imun terhadap makanan tertentu.",
+                "Gejala alergi bisa ringan hingga berat, termasuk anafilaksis.",
+                "Membaca label makanan penting untuk penderita alergi.",
+                "Alergi makanan tidak dapat disembuhkan, hanya dapat dihindari pencetusnya."
+            ],
+            "Sinusitis": [
+                "Sinusitis adalah peradangan pada rongga sinus yang menyebabkan nyeri wajah dan hidung tersumbat.",
+                "Infeksi virus, bakteri, atau jamur dapat menyebabkan sinusitis.",
+                "Menjaga kebersihan dan menghindari polusi membantu mencegah sinusitis.",
+                "Sinusitis kronis memerlukan penanganan medis lebih lanjut."
+            ],
+            "Campak": [
+                "Campak sangat menular dan dapat dicegah dengan vaksinasi.",
+                "Gejala campak meliputi demam tinggi, ruam, batuk, pilek, dan mata merah.",
+                "Komplikasi campak bisa serius seperti pneumonia dan ensefalitis.",
+                "Isolasi penderita penting untuk mencegah penularan."
+            ],
+            "Cacar Air": [
+                "Cacar air disebabkan oleh virus varicella-zoster dan sangat menular.",
+                "Ruam berisi cairan dan gatal adalah ciri khas cacar air.",
+                "Komplikasi bisa terjadi pada orang dewasa dan ibu hamil.",
+                "Vaksinasi efektif untuk mencegah cacar air."
+            ],
+            "Hepatitis A": [
+                "Hepatitis A menular melalui makanan/minuman yang terkontaminasi.",
+                "Gejala utama: mual, muntah, demam, kulit/mata kuning.",
+                "Biasanya sembuh total tanpa komplikasi kronis.",
+                "Cuci tangan dan sanitasi penting untuk pencegahan."
+            ],
+            "Anemia": [
+                "Anemia adalah kekurangan sel darah merah atau hemoglobin.",
+                "Penyebab utama: kekurangan zat besi, perdarahan, atau penyakit kronis.",
+                "Gejala: lemas, pucat, jantung berdebar, sesak napas.",
+                "Konsumsi makanan kaya zat besi dan suplemen jika perlu."
+            ],
+            "Vertigo": [
+                "Vertigo adalah sensasi berputar yang disebabkan gangguan sistem keseimbangan.",
+                "Penyebab umum: infeksi telinga dalam, migrain, atau gangguan saraf.",
+                "Vertigo bisa disertai mual, muntah, dan sulit berdiri.",
+                "Hindari gerakan kepala mendadak saat vertigo kambuh."
+            ],
+            "Bronkitis": [
+                "Bronkitis adalah peradangan saluran bronkus paru-paru.",
+                "Gejala: batuk berdahak, sesak napas, demam ringan.",
+                "Hindari asap rokok dan polusi untuk mencegah bronkitis.",
+                "Bronkitis bisa akut atau kronis tergantung penyebabnya."
+            ],
+            "Pneumonia": [
+                "Pneumonia adalah infeksi paru-paru yang bisa disebabkan bakteri, virus, atau jamur.",
+                "Gejala: demam tinggi, batuk berdahak, sesak napas, nyeri dada.",
+                "Pneumonia bisa berbahaya pada anak kecil dan lansia.",
+                "Segera ke dokter jika sesak berat atau demam tinggi."
+            ],
+            "Demam Scarlet": [
+                "Demam scarlet disebabkan infeksi bakteri Streptococcus.",
+                "Gejala: demam, ruam merah, sakit tenggorokan, lidah merah.",
+                "Segera ke dokter untuk antibiotik.",
+                "Pantau ruam dan suhu tubuh selama sakit."
+            ],
+            "COVID-19": [
+                "COVID-19 disebabkan oleh virus corona dan sangat menular.",
+                "Gejala utama: demam, batuk, sesak napas, hilang penciuman.",
+                "Isolasi mandiri dan protokol kesehatan penting untuk pencegahan.",
+                "Segera ke dokter jika sesak berat atau saturasi oksigen turun."
             ]
         }
         return facts
@@ -350,30 +434,30 @@ class Chatbot:
             Dictionary berisi sinonim untuk setiap penyakit
         """
         synonyms = {
-            "Flu": ["influenza", "pilek", "flu biasa", "flu ringan", "flu musiman", 
-                   "batuk pilek", "hidung meler", "masuk angin"],
-            "Demam Berdarah": ["dbd", "db", "demam dengue", "dengue", "demam berdarah dengue", 
-                              "penyakit nyamuk", "demam dengue", "panas berdarah"],
-            "Tipes": ["tifus", "tipus", "typhoid", "tipes abdominalis", "demam tifoid",
-                     "penyakit tipes", "sakit tipes", "demam tipus"],
-            "TBC": ["tuberkulosis", "tb", "tuberculosis", "tbc paru", "flek paru",
-                   "batuk tbc", "batuk darah", "batuk kering", "batuk lama"],
-            "Maag": ["dispepsia", "sakit lambung", "sakit maag", "asam lambung", 
-                    "radang lambung", "perih lambung", "nyeri lambung", "gerd"],
-            "Asma": ["bengek", "sesak nafas", "asma bronkial", "penyakit asma",
-                    "sesak napas", "mengi", "wheezing", "asma akut"],
-            "Migrain": ["sakit kepala", "migrain kronis", "nyeri kepala", "sakit kepala sebelah",
-                       "migrain tanpa aura", "migrain dengan aura", "sakit kepala berdenyut"],
-            "Diare": ["mencret", "berak cair", "sakit perut", "disentri", "gastroenteritis",
-                     "buang air besar cair", "muntaber", "sakit mencret"],
-            "Hipertensi": ["darah tinggi", "tekanan darah tinggi", "hipertensi primer", 
-                          "hipertensi sekunder", "penyakit darah tinggi", "tensi tinggi"],
-            "Diabetes": ["kencing manis", "diabetes mellitus", "gula darah tinggi", 
-                        "diabetes tipe 1", "diabetes tipe 2", "sakit gula", "penyakit gula"],
-            "Alergi Makanan": ["alergi", "reaksi alergi", "hipersensitivitas", "alergi makanan laut", 
-                              "alergi kacang", "alergi susu", "alergi telur", "intoleransi makanan"],
-            "Sinusitis": ["radang sinus", "infeksi sinus", "hidung tersumbat", "nyeri wajah",
-                         "sinus kronis", "sinus akut", "hidung mampet"]
+            "Flu": ["influenza", "pilek", "flu biasa", "flu ringan", "flu musiman", "batuk pilek", "hidung meler", "masuk angin"],
+            "Demam Berdarah": ["dbd", "db", "demam dengue", "dengue", "demam berdarah dengue", "penyakit nyamuk", "demam dengue", "panas berdarah"],
+            "Tipes": ["tifus", "tipus", "typhoid", "tipes abdominalis", "demam tifoid", "penyakit tipes", "sakit tipes", "demam tipus"],
+            "TBC": ["tuberkulosis", "tb", "tuberculosis", "tbc paru", "flek paru", "batuk tbc", "batuk darah", "batuk kering", "batuk lama"],
+            "Maag": ["dispepsia", "sakit lambung", "sakit maag", "asam lambung", "radang lambung", "perih lambung", "nyeri lambung", "gerd"],
+            "Asma": ["bengek", "sesak nafas", "asma bronkial", "penyakit asma", "sesak napas", "mengi", "wheezing", "asma akut"],
+            "Migrain": ["sakit kepala", "migrain kronis", "nyeri kepala", "sakit kepala sebelah", "migrain tanpa aura", "migrain dengan aura", "sakit kepala berdenyut"],
+            "Diare": ["mencret", "berak cair", "sakit perut", "disentri", "gastroenteritis", "buang air besar cair", "muntaber", "sakit mencret"],
+            "Hipertensi": ["darah tinggi", "tekanan darah tinggi", "hipertensi primer", "hipertensi sekunder", "penyakit darah tinggi", "tensi tinggi"],
+            "Diabetes": ["kencing manis", "diabetes mellitus", "gula darah tinggi", "diabetes tipe 1", "diabetes tipe 2", "sakit gula", "penyakit gula"],
+            "Eksim": ["dermatitis", "eksim atopik", "eksim kering", "eksim basah", "kulit gatal", "ruam kulit", "kulit bersisik"],
+            "Infeksi Saluran Kemih": ["isk", "infeksi kandung kemih", "infeksi ginjal", "sistitis", "uretritis", "nyeri kencing", "kencing sakit"],
+            "Radang Sendi": ["artritis", "arthritis", "rematik", "sendi bengkak", "sendi kaku", "nyeri sendi", "osteoartritis", "rheumatoid arthritis"],
+            "Alergi Makanan": ["alergi", "reaksi alergi", "hipersensitivitas", "alergi makanan laut", "alergi kacang", "alergi susu", "alergi telur", "intoleransi makanan"],
+            "Sinusitis": ["radang sinus", "infeksi sinus", "hidung tersumbat", "nyeri wajah", "sinus kronis", "sinus akut", "hidung mampet"],
+            "Campak": ["measles", "morbili", "ruam merah", "penyakit campak", "campak jerman", "campak biasa"],
+            "Cacar Air": ["varisela", "chickenpox", "cacar", "ruam berair", "bintik berair", "penyakit cacar"],
+            "Hepatitis A": ["hepatitis", "penyakit kuning", "hepatitis virus", "hepatitis akut", "hepatitis infeksi"],
+            "Anemia": ["kurang darah", "darah rendah", "lemas darah", "anemia defisiensi besi", "anemia ringan", "anemia berat"],
+            "Vertigo": ["pusing berputar", "kepala berputar", "vertigo perifer", "vertigo sentral", "gangguan keseimbangan"],
+            "Bronkitis": ["radang bronkus", "batuk berdahak", "bronkitis akut", "bronkitis kronis", "infeksi bronkus"],
+            "Pneumonia": ["paru-paru basah", "infeksi paru", "radang paru", "pneumonia bakteri", "pneumonia virus"],
+            "Demam Scarlet": ["scarlet fever", "demam merah", "ruam scarlet", "infeksi streptokokus"],
+            "COVID-19": ["corona", "covid", "virus corona", "covid19", "covid 19", "coronavirus", "covid-19"]
         }
         return synonyms
     def _extract_disease_from_question(self, question_type, question):
@@ -532,8 +616,20 @@ class Chatbot:
                     "Diare": "Mencuci tangan dengan sabun, menggunakan air bersih, memasak makanan hingga matang, dan menjaga kebersihan makanan.",
                     "Hipertensi": "Mengurangi konsumsi garam, menjaga berat badan ideal, olahraga teratur, dan menghindari stres.",
                     "Diabetes": "Menjaga pola makan sehat, olahraga teratur, menghindari makanan tinggi gula, dan menjaga berat badan ideal.",
+                    "Eksim": "Menjaga kelembapan kulit, menghindari pencetus alergi, dan menggunakan pelembab secara teratur.",
+                    "Infeksi Saluran Kemih": "Minum air putih yang cukup, jangan menahan kencing, dan jaga kebersihan area genital.",
+                    "Radang Sendi": "Menjaga berat badan ideal, olahraga teratur, dan hindari cedera sendi.",
                     "Alergi Makanan": "Menghindari makanan pemicu alergi, membaca label makanan dengan seksama, dan membawa obat alergi jika memiliki riwayat alergi berat.",
-                    "Sinusitis": "Menjaga kebersihan, menghindari alergen, banyak minum air putih, dan hindari perubahan suhu ekstrem."
+                    "Sinusitis": "Menjaga kebersihan, menghindari alergen, banyak minum air putih, dan hindari perubahan suhu ekstrem.",
+                    "Campak": "Vaksinasi campak, menjaga kebersihan, dan menghindari kontak dengan penderita campak.",
+                    "Cacar Air": "Vaksinasi cacar air, menjaga kebersihan, dan hindari kontak dengan penderita cacar air.",
+                    "Hepatitis A": "Cuci tangan sebelum makan, konsumsi air bersih, dan hindari makanan/minuman yang tidak higienis.",
+                    "Anemia": "Konsumsi makanan kaya zat besi, vitamin B12, dan asam folat, serta rutin cek darah.",
+                    "Vertigo": "Hindari perubahan posisi kepala mendadak, cukup istirahat, dan kelola stres.",
+                    "Bronkitis": "Hindari asap rokok dan polusi, cuci tangan, dan vaksinasi flu.",
+                    "Pneumonia": "Vaksinasi pneumonia, jaga kebersihan tangan, dan hindari kontak dengan penderita infeksi saluran napas.",
+                    "Demam Scarlet": "Jaga kebersihan, cuci tangan, dan hindari kontak dengan penderita infeksi tenggorokan.",
+                    "COVID-19": "Vaksinasi COVID-19, gunakan masker, cuci tangan, dan jaga jarak."
                 }
                 
                 if disease_or_condition in pencegahan:
@@ -562,8 +658,20 @@ class Chatbot:
                     "Diare": "Diare akut biasanya sembuh dalam 2-3 hari. Jika berlangsung lebih dari seminggu, perlu evaluasi medis lebih lanjut.",
                     "Hipertensi": "Hipertensi adalah kondisi kronis yang memerlukan pengelolaan seumur hidup melalui pengobatan dan perubahan gaya hidup.",
                     "Diabetes": "Diabetes adalah kondisi kronis yang memerlukan pengelolaan seumur hidup. Dengan penanganan yang tepat, kadar gula darah bisa terkontrol dengan baik.",
+                    "Eksim": "Eksim dapat berlangsung beberapa minggu hingga bulan, tergantung pemicu dan pengelolaan. Eksim kronis bisa kambuh berulang.",
+                    "Infeksi Saluran Kemih": "ISK ringan biasanya sembuh dalam 3-7 hari dengan pengobatan. Jika berat atau berulang, bisa lebih lama.",
+                    "Radang Sendi": "Radang sendi bersifat kronis dan memerlukan pengelolaan jangka panjang. Nyeri bisa membaik dalam beberapa hari hingga minggu dengan terapi.",
                     "Alergi Makanan": "Reaksi alergi makanan bisa berlangsung dari beberapa menit hingga beberapa jam, dan umumnya mereda dalam 1-2 hari setelah berhenti mengonsumsi pemicu.",
-                    "Sinusitis": "Sinusitis akut biasanya sembuh dalam 2-4 minggu, sementara sinusitis kronis dapat berlangsung lebih dari 12 minggu dan membutuhkan perawatan jangka panjang."
+                    "Sinusitis": "Sinusitis akut biasanya sembuh dalam 2-4 minggu, sementara sinusitis kronis dapat berlangsung lebih dari 12 minggu dan membutuhkan perawatan jangka panjang.",
+                    "Campak": "Campak biasanya sembuh dalam 7-10 hari. Ruam akan hilang bertahap setelah demam turun.",
+                    "Cacar Air": "Cacar air umumnya sembuh dalam 1-2 minggu. Bekas ruam bisa bertahan lebih lama.",
+                    "Hepatitis A": "Hepatitis A biasanya sembuh total dalam 2-6 minggu tanpa komplikasi kronis.",
+                    "Anemia": "Durasi pemulihan anemia tergantung penyebab dan terapi, biasanya beberapa minggu hingga bulan.",
+                    "Vertigo": "Vertigo akut bisa berlangsung beberapa menit hingga jam, namun pada kasus kronis bisa berulang dalam waktu lama.",
+                    "Bronkitis": "Bronkitis akut biasanya sembuh dalam 1-3 minggu. Bronkitis kronis bisa berlangsung lama dan sering kambuh.",
+                    "Pneumonia": "Pneumonia ringan bisa sembuh dalam 1-3 minggu, namun pada lansia atau berat bisa lebih lama.",
+                    "Demam Scarlet": "Demam scarlet biasanya membaik dalam 1 minggu dengan antibiotik.",
+                    "COVID-19": "COVID-19 ringan biasanya sembuh dalam 1-2 minggu, kasus berat bisa lebih lama tergantung komplikasi."
                 }
                 
                 if disease_or_condition in durasi:

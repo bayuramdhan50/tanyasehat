@@ -271,6 +271,69 @@ class DiseaseClassifier:
             {"symptoms": "Sakit di wajah atas, nyeri saat menekan pipi dan dahi, hidung mampet", "disease": "Sinusitis"},
             {"symptoms": "Hidung berlendir tebal, nyeri di sekitar hidung dan mata, sakit kepala", "disease": "Sinusitis"},
             {"symptoms": "Hidung mampet, sakit kepala dan wajah, ingus kental yang sulit keluar", "disease": "Sinusitis"}
+            ,
+            # Campak
+            {"symptoms": "Demam tinggi, ruam merah di kulit, batuk, pilek, mata merah, nafsu makan menurun, lemas", "disease": "Campak"},
+            {"symptoms": "Ruam muncul setelah demam, mata berair, batuk kering, pilek, demam, nyeri tenggorokan", "disease": "Campak"},
+            {"symptoms": "Demam, ruam menyebar dari wajah ke seluruh tubuh, batuk, pilek, mata sensitif cahaya", "disease": "Campak"},
+            {"symptoms": "Ruam merah, demam tinggi, batuk, pilek, mata merah, sariawan di mulut", "disease": "Campak"},
+            {"symptoms": "Demam, batuk, pilek, ruam merah, mata berair, lemas, nafsu makan turun", "disease": "Campak"},
+
+            # Cacar Air
+            {"symptoms": "Demam, ruam berisi cairan, gatal, lemas, nafsu makan menurun, bintik merah", "disease": "Cacar Air"},
+            {"symptoms": "Bintik merah berisi cairan, demam ringan, gatal di seluruh tubuh, lemas", "disease": "Cacar Air"},
+            {"symptoms": "Ruam berisi cairan, demam, gatal, nyeri otot, sakit kepala", "disease": "Cacar Air"},
+            {"symptoms": "Demam, bintik merah, gatal, ruam menyebar, lemas, nafsu makan turun", "disease": "Cacar Air"},
+            {"symptoms": "Ruam berisi cairan, demam, gatal, nyeri sendi, sakit kepala", "disease": "Cacar Air"},
+
+            # Hepatitis A
+            {"symptoms": "Mual, muntah, demam, mata dan kulit menguning, urine gelap, lemas", "disease": "Hepatitis A"},
+            {"symptoms": "Lemas, nyeri perut kanan atas, nafsu makan turun, kulit kuning, mual", "disease": "Hepatitis A"},
+            {"symptoms": "Demam, mual, muntah, kulit dan mata kuning, urine gelap, feses pucat", "disease": "Hepatitis A"},
+            {"symptoms": "Mual, muntah, demam, nyeri perut, kulit kuning, lemas, nafsu makan turun", "disease": "Hepatitis A"},
+            {"symptoms": "Demam, mual, muntah, nyeri perut kanan atas, kulit kuning, urine gelap", "disease": "Hepatitis A"},
+
+            # Anemia
+            {"symptoms": "Lemas, pucat, mudah lelah, pusing, jantung berdebar, sesak napas", "disease": "Anemia"},
+            {"symptoms": "Sesak napas saat aktivitas, kulit pucat, sakit kepala, lemas, sulit konsentrasi", "disease": "Anemia"},
+            {"symptoms": "Pusing, lemas, kulit pucat, jantung berdebar, mudah lelah", "disease": "Anemia"},
+            {"symptoms": "Lemas, pusing, kulit pucat, nafsu makan turun, jantung berdebar", "disease": "Anemia"},
+            {"symptoms": "Lemas, pusing, kulit pucat, jantung berdebar, sesak napas, sulit tidur", "disease": "Anemia"},
+
+            # Vertigo
+            {"symptoms": "Pusing berputar, mual, muntah, kehilangan keseimbangan, sulit berdiri", "disease": "Vertigo"},
+            {"symptoms": "Kepala terasa berputar, sulit berdiri, mual, muntah, lemas", "disease": "Vertigo"},
+            {"symptoms": "Pusing berputar, mual, muntah, sulit berjalan, keringat dingin", "disease": "Vertigo"},
+            {"symptoms": "Pusing, mual, muntah, kehilangan keseimbangan, sulit fokus", "disease": "Vertigo"},
+            {"symptoms": "Pusing berputar, mual, muntah, sulit berdiri, telinga berdenging", "disease": "Vertigo"},
+
+            # Bronkitis
+            {"symptoms": "Batuk berdahak, dada terasa berat, demam ringan, sesak napas, lemas", "disease": "Bronkitis"},
+            {"symptoms": "Batuk lama, dahak kental, lemas, napas berbunyi, nyeri dada", "disease": "Bronkitis"},
+            {"symptoms": "Batuk berdahak, demam, sesak napas, nyeri dada, lemas", "disease": "Bronkitis"},
+            {"symptoms": "Batuk berdahak, demam ringan, sesak napas, nyeri dada, lemas", "disease": "Bronkitis"},
+            {"symptoms": "Batuk berdahak, dada terasa berat, demam, sesak napas, lemas", "disease": "Bronkitis"},
+
+            # Pneumonia
+            {"symptoms": "Demam tinggi, batuk berdahak, sesak napas, nyeri dada, lemas", "disease": "Pneumonia"},
+            {"symptoms": "Batuk berdahak kuning atau hijau, lemas, napas cepat, demam", "disease": "Pneumonia"},
+            {"symptoms": "Demam, batuk berdahak, sesak napas, nyeri dada, lemas", "disease": "Pneumonia"},
+            {"symptoms": "Batuk berdahak, demam tinggi, sesak napas, nyeri dada, lemas", "disease": "Pneumonia"},
+            {"symptoms": "Demam tinggi, batuk berdahak, sesak napas, nyeri dada, lemas", "disease": "Pneumonia"},
+
+            # Demam Scarlet
+            {"symptoms": "Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah", "disease": "Demam Scarlet"},
+            {"symptoms": "Ruam merah di leher dan dada, demam, nyeri tenggorokan, lidah merah", "disease": "Demam Scarlet"},
+            {"symptoms": "Demam, ruam merah, nyeri tenggorokan, lidah merah, mual", "disease": "Demam Scarlet"},
+            {"symptoms": "Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah", "disease": "Demam Scarlet"},
+            {"symptoms": "Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah", "disease": "Demam Scarlet"},
+
+            # COVID-19
+            {"symptoms": "Demam, batuk kering, sesak napas, hilang penciuman, lemas, nyeri otot", "disease": "COVID-19"},
+            {"symptoms": "Sakit tenggorokan, demam, batuk, nyeri otot, kehilangan rasa, pilek", "disease": "COVID-19"},
+            {"symptoms": "Demam, batuk, sesak napas, lemas, kehilangan penciuman, sakit kepala", "disease": "COVID-19"},
+            {"symptoms": "Demam, batuk kering, nyeri tenggorokan, kehilangan rasa, lemas", "disease": "COVID-19"},
+            {"symptoms": "Demam, batuk, sesak napas, kehilangan penciuman, lemas, nyeri otot", "disease": "COVID-19"}
         ]
         
         # Konversi ke DataFrame

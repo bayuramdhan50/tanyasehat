@@ -97,25 +97,166 @@
         ]
     },
     "Diabetes": {
-        "description": "Penyakit kronis yang ditandai dengan kadar gula darah tinggi karena tubuh tidak dapat memproduksi atau menggunakan insulin dengan baik. Diabetes dapat menyebabkan kerusakan pada berbagai organ tubuh jika tidak ditangani dengan baik.",
+        "description": "Kondisi yang ditandai dengan kadar gula darah tinggi karena tubuh tidak dapat memproduksi atau menggunakan insulin dengan baik. Diabetes dapat menyebabkan berbagai komplikasi jika tidak ditangani dengan baik.",
         "recommendations": [
             "Pantau kadar gula darah secara teratur",
-            "Ikuti pola makan seimbang dengan membatasi karbohidrat sederhana dan gula",
-            "Lakukan aktivitas fisik secara teratur",
-            "Konsumsi obat diabetes atau insulin sesuai resep dokter",
-            "Jaga berat badan ideal",
-            "Rawat kaki dengan baik dan perhatikan luka yang lambat sembuh",
+            "Ikuti diet seimbang dengan batasan gula dan karbohidrat sesuai anjuran",
+            "Lakukan aktivitas fisik secara rutin",
+            "Konsumsi obat atau insulin sesuai resep dokter",
+            "Periksa kaki setiap hari untuk mencegah luka yang sulit sembuh",
+            "Kontrol berat badan dalam rentang sehat",
             "Periksakan diri ke dokter secara rutin untuk mencegah komplikasi"
         ]
     },
-    "Tidak diketahui": {
-        "description": "Sulit menentukan diagnosis yang tepat berdasarkan gejala yang disampaikan.",
+    "Eksim": {
+        "description": "Kondisi peradangan pada kulit yang ditandai dengan kulit kering, gatal, kemerahan, dan kadang-kadang lepuh. Eksim dapat dipicu oleh faktor genetik, alergi, atau lingkungan.",
         "recommendations": [
-            "Periksakan diri ke dokter untuk evaluasi lebih lanjut",
-            "Berikan informasi gejala secara lebih detail kepada tenaga medis",
-            "Lakukan pemeriksaan fisik dan tes laboratorium jika diperlukan",
-            "Istirahat yang cukup dan minum banyak air putih",
-            "Pantau perkembangan gejala dan catat jika ada perubahan"
+            "Hindari bahan-bahan yang dapat memicu alergi seperti sabun keras dan deterjen",
+            "Gunakan pelembab secara teratur untuk mengatasi kulit kering",
+            "Hindari menggaruk area yang gatal untuk mencegah infeksi",
+            "Gunakan pakaian berbahan lembut seperti katun",
+            "Mandi dengan air hangat (tidak panas) dan segera gunakan pelembab setelah mandi",
+            "Konsultasikan dengan dokter kulit untuk pengobatan yang tepat jika kondisi memburuk"
+        ]
+    },
+    "Infeksi Saluran Kemih": {
+        "description": "Infeksi yang terjadi di saluran kemih termasuk kandung kemih, uretra, ureter, dan ginjal. ISK lebih sering terjadi pada wanita dan ditandai dengan rasa terbakar saat buang air kecil dan keinginan buang air kecil yang sering.",
+        "recommendations": [
+            "Minum banyak air putih untuk membantu membilas bakteri dari saluran kemih",
+            "Buang air kecil segera saat terasa ingin, jangan ditahan",
+            "Jaga kebersihan area genital",
+            "Konsumsi obat antibiotik sesuai resep dokter hingga habis meskipun gejala sudah hilang",
+            "Hindari minuman yang dapat mengiritasi kandung kemih seperti alkohol, kafein, dan minuman bersoda",
+            "Konsultasikan dengan dokter jika gejala tidak membaik setelah beberapa hari pengobatan"
+        ]
+    },
+    "Radang Sendi": {
+        "description": "Peradangan pada satu atau lebih sendi yang menyebabkan nyeri dan kekakuan. Terdapat berbagai jenis radang sendi, dengan osteoartritis dan rheumatoid arthritis sebagai jenis yang paling umum.",
+        "recommendations": [
+            "Lakukan latihan ringan dan peregangan untuk menjaga fleksibilitas sendi",
+            "Jaga berat badan ideal untuk mengurangi tekanan pada sendi",
+            "Gunakan kompres panas atau dingin untuk meredakan nyeri",
+            "Konsumsi obat anti-inflamasi sesuai anjuran dokter",
+            "Istirahatkan sendi yang sakit, tetapi hindari imobilisasi yang terlalu lama",
+            "Gunakan alat bantu seperti tongkat atau penyangga jika diperlukan",
+            "Konsultasikan dengan dokter untuk program terapi yang sesuai"
+        ]
+    },
+    "Alergi Makanan": {
+        "description": "Respons imun abnormal terhadap protein dalam makanan tertentu. Alergi makanan dapat menyebabkan gejala ringan seperti gatal-gatal hingga yang lebih serius seperti anafilaksis.",
+        "recommendations": [
+            "Hindari makanan yang menyebabkan alergi",
+            "Baca label makanan dengan cermat untuk mengidentifikasi alergen tersembunyi",
+            "Informasikan kondisi alergi Anda kepada restoran saat makan di luar",
+            "Bawalah selalu obat alergi atau EpiPen jika Anda memiliki riwayat reaksi parah",
+            "Kenakan gelang informasi medis jika alergi Anda parah",
+            "Konsultasikan dengan ahli alergi untuk tes dan manajemen alergi yang tepat"
+        ]
+    },
+    "Sinusitis": {
+        "description": "Peradangan pada rongga sinus yang biasanya disebabkan oleh infeksi virus, bakteri, atau jamur. Sinusitis ditandai dengan hidung tersumbat, sakit kepala, nyeri wajah, dan lendir kental.",
+        "recommendations": [
+            "Gunakan semprotan hidung saline untuk membantu mengencerkan dan mengalirkan lendir",
+            "Hirup uap hangat untuk membantu mengurangi sumbatan",
+            "Hindari iritan seperti asap rokok dan polusi",
+            "Kompres hangat pada wajah untuk meredakan nyeri",
+            "Minum banyak cairan untuk mengencerkan lendir",
+            "Jika gejala berlangsung lebih dari 10 hari atau sangat parah, konsultasikan dengan dokter"
+        ]
+    },
+    "Campak": {
+        "description": "Penyakit menular akibat infeksi virus yang ditandai dengan demam tinggi, batuk, pilek, mata merah, dan ruam merah di kulit.",
+        "recommendations": [
+            "Istirahat total dan minum banyak cairan",
+            "Kompres hangat untuk menurunkan demam",
+            "Hindari kontak dengan orang lain untuk mencegah penularan",
+            "Gunakan obat penurun panas jika diperlukan",
+            "Segera ke dokter jika muncul sesak napas atau kejang"
+        ]
+    },
+    "Cacar Air": {
+        "description": "Infeksi virus varicella-zoster yang menyebabkan ruam berisi cairan dan sangat gatal di seluruh tubuh.",
+        "recommendations": [
+            "Jaga kebersihan kulit dan hindari menggaruk ruam",
+            "Gunakan losion calamine untuk mengurangi gatal",
+            "Istirahat cukup dan minum banyak cairan",
+            "Gunakan obat penurun demam jika diperlukan",
+            "Segera ke dokter jika ruam terinfeksi atau demam tinggi"
+        ]
+    },
+    "Hepatitis A": {
+        "description": "Infeksi hati akibat virus hepatitis A yang ditandai dengan mual, muntah, demam, kulit dan mata menguning, serta urine gelap.",
+        "recommendations": [
+            "Istirahat total dan konsumsi makanan bergizi",
+            "Minum banyak cairan untuk mencegah dehidrasi",
+            "Hindari makanan berlemak dan alkohol",
+            "Cuci tangan sebelum makan dan setelah dari toilet",
+            "Segera ke dokter jika gejala memburuk"
+        ]
+    },
+    "Anemia": {
+        "description": "Kondisi kekurangan sel darah merah atau hemoglobin yang menyebabkan lemas, pucat, dan mudah lelah.",
+        "recommendations": [
+            "Konsumsi makanan kaya zat besi seperti daging merah, hati, dan sayuran hijau",
+            "Minum suplemen zat besi jika diresepkan dokter",
+            "Istirahat cukup dan hindari aktivitas berat",
+            "Segera ke dokter jika sering pingsan atau sesak napas berat"
+        ]
+    },
+    "Vertigo": {
+        "description": "Gangguan keseimbangan yang menyebabkan sensasi berputar, mual, muntah, dan sulit berdiri.",
+        "recommendations": [
+            "Duduk atau berbaring segera saat vertigo menyerang",
+            "Hindari gerakan kepala mendadak",
+            "Minum obat anti-mual jika diresepkan dokter",
+            "Konsultasikan ke dokter jika vertigo sering kambuh"
+        ]
+    },
+    "Bronkitis": {
+        "description": "Peradangan pada saluran bronkus paru-paru yang menyebabkan batuk berdahak, sesak napas, dan demam ringan.",
+        "recommendations": [
+            "Istirahat cukup dan minum air hangat",
+            "Hindari asap rokok dan polusi",
+            "Gunakan obat batuk sesuai anjuran dokter",
+            "Segera ke dokter jika batuk berdarah atau sesak berat"
+        ]
+    },
+    "Pneumonia": {
+        "description": "Infeksi paru-paru yang menyebabkan demam tinggi, batuk berdahak, sesak napas, dan nyeri dada.",
+        "recommendations": [
+            "Segera periksakan diri ke dokter untuk pengobatan antibiotik",
+            "Istirahat total dan minum banyak cairan",
+            "Gunakan obat penurun demam jika diperlukan",
+            "Pantau pernapasan dan segera ke IGD jika sesak berat"
+        ]
+    },
+    "Demam Scarlet": {
+        "description": "Infeksi bakteri Streptococcus yang menyebabkan demam, ruam merah, sakit tenggorokan, dan lidah merah.",
+        "recommendations": [
+            "Segera ke dokter untuk mendapatkan antibiotik",
+            "Istirahat cukup dan minum banyak cairan",
+            "Konsumsi makanan lunak jika tenggorokan sakit",
+            "Pantau ruam dan suhu tubuh"
+        ]
+    },
+    "COVID-19": {
+        "description": "Penyakit infeksi saluran pernapasan akibat virus corona, gejala utama: demam, batuk, sesak napas, hilang penciuman.",
+        "recommendations": [
+            "Lakukan isolasi mandiri minimal 5 hari",
+            "Gunakan masker dan jaga jarak dengan orang lain",
+            "Minum banyak cairan dan istirahat cukup",
+            "Segera ke dokter jika sesak napas berat atau saturasi oksigen turun",
+            "Pantau suhu tubuh dan gejala lain secara berkala"
+        ]
+    },
+    "Tidak diketahui": {
+        "description": "Berdasarkan gejala yang diberikan, tidak dapat dipastikan diagnosis yang tepat. Ini bisa disebabkan oleh berbagai faktor seperti gejala yang tidak spesifik, atau kondisi yang jarang terjadi.",
+        "recommendations": [
+            "Konsultasikan dengan dokter untuk pemeriksaan lebih lanjut dan diagnosis yang tepat",
+            "Catat semua gejala yang dialami secara detail, termasuk kapan mulai terjadi dan apa yang memperburuk atau meringankan gejala",
+            "Hindari mendiagnosis sendiri dan mengobati diri tanpa petunjuk medis",
+            "Prioritaskan istirahat dan jaga kesehatan secara umum sambil menunggu konsultasi medis",
+            "Jika gejala semakin parah, segera cari bantuan medis darurat"
         ]
     }
 }
