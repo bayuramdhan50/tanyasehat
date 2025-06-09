@@ -1,0 +1,213 @@
+symptoms,disease
+"Demam tinggi, pilek, hidung tersumbat, bersin-bersin, batuk kering, sakit tenggorokan, nyeri otot",Flu
+"Badan panas dingin, kepala pusing, batuk pilek, hidung meler",Flu
+"Demam, nyeri otot, sakit kepala, bersin, hidung tersumbat, batuk",Flu
+"Badan menggigil, demam, batuk kering, sakit kepala, hidung meler",Flu
+"Suhu tubuh tinggi, lemas, bersin-bersin, nyeri tenggorokan, batuk",Flu
+"Bersin terus menerus, hidung tersumbat, mata gatal dan berair, tenggorokan gatal",Flu
+"Hidung mampet, bersin-bersin, tenggorokan sakit, tubuh panas dingin",Flu
+"Badan hangat, bersin terus menerus, batuk kering, tubuh terasa lemas",Flu
+"Hidung tersumbat, sulit bernapas lewat hidung, kepala terasa berat, bersin",Flu
+"Demam ringan, sakit tenggorokan, batuk berdahak, hidung meler terus",Flu
+"Tenggorokan kering, batuk tidak berhenti, badan meriang, nafsu makan hilang",Flu
+"Batuk pilek, badan pegal-pegal, demam naik turun, mata berair",Flu
+"Demam tinggi mendadak, nyeri di belakang mata, sakit kepala parah, ruam merah, nyeri sendi dan otot",Demam Berdarah
+"Demam 40 derajat, nyeri otot dan sendi, mual, muntah, bintik merah di kulit",Demam Berdarah
+"Panas tinggi selama 2-7 hari, nyeri sendi luar biasa, sakit kepala berat, bintik merah di anggota tubuh",Demam Berdarah
+"Demam tinggi, perdarahan gusi, mimisan, bintik merah di tubuh, mual dan muntah",Demam Berdarah
+"Panas tinggi, nyeri otot dan sendi parah, mata merah dan nyeri, lemas, bintik kemerahan",Demam Berdarah
+"Bintik-bintik merah di kulit seperti bekas gigitan nyamuk, demam tinggi, pusing, mual, muntah",Demam Berdarah
+"Demam tinggi disertai menggigil, sakit kepala hebat bagian belakang, nyeri sendi dan otot, muntah",Demam Berdarah
+"Demam naik tiba-tiba, nyeri pada mata saat digerakkan, penurunan nafsu makan, bintik merah di kulit",Demam Berdarah
+"Muntah terus menerus, demam sangat tinggi, sakit kepala parah, nyeri otot dan sendi, ruam merah",Demam Berdarah
+"Kelelahan ekstrem, demam tinggi, kulit tampak kemerahan, nyeri sendi dan otot yang hebat",Demam Berdarah
+"Mimisan berulang, gusi berdarah, demam tinggi selama beberapa hari, lemas tak bertenaga",Demam Berdarah
+"Mata merah dan sakit, panas 40 derajat, nyeri seluruh badan, muncul bintik merah saat demam turun",Demam Berdarah
+"Demam tinggi berkelanjutan, sakit kepala, nafsu makan menurun, nyeri perut, sembelit atau diare",Tipes
+"Demam naik secara bertahap, lemas, sakit perut, tidak nafsu makan, lidah kotor",Tipes
+"Panas tinggi terus menerus, nyeri perut bagian kanan bawah, sembelit, lidah berselaput",Tipes
+"Demam lebih dari seminggu, sakit kepala, tidak nafsu makan, perut tidak nyaman",Tipes
+"Panas terus-menerus, lemas, mual, sakit perut, lidah kotor, konstipasi",Tipes
+"Demam yang naik di sore hari, lidah putih kotor, sakit perut, sembelit bergantian dengan diare, lemah lesu",Tipes
+"Demam bertahan lama, perut kembung, sakit kepala terus menerus, tidak nafsu makan sama sekali",Tipes
+"Demam yang tidak turun dengan obat biasa, lidah putih, perut sakit ketika ditekan",Tipes
+"Lemas luar biasa, demam lebih dari 7 hari, perut kembung dan nyeri, lidah berwarna putih",Tipes
+"Lidah berwarna putih tebal, panas tidak kunjung turun, konstipasi, nyeri perut kanan bawah",Tipes
+"Tidak bisa makan, demam hampir 2 minggu, sakit kepala hebat, badan lemas",Tipes
+"Batuk kering, panas naik turun saat sore hari, nafsu makan hilang, sakit perut",Tipes
+"Batuk berdahak lebih dari 2 minggu, batuk berdarah, nyeri dada, demam, berkeringat di malam hari, berat badan turun",TBC
+"Batuk terus-menerus selama berminggu-minggu, dahak kental, demam tidak tinggi tapi berkelanjutan, keringat malam",TBC
+"Batuk lama tidak sembuh, sesak napas, dahak kadang berdarah, demam malam, berat badan turun",TBC
+"Batuk berlangsung lebih dari sebulan, batuk keluar darah, berkeringat malam, demam tidak terlalu tinggi",TBC
+"Batuk berdahak berkepanjangan, mual, kehilangan nafsu makan, kelelahan ekstrem, keringat di malam hari",TBC
+"Dahak bercampur darah, batuk lama lebih dari 3 minggu, berat badan menurun drastis, demam naik turun",TBC
+"Napas pendek, batuk darah, demam rendah yang berkelanjutan, badan terasa lemah terus menerus",TBC
+"Batuk terus menerus yang tidak sembuh dengan obat biasa, sesak saat beraktivitas, keringat berlebih saat malam",TBC
+"Dahak berlendir dan kadang berdarah, nafsu makan turun, berat badan terus menurun, badan lemah",TBC
+"Batuk selama lebih dari sebulan, suhu tubuh naik tiap sore, sesak napas ringan, lemas",TBC
+"Nyeri perut bagian atas, perut kembung, mual, muntah, cepat kenyang, sendawa",Maag
+"Sakit perut terutama saat lapar, mual, perut terasa penuh dan kembung",Maag
+"Nyeri terbakar di ulu hati, perut kembung, sendawa terus-menerus, mual setelah makan",Maag
+"Perut sakit seperti ditusuk-tusuk, mual, muntah, tidak nafsu makan",Maag
+"Nyeri perut yang membaik setelah makan, kembung, sering bersendawa, mual",Maag
+"Perih di lambung jika telat makan, mual, mulut terasa asam, nafsu makan berkurang",Maag
+"Sakit perut bagian atas setelah makan pedas, mual dan muntah, perut kembung",Maag
+"Nyeri perut yang hilang timbul, mual pagi hari, mudah kenyang saat makan",Maag
+"Sakit perut malam hari sampai terbangun, bersendawa terus menerus, mual",Maag
+"Nyeri seperti terbakar di dada dan perut atas, sendawa asam, kembung",Maag
+"Perut sakit saat perut kosong atau lapar, mual, kembung, nafsu makan berkurang",Maag
+"Sesak napas mendadak, mengi saat bernapas, dada terasa sesak, batuk-batuk terutama malam hari",Asma
+"Sulit bernapas terutama saat beraktivitas, bunyi mengi saat napas, batuk kering berulang",Asma
+"Napas berbunyi seperti peluit, dada terasa tertekan, sulit bernapas saat tertawa atau olahraga",Asma
+"Serangan sesak napas di malam hari, batuk kering terus menerus, napas bunyi mengi",Asma
+"Kesulitan bernapas, batuk terus-menerus, dada sesak, napas bunyi seperti peluit",Asma
+"Serangan sesak napas, batuk, napas berbunyi, kesulitan tidur karena batuk",Asma
+"Kesulitan bernapas setelah terpapar udara dingin, debu, atau asap, dada sesak",Asma
+"Batuk kering terus menerus terutama malam hari, napas pendek, dada terasa berat",Asma
+"Sulit bernapas ketika beraktivitas, batuk tidak kunjung sembuh, dada terasa ditekan",Asma
+"Napas berbunyi saat menghembuskan napas, batuk tidak berhenti dengan obat batuk biasa",Asma
+"Gagal menyelesaikan kalimat saat berbicara karena napas pendek, batuk malam hari",Asma
+"Sakit kepala berdenyut di satu sisi, mual, muntah, sensitif terhadap cahaya dan suara",Migrain
+"Nyeri kepala parah, pandangan kabur, sensitif terhadap cahaya, mual",Migrain
+"Sakit kepala berdenyut, mual, sensitif terhadap suara, penglihatan berbayang",Migrain
+"Nyeri kepala sebelah, sensitif terhadap cahaya dan suara, mual, muntah",Migrain
+"Sakit kepala hebat, mual, mata berkunang-kunang, sensitif terhadap suara",Migrain
+"Sakit kepala sebelah yang bertambah parah saat beraktivitas, mual, pandangan kabur",Migrain
+"Melihat kilatan cahaya sebelum sakit kepala, nyeri berdenyut di satu sisi kepala",Migrain
+"Sakit kepala yang memburuk dengan gerakan, cahaya terang memperparah sakit kepala",Migrain
+"Kepala berdenyut seperti ditusuk-tusuk di satu sisi, mual, sensitif terhadap bau",Migrain
+"Sakit kepala yang berlangsung berjam-jam hingga berhari-hari, muntah, pusing",Migrain
+"Nyeri kepala berdenyut yang menghalangi aktivitas sehari-hari, sensitif cahaya",Migrain
+"BAB cair lebih dari 3 kali sehari, sakit perut, kram perut, mual, muntah",Diare
+"BAB encer berkali-kali, perut kram, mual, lemas, dehidrasi",Diare
+"Buang air besar cair berkali-kali, sakit perut, mual, muntah, kurang nafsu makan",Diare
+"BAB encer terus menerus, perut sakit, kembung, mual, badan lemas",Diare
+"Mencret berkali-kali, kram perut, mual, muntah, haus terus",Diare
+"Feses berair, rasa tidak nyaman di perut, sering ke toilet, mual",Diare
+"BAB encer dengan lendir atau darah, sakit perut hebat, demam, lemas",Diare
+"Sering buang air besar yang encer, perut seperti melilit, mulut kering",Diare
+"BAB dengan bau sangat menyengat, perut kembung dan berbunyi, lemas",Diare
+"Perut kram sebelum BAB, feses sangat encer, tubuh terasa lemah",Diare
+"Buang air besar encer lebih dari 10 kali sehari, nyeri perut, mual terus menerus",Diare
+"Sakit kepala, pusing, jantung berdebar, sesak napas, telinga berdenging",Hipertensi
+"Sakit kepala parah, pusing, sesak napas, jantung berdebar kencang",Hipertensi
+"Pusing, sakit kepala terutama di tengkuk, wajah kemerahan, mudah lelah",Hipertensi
+"Pusing, leher kaku, pandangan kabur, sesak napas, jantung berdebar",Hipertensi
+"Sakit kepala, penglihatan kabur, jantung berdebar, sulit tidur",Hipertensi
+"Nyeri di bagian belakang kepala, wajah merah, mata berkunang-kunang",Hipertensi
+"Telinga berdengung, pusing saat bangun tidur, jantung terasa berdebar",Hipertensi
+"Sakit kepala di pagi hari, tengkuk terasa berat, mudah marah, wajah merah",Hipertensi
+"Kepala terasa berat dan pusing, mimisan kadang-kadang, cepat lelah",Hipertensi
+"Napas pendek-pendek, jantung berdebar kencang, muka merah, mudah lelah",Hipertensi
+"Pandangan kabur sewaktu-waktu, nyeri kepala belakang terus-menerus",Hipertensi
+"Sering buang air kecil, selalu haus, selalu lapar, berat badan turun, pandangan kabur, luka lambat sembuh",Diabetes
+"Kencing terus-menerus, haus terus, lapar berlebihan, berat badan menurun",Diabetes
+"Sering kencing terutama malam hari, haus berlebihan, lemas, luka sulit sembuh",Diabetes
+"Kencing terus, selalu haus, nafsu makan bertambah, lemas, penglihatan kabur",Diabetes
+"Haus terus, sering pipis, cepat lelah, berat badan turun tanpa sebab",Diabetes
+"Luka yang lama sembuh, sering haus dan lapar, kencing berkali-kali di malam hari",Diabetes
+"Sering kencing dalam jumlah banyak, haus terus menerus, kulit kering dan gatal",Diabetes
+"Pandangan kabur, berat badan turun drastis padahal makan banyak, cepat lelah",Diabetes
+"Infeksi jamur berulang, gatal pada kulit, sering buang air kecil, sangat haus",Diabetes
+"Kesemutan pada tangan dan kaki, haus luar biasa, sering kencing, lemas",Diabetes
+"Luka yang lambat sembuh, sering kencing, haus terus, vitalitas menurun",Diabetes
+"Ruam merah, gatal, kulit kering dan bersisik, kulit melepuh dan mengeluarkan cairan",Eksim
+"Kulit gatal terus-menerus, kulit memerah, kulit kering pecah-pecah, bersisik",Eksim
+"Kulit gatal yang memburuk malam hari, kulit meradang, area kulit menebal",Eksim
+"Gatal parah, kulit kasar dan kering, luka mudah infeksi, ruam merah",Eksim
+"Kulit kering, gatal, merah, dan bersisik terutama di siku dan lutut",Eksim
+"Kulit mengelupas, sangat gatal, merah, dan kadang basah atau berkeropeng",Eksim
+"Lepuhan kecil yang gatal dan pecah mengeluarkan cairan, kulit merah dan kasar",Eksim
+Kulit kering yang gatal dan memerah setelah kontak dengan sabun atau deterjen,Eksim
+"Penebalan kulit di area yang sering digaruk, kulit berminyak dan bersisik",Eksim
+"Gatal yang memburuk saat berkeringat, kulit kering dan pecah-pecah, merah",Eksim
+"Ruam kulit yang gatal dan terasa panas, kulit kering dan bersisik, menebal",Eksim
+"Sering buang air kecil, rasa terbakar saat kencing, urine keruh atau berbau tajam, nyeri perut bagian bawah",Infeksi Saluran Kemih
+"Nyeri atau terbakar saat buang air kecil, sering ingin kencing tapi sedikit keluar",Infeksi Saluran Kemih
+"Urine berbau menyengat, nyeri di bawah pusar, sering buang air kecil",Infeksi Saluran Kemih
+"Kencing sakit dan panas, urine keruh kadang berdarah, nyeri pinggang",Infeksi Saluran Kemih
+"Buang air kecil tidak tuntas, nyeri panggul, demam ringan, urine berbau tajam",Infeksi Saluran Kemih
+"Sering terasa ingin kencing tapi sedikit yang keluar, nyeri perut bagian bawah",Infeksi Saluran Kemih
+"Sakit saat kencing, urine keruh atau kemerahan, nyeri di pinggang",Infeksi Saluran Kemih
+"Nyeri atau terbakar saat buang air kecil, urine berbau tajam, rasa tidak nyaman di perut bawah",Infeksi Saluran Kemih
+"Sering buang air kecil dalam jumlah sedikit, kencing terasa sakit, urine berbau",Infeksi Saluran Kemih
+"Rasa tidak tuntas setelah buang air kecil, nyeri di area kandung kemih",Infeksi Saluran Kemih
+"Nyeri pinggang, demam ringan, sakit saat kencing, urine berbau tidak sedap",Infeksi Saluran Kemih
+"Nyeri sendi, bengkak pada sendi, kaku sendi terutama pagi hari, sendi terasa hangat",Radang Sendi
+"Sendi kaku dan sakit, terutama pagi hari atau setelah tidak aktif",Radang Sendi
+"Bengkak dan nyeri di sendi, sulit menggerakkan sendi, kadang muncul benjolan",Radang Sendi
+"Sendi terasa panas dan sakit jika disentuh, kaku di pagi hari, bengkak",Radang Sendi
+"Nyeri sendi ketika bergerak, kaku sendi lebih dari 30 menit di pagi hari",Radang Sendi
+"Kemerahan dan pembengkakan di area sendi, terasa sakit saat ditekan",Radang Sendi
+"Bunyi gemertak saat sendi digerakkan, nyeri dan tidak nyaman di sendi",Radang Sendi
+"Sendi kaku setelah duduk lama, sakit saat digerakkan, terasa hangat",Radang Sendi
+"Pembengkakan sendi yang tidak hilang, sakit terus-menerus, kekakuan",Radang Sendi
+"Sendi sakit sepanjang hari, terasa hangat, bengkak, dan sulit digerakkan",Radang Sendi
+"Nyeri sendi yang parah ketika cuaca berubah, kaku di pagi hari, bengkak",Radang Sendi
+"Gatal-gatal, ruam pada kulit, mual, muntah, diare, bengkak pada bibir atau lidah",Alergi Makanan
+"Ruam merah pada kulit setelah makan, gatal-gatal, perut kram",Alergi Makanan
+"Bibir bengkak, gatal-gatal, sulit bernapas setelah mengonsumsi makanan tertentu",Alergi Makanan
+"Mual dan muntah setelah makan, ruam kulit, gatal-gatal seluruh tubuh",Alergi Makanan
+"Diare mendadak setelah makan, perut kram, kulit gatal dan kemerahan",Alergi Makanan
+"Tenggorokan gatal, bibir bengkak, napas berbunyi setelah makan",Alergi Makanan
+"Wajah bengkak, kulit merah dan gatal, mual setelah makan makanan tertentu",Alergi Makanan
+"Kulit gatal dan muncul bentol-bentol, bibir dan tenggorokan gatal",Alergi Makanan
+"Sesak napas, batuk, bersin setelah mengonsumsi makanan tertentu",Alergi Makanan
+"Lidah terasa tebal, bibir bengkak, muncul ruam merah di tubuh setelah makan",Alergi Makanan
+"Muntah mendadak setelah makan, kulit gatal-gatal, perut kram",Alergi Makanan
+"Hidung tersumbat, sakit kepala, nyeri di sekitar mata dan pipi, lendir kental berwarna kuning atau hijau",Sinusitis
+"Sakit kepala yang memburuk saat membungkuk, hidung mampet, ingus kental",Sinusitis
+"Nyeri wajah di sekitar mata, hidung, dan dahi, hidung tersumbat, ingus berwarna",Sinusitis
+"Hidung tersumbat, sakit kepala, dan nyeri wajah, tenggorokan sakit",Sinusitis
+"Nyeri di pipi dan dahi, hidung tersumbat, batuk yang memburuk di malam hari",Sinusitis
+"Ingus kental berwarna kuning atau hijau, sakit kepala, nyeri wajah",Sinusitis
+"Nyeri saat menunduk, hidung tersumbat terus-menerus, napas bau",Sinusitis
+"Wajah terasa penuh dan nyeri, lendir menetes ke tenggorokan, lelah",Sinusitis
+"Sakit di wajah atas, nyeri saat menekan pipi dan dahi, hidung mampet",Sinusitis
+"Hidung berlendir tebal, nyeri di sekitar hidung dan mata, sakit kepala",Sinusitis
+"Hidung mampet, sakit kepala dan wajah, ingus kental yang sulit keluar",Sinusitis
+"Demam tinggi, ruam merah di kulit, batuk, pilek, mata merah, nafsu makan menurun, lemas",Campak
+"Ruam muncul setelah demam, mata berair, batuk kering, pilek, demam, nyeri tenggorokan",Campak
+"Demam, ruam menyebar dari wajah ke seluruh tubuh, batuk, pilek, mata sensitif cahaya",Campak
+"Ruam merah, demam tinggi, batuk, pilek, mata merah, sariawan di mulut",Campak
+"Demam, batuk, pilek, ruam merah, mata berair, lemas, nafsu makan turun",Campak
+"Demam, ruam berisi cairan, gatal, lemas, nafsu makan menurun, bintik merah",Cacar Air
+"Bintik merah berisi cairan, demam ringan, gatal di seluruh tubuh, lemas",Cacar Air
+"Ruam berisi cairan, demam, gatal, nyeri otot, sakit kepala",Cacar Air
+"Demam, bintik merah, gatal, ruam menyebar, lemas, nafsu makan turun",Cacar Air
+"Ruam berisi cairan, demam, gatal, nyeri sendi, sakit kepala",Cacar Air
+"Mual, muntah, demam, mata dan kulit menguning, urine gelap, lemas",Hepatitis A
+"Lemas, nyeri perut kanan atas, nafsu makan turun, kulit kuning, mual",Hepatitis A
+"Demam, mual, muntah, kulit dan mata kuning, urine gelap, feses pucat",Hepatitis A
+"Mual, muntah, demam, nyeri perut, kulit kuning, lemas, nafsu makan turun",Hepatitis A
+"Demam, mual, muntah, nyeri perut kanan atas, kulit kuning, urine gelap",Hepatitis A
+"Lemas, pucat, mudah lelah, pusing, jantung berdebar, sesak napas",Anemia
+"Sesak napas saat aktivitas, kulit pucat, sakit kepala, lemas, sulit konsentrasi",Anemia
+"Pusing, lemas, kulit pucat, jantung berdebar, mudah lelah",Anemia
+"Lemas, pusing, kulit pucat, nafsu makan turun, jantung berdebar",Anemia
+"Lemas, pusing, kulit pucat, jantung berdebar, sesak napas, sulit tidur",Anemia
+"Pusing berputar, mual, muntah, kehilangan keseimbangan, sulit berdiri",Vertigo
+"Kepala terasa berputar, sulit berdiri, mual, muntah, lemas",Vertigo
+"Pusing berputar, mual, muntah, sulit berjalan, keringat dingin",Vertigo
+"Pusing, mual, muntah, kehilangan keseimbangan, sulit fokus",Vertigo
+"Pusing berputar, mual, muntah, sulit berdiri, telinga berdenging",Vertigo
+"Batuk berdahak, dada terasa berat, demam ringan, sesak napas, lemas",Bronkitis
+"Batuk lama, dahak kental, lemas, napas berbunyi, nyeri dada",Bronkitis
+"Batuk berdahak, demam, sesak napas, nyeri dada, lemas",Bronkitis
+"Batuk berdahak, demam ringan, sesak napas, nyeri dada, lemas",Bronkitis
+"Batuk berdahak, dada terasa berat, demam, sesak napas, lemas",Bronkitis
+"Demam tinggi, batuk berdahak, sesak napas, nyeri dada, lemas",Pneumonia
+"Batuk berdahak kuning atau hijau, lemas, napas cepat, demam",Pneumonia
+"Demam, batuk berdahak, sesak napas, nyeri dada, lemas",Pneumonia
+"Batuk berdahak, demam tinggi, sesak napas, nyeri dada, lemas",Pneumonia
+"Demam tinggi, batuk berdahak, sesak napas, nyeri dada, lemas",Pneumonia
+"Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah",Demam Scarlet
+"Ruam merah di leher dan dada, demam, nyeri tenggorokan, lidah merah",Demam Scarlet
+"Demam, ruam merah, nyeri tenggorokan, lidah merah, mual",Demam Scarlet
+"Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah",Demam Scarlet
+"Demam, ruam merah, sakit tenggorokan, lidah merah, mual, muntah",Demam Scarlet
+"Demam, batuk kering, sesak napas, hilang penciuman, lemas, nyeri otot",COVID-19
+"Sakit tenggorokan, demam, batuk, nyeri otot, kehilangan rasa, pilek",COVID-19
+"Demam, batuk, sesak napas, lemas, kehilangan penciuman, sakit kepala",COVID-19
+"Demam, batuk kering, nyeri tenggorokan, kehilangan rasa, lemas",COVID-19
+"Demam, batuk, sesak napas, kehilangan penciuman, lemas, nyeri otot",COVID-19

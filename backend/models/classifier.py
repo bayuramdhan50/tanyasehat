@@ -36,8 +36,10 @@ class DiseaseClassifier:
             ('clf', ComplementNB(alpha=0.3))  # ComplementNB lebih baik untuk kelas tidak seimbang
         ])
         
-        # Path ke file data training
-        self.data_path = os.path.join('data', 'training_data.csv')
+        # Path ke file data training - menggunakan path absolut berdasarkan lokasi script
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        project_dir = os.path.dirname(backend_dir)
+        self.data_path = os.path.join(project_dir, 'data', 'training_data.csv')
         
         # Dictionary untuk menyimpan semua penyakit dan gejala-gejalanya
         self.diseases_info = {}
